@@ -10,7 +10,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  but it's clear that this is the test for the exception class*/
 @SuppressFBWarnings(
     value = "NM",
-    justification = "SpotBugs signals that this class is named like an exception even if it does'nt extends Exception class"
+    justification = "SpotBugs signals that this class is named like an exception even if it doesn't extends Exception class"
         + ", but it's clear that this class is not an exception but it's a Test"
 )
 class TestExecutionWithIllegalThreadException {
@@ -22,11 +22,21 @@ class TestExecutionWithIllegalThreadException {
     void testConstructorWithDefaultMessage() {
         final ExecutionWithIllegalThreadException ex = new ExecutionWithIllegalThreadException();
         assertEquals(DEFAULT_MESSAGE, ex.getMessage());
+        try {
+            throw(ex);
+        } catch (ExecutionWithIllegalThreadException e) {
+            assertEquals(ex, e);
+        }
     }
 
     @Test
     void testConstructorWithAddedMessage() {
         final ExecutionWithIllegalThreadException ex = new ExecutionWithIllegalThreadException(ADDED_MESSAGE);
         assertEquals(DEFAULT_MESSAGE + ADDED_MESSAGE, ex.getMessage());
+        try {
+            throw(ex);
+        } catch (ExecutionWithIllegalThreadException e) {
+            assertEquals(ex, e);
+        }
     }
 }
