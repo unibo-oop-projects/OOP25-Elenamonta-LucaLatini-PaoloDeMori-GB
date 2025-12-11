@@ -22,21 +22,11 @@ class TestNotStartedViewException {
     void testConstructorWithDefaultMessage() {
         final NotStartedViewException ex = new NotStartedViewException();
         assertEquals(DEFAULT_MESSAGE, ex.getMessage());
-        try {
-            throw(ex);
-        } catch (NotStartedViewException e) {
-            assertEquals(ex, e);
-        }
     }
 
     @Test
     void testConstructorWithAddedMessage() {
         final NotStartedViewException ex = new NotStartedViewException(ADDED_MESSAGE);
         assertEquals(DEFAULT_MESSAGE + ADDED_MESSAGE, ex.getMessage());
-        try {
-            throw(ex);
-        } catch (NotStartedViewException e) {
-            assertEquals(ex, e);
-        }
     }
 }

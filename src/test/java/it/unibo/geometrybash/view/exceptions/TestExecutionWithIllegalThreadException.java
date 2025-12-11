@@ -22,21 +22,11 @@ class TestExecutionWithIllegalThreadException {
     void testConstructorWithDefaultMessage() {
         final ExecutionWithIllegalThreadException ex = new ExecutionWithIllegalThreadException();
         assertEquals(DEFAULT_MESSAGE, ex.getMessage());
-        try {
-            throw(ex);
-        } catch (ExecutionWithIllegalThreadException e) {
-            assertEquals(ex, e);
-        }
     }
 
     @Test
     void testConstructorWithAddedMessage() {
         final ExecutionWithIllegalThreadException ex = new ExecutionWithIllegalThreadException(ADDED_MESSAGE);
         assertEquals(DEFAULT_MESSAGE + ADDED_MESSAGE, ex.getMessage());
-        try {
-            throw(ex);
-        } catch (ExecutionWithIllegalThreadException e) {
-            assertEquals(ex, e);
-        }
     }
 }

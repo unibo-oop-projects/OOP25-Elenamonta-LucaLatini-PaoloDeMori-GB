@@ -14,15 +14,16 @@ public interface GameLoop {
      * Starts the GameLoop.
      * 
      * @throws InvalidGameLoopStatusException if the gameloop has already been started
+     * @throws InvalidGameLoopConfigurationException if the gameloop isn't correctly initialized
      */
     void start() throws InvalidGameLoopStatusException, InvalidGameLoopConfigurationException;
 
     /**
-     * Pause The GameLoop.
+     * Pauses The GameLoop.
      * 
      * @throws NotStartedException if the gameloop never started
      */
-    void pause() throws NotStartedException,InvalidGameLoopStatusException;
+    void pause() throws NotStartedException, InvalidGameLoopStatusException;
 
     /**
      * Resumes The GameLoop.
@@ -40,17 +41,25 @@ public interface GameLoop {
     void stop() throws NotStartedException;
 
     /**
-     * Set the action to perform on every cycle.
+     * Sets the action to perform on every cycle.
      * 
      * @param action The action to perform on every cycle
      */
     void setUpdateAction(ActionOnLoopChange action);
 
     /**
-     * Get the number of Frames per second of my loop.
+     * Gets the number of Frames per second of my loop.
+     * 
+     * @return the number of Frames per second measured during the last second execution.
      * 
      * @throws FpsNotCalculatedException if a client tries to get the number of FPS but it has not been calculated yet.
-     * @return the number of Frames per second measured during the last second execution.
      */
-    int getFPS() throws FpsNotCalculatedException;
+    short getFPS() throws FpsNotCalculatedException;
+
+    /**
+     * Gets a boolean that is set true if the gameloop's last exectuion terminated safely.
+     * 
+     * @return true if the gameloop was safely interrupted, false if it didn't.
+     */
+    boolean isTerminatedSafely();
 }
