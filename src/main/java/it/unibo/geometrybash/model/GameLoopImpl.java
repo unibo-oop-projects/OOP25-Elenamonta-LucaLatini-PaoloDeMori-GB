@@ -174,7 +174,7 @@ public class GameLoopImpl implements GameLoop {
                          * Implementing this method it was obvious that the nanoseconds lost, 
                          * using Thread.sleep(long millis) weren't negligible.
                          *  That amount of time made the gameloop go at at least 4/5 fps more per second.
-                         * That's why in the following section uses Thread.sleep.(long millis, int nanos)
+                         * That's why the following section uses Thread.sleep.(long millis, int nanos)
                          */
                         Thread.sleep(timeToWaitMillis, timeToWaitNanos);
                     } catch (final InterruptedException e) {

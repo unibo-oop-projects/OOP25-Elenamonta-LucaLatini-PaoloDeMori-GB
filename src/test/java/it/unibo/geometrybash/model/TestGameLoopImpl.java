@@ -66,7 +66,7 @@ class TestGameLoopImpl {
         //Check if the thread correctly executed the function
         assertTrue(eC.wasExecuted());
 
-        //set the variable as false thinking t it will be set as true by the gameloop
+        //set the variable as false thinking that it will be set as true by the gameloop
         eC.setFalse();
         try {
             Thread.sleep(ONE_EXECUTION_TIME);
