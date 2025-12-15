@@ -16,13 +16,13 @@ import it.unibo.geometrybash.model.exceptions.NotStartedException;
 
 class TestGameLoopImpl {
     private static final String INTERRUPT_RECEIVED_MESSAGE = "interrupt received";
-     private static final long ONE_EXECUTION_TIME = 50L;
+     private static final long ONE_EXECUTION_TIME = 30L;
 
     /**
-    *Tests that an InvalidGameLoopConfigurationException is thrown if the gameLoop is started without a correct initialization.
-    *To correctly initialize a GameLoopImpl instance you have to call the setUpdateAction() method
-    * or set an OnUpdateAction through the constructor.
-    */
+     * Tests that an InvalidGameLoopConfigurationException is thrown if the gameLoop is started without a correct initialization.
+     * To correctly initialize a GameLoopImpl instance you have to call the setUpdateAction() method
+     * or set an OnUpdateAction through the constructor.
+     */
     @Test
     void testInvalidInitialization() {
         final GameLoop gL = new GameLoopImpl();
@@ -30,9 +30,9 @@ class TestGameLoopImpl {
     }
 
     /**
-    *Tries to start a gameloop with a correct intilialization.
-    *It verifies that a correct exception is thrown if a client tries to start a gameloop that has already been started.
-    */
+     * Tries to start a gameloop with a correct intilialization.
+     * It verifies that a correct exception is thrown if a client tries to start a gameloop that has already been started.
+     */
     @Test
     void testCorrectInitializationAndExecution() {
         final GameLoop gL = new GameLoopImpl();
@@ -50,8 +50,8 @@ class TestGameLoopImpl {
     }
 
     /**
-    *Tries to start a gameloop with a correct intilialization using the constructor.
-    */
+     * Tries to start a gameloop with a correct intilialization using the constructor.
+     */
     @Test
     void testCorrectInitializationWithConstructorAndExecution() {
         final ExampleClass eC = new ExampleClass();
@@ -66,10 +66,10 @@ class TestGameLoopImpl {
     }
 
     /**
-    *Tries to start and stop a gameloop with a correct intilialization, and it verifies if the method set is correctly executed.
-    *It verifies that a NotStartedException is thrown if a client tries to stop a gameloop that hasn't been started.
-    *This test uses an instance of Example class to verify that the gameloop executed the set AcionOnUpdate.
-    */
+     * Tries to start and stop a gameloop with a correct intilialization, and it verifies if the method set is correctly executed.
+     * It verifies that a NotStartedException is thrown if a client tries to stop a gameloop that hasn't been started.
+     * This test uses an instance of Example class to verify that the gameloop executed the set AcionOnUpdate.
+     */
     @Test
     void testCorrectStartAndStop() {
         final GameLoop gL = new GameLoopImpl();
@@ -85,21 +85,15 @@ class TestGameLoopImpl {
         }
         assertTrue(eC.wasExecuted());
         assertDoesNotThrow(gL::stop);
-        //sleep to be sure that the stop method is completely executed.
-        try {
-            Thread.sleep(ONE_EXECUTION_TIME);
-        } catch (final InterruptedException e) {
-            fail(INTERRUPT_RECEIVED_MESSAGE);
-        }
         assertTrue(gL.isTerminatedSafely());
     }
 
     /**
-    *Tries to start, stop, pause and resume a gameloop with a correct intilialization,
-    * and it verifies if the method set is correctly executed.
-    *It verifies that a NotStartedException is thrown if a client tries to stop a gameloop that hasn't been started.
-    *This test uses an instance of Example class to verify that the gameloop executed the set AcionOnUpdate.
-    */
+     * Tries to start, stop, pause and resume a gameloop with a correct intilialization,
+     * and it verifies if the method set is correctly executed.
+     * It verifies that a NotStartedException is thrown if a client tries to stop a gameloop that hasn't been started.
+     * This test uses an instance of Example class to verify that the gameloop executed the set AcionOnUpdate.
+     */
     @Test
     void testCorrectPauseAndResume() {
         final GameLoop gL = new GameLoopImpl();
@@ -170,17 +164,13 @@ class TestGameLoopImpl {
             fail(INTERRUPT_RECEIVED_MESSAGE);
         }
         assertDoesNotThrow(gL::stop);
-        try {
-            Thread.sleep(ONE_EXECUTION_TIME);
-        } catch (final InterruptedException e) {
-            fail(INTERRUPT_RECEIVED_MESSAGE);
-        }
         assertTrue(gL.isTerminatedSafely());
     }
 
     /**
-    *This test verifies that if a gameLoop is interrupted not safely the gameloop stops and set that it wasn't terminated safely.
-    */
+     * This test verifies that if a gameLoop is interrupted not safely.
+     * The gameloop stops and set that it wasn't terminated safely.
+     */
     @Test
     void testCorrectLoopInterruptInPause() {
         final GameLoop gL = new GameLoopImpl();
@@ -213,9 +203,9 @@ class TestGameLoopImpl {
     }
 
     /**
-    *Tests that if the thread is waiting the necessary time to keep a 60fps gameloop,
-    * is interrupted,the terminatedSafely flag is correctly set.
-    */
+     * Tests that if the thread is waiting the necessary time to keep a 60fps gameloop,
+     * is interrupted,the terminatedSafely flag is correctly set.
+     */
     @Test
     void testCorrectLoopInterrupt() {
         final GameLoop gL = new GameLoopImpl();
@@ -238,8 +228,8 @@ class TestGameLoopImpl {
     }
 
     /**
-    *Test that verifies that the thread is running at around 60fps.
-    */
+     * Test that verifies that the thread is running at around 60fps.
+     */
     @Test
     void testGetFps() {
         final GameLoop gL = new GameLoopImpl();
@@ -248,7 +238,7 @@ class TestGameLoopImpl {
         final short timesToCycle = 5;
         //time to wait for the thread to calculate a new number of fps
         final long oneSecondAndOneMillisecond = 6_001L;
-        short fpsSUm = 0;
+        short fpsSum = 0;
         final short maxAverageFrameRate = 65;
         final short minAverageFramerate = 55;
         gL.setUpdateAction(eC::executable);
@@ -260,22 +250,22 @@ class TestGameLoopImpl {
         try {
             Thread.sleep(oneSecondAndOneMillisecond);
             assertDoesNotThrow(gL::getFPS);
-            fpsSUm += gL.getFPS();
+            fpsSum += gL.getFPS();
             //Chek if the gameloop is around 60fps.
         } catch (InterruptedException | FpsNotCalculatedException e) {
             fail("Unexpected Exception");
         }
         }
         //average calculation
-        fpsSUm /= timesToCycle;
-        assertTrue(fpsSUm <= maxAverageFrameRate && fpsSUm >= minAverageFramerate);
+        fpsSum /= timesToCycle;
+        assertTrue(fpsSum <= maxAverageFrameRate && fpsSum >= minAverageFramerate);
 
         assertDoesNotThrow(gL::stop);
     }
 
-    /**An example class that handles a boolean flag.
-    *
-    */
+    /**
+     * An example class that handles a boolean flag.
+     */
     class ExampleClass {
         private volatile boolean wasExecuted;
 
@@ -292,8 +282,8 @@ class TestGameLoopImpl {
         }
     }
 
-    /**An example class that take the thread in which is running and offers a method to interrupt it.
-     *
+    /**
+     * An example class that take the thread in which is running and offers a method to interrupt it.
      */
     class ThreadClass {
         private volatile Thread currentThread;
