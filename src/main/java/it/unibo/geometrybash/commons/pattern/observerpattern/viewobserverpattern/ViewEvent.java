@@ -13,6 +13,7 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.Event;
  * @see Event 
  */
 public final class ViewEvent implements Event {
+    //TODO
 
     /**
      * Logger useful for debug purposes.
@@ -31,16 +32,6 @@ public final class ViewEvent implements Event {
     }
 
     /**
-     * A factory static method to create an event that represents the resume command is called in the view. 
-     * 
-     * @return a instance of this class with type  {@link ViewEventType#RESUME}.
-     */
-    public static ViewEvent createResumeEvent() {
-        LOGGER.debug("Created a new ResumeEvent");
-        return new ViewEvent(ViewEventType.RESUME);
-    }
-
-    /**
      * A method that returns the type of the event.
      * 
      * @return the {@link ViewEventType} of this instance.
@@ -56,6 +47,6 @@ public final class ViewEvent implements Event {
      */
     @Override
     public String getEventName() {
-        return type.getName();
+        return type.getCommand();
     }
 }
