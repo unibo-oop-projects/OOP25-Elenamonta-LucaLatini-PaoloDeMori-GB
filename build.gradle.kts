@@ -31,6 +31,7 @@ dependencies {
      */
     val slf4jVersion = "2.0.17"
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation ("org.jbox2d:jbox2d-library:2.2.1.1")
     // Logback backend for SLF4J
     runtimeOnly("ch.qos.logback:logback-classic:1.5.20")
 
