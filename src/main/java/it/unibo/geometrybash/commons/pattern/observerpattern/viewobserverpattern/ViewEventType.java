@@ -1,30 +1,36 @@
 package it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern;
 
 /**
- * Enum that represents the kind of Events that can be notified to a {@link ViewObserver}.
+ * Interface representing the type of a view event.
+ * Can be either a standard event or a generic terminal command.
  * 
- * @see ViewObserver
- * @see ViewEvent
+ * <p>Use factory methods to create instances:
+ * 
+ * @see StandardViewEventType
  */
-public enum ViewEventType {
-    /**
-     * Event that represents the resumption of the game form the menu.
-     */
-    RESUME("Resume");
-
-    private final String name; //the name of the type
-
-    ViewEventType(final String name) {
-        this.name = name;
-    }
+public interface ViewEventType {
 
     /**
-     * Returns the name of the type of the event.
+     * Checks if this event is a generic terminal command.
      * 
-     * @return a String representation of the type.
+     * @return true if this is a generic command, false if it is standard
      */
-    public String getName() {
-        return this.name;
-    }
+    boolean isGeneric();
 
+    /**
+     * Returns the standard type of this event.
+     * Returns {@link StandardViewEventType#GENERIC} for generic terminal commands.
+     * 
+     * @return the standard event type (never null)
+     */
+    StandardViewEventType getStandard();
+
+    /**
+     * Returns the command string.
+     * For standard events: returns the command name
+     * For generic events: returns the custom command entered by the user.
+     * 
+     * @return the command string
+     */
+    String getCommand();
 }

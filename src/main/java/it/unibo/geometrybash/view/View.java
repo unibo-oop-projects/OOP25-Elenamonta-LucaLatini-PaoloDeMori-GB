@@ -47,7 +47,7 @@ public interface View {
     /**
      * Method called by the Controller to switch between completely different scenes.
      * 
-     * <p> This method is called to switch from the current visualization to a completely different scene.
+     * <p>This method is called to switch from the current visualization to a completely different scene.
      * 
      * @param scene the scene to switch to.
      * @throws NotStartedViewException if the view wasn't initialized correctly

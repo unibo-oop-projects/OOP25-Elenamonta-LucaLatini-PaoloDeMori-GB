@@ -9,11 +9,11 @@ package it.unibo.geometrybash.view;
  */
 public enum ViewScene {
     /**
-     * The scene representing the first shown menu
+     * The scene representing the first shown menu.
      */
     START_MENU,
     /**
-     * The scene that starts when the player starts the game
+     * The scene that starts when the player starts the game.
      */
     IN_GAME
 }
