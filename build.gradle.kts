@@ -34,6 +34,13 @@ dependencies {
     // Logback backend for SLF4J
     runtimeOnly("ch.qos.logback:logback-classic:1.5.20")
 
+    /*
+     * JBox2D: A Java Physics Engine
+     * See: https://www.jbox2d.org/
+     */
+    val jbox2dVersion="2.2.1.1"
+    implementation("org.jbox2d:jbox2d-library:$jbox2dVersion")
+
     // JUnit API and testing engine
     testImplementation(platform("org.junit:junit-bom:6.0.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
