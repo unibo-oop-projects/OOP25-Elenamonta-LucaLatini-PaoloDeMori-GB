@@ -1,4 +1,6 @@
-package it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern;
+package it.unibo.geometrybash.commons.input;
+
+import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEventType;
 
 /**
  * Enum representing standard view event types.
@@ -39,6 +41,16 @@ public enum StandardViewEventType {
     INVENTORY("inventory"),
 
     /**
+     * Event when player push the button jump action (SPACE or UP arrow).
+     */
+    JUMP("jump"),
+
+    /**
+     * Event when player opens menu/pause with the keyboard's button (ESC key).
+     */
+    MENU("menu"),
+
+    /**
      * Represents a generic terminal command.
      * The actual command string is stored in {@link ViewEventType#getCommand()}.
      */
@@ -57,5 +69,24 @@ public enum StandardViewEventType {
      */
     public String getCommandName() {
         return commandName;
+    }
+
+    /**
+     * Checks if this event type represents a user input action (keyboard).
+     *
+     * @return true if this is a user input event (JUMP, MENU), false otherwise
+     */
+    public boolean isUserInput() {
+        return this == JUMP || this == MENU;
+    }
+
+    /**
+     * Checks if this event type represents a GUI action (buttons, menu clicks).
+     *
+     * @return true if this is a GUI event, false otherwise
+     */
+    public boolean isGuiEvent() {
+        return this == START || this == RESUME || this == HOME
+                || this == RESTART || this == CLOSE || this == INVENTORY;
     }
 }

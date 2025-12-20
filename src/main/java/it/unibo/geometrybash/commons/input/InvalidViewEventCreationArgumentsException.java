@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.controller.input;
+package it.unibo.geometrybash.commons.input;
 
 /**
  * Exception thrown if a client tries to create an view event with invalid arguments.
@@ -11,7 +11,7 @@ public class InvalidViewEventCreationArgumentsException extends RuntimeException
 
     /**
      * Constructor to create an exception with an added string to the default message.
-     * 
+     *
      * @param message the string to add to the default message.
      */
     public InvalidViewEventCreationArgumentsException(final String message) {

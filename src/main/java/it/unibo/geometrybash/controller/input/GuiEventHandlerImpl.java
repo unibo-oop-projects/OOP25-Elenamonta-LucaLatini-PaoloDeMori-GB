@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEventType;
 import it.unibo.geometrybash.controller.OnGenericCommandAction;

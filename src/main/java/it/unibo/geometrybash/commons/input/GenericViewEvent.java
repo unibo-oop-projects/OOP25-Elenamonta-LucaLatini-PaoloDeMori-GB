@@ -1,6 +1,5 @@
-package it.unibo.geometrybash.controller.input;
+package it.unibo.geometrybash.commons.input;
 
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEventType;
 
 /**
@@ -13,7 +12,7 @@ final class GenericViewEvent implements ViewEventType {
 
     /**
      * Creates a generic command event.
-     * 
+     *
      * @param command the terminal command
      */
     GenericViewEvent(final String command) {
@@ -25,7 +24,7 @@ final class GenericViewEvent implements ViewEventType {
 
     /**
      * Checks if this event is generic.
-     * 
+     *
      * @return true if the event is generic, false otherwise
      */
     @Override
@@ -34,8 +33,16 @@ final class GenericViewEvent implements ViewEventType {
     }
 
     /**
+     * @return always false beacause Generic event is never an user input.
+     */
+    @Override
+    public boolean isFromUserInput() {
+        return false;
+    }
+
+    /**
      * Returns the standard view event type.
-     * 
+     *
      * @return the standard view event type
      */
     @Override
@@ -45,7 +52,7 @@ final class GenericViewEvent implements ViewEventType {
 
     /**
      * Returns the terminal command associated with this event.
-     * 
+     *
      * @return the terminal command
      */
     @Override

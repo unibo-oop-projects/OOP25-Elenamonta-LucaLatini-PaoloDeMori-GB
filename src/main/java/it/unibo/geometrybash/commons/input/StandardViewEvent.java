@@ -1,6 +1,5 @@
-package it.unibo.geometrybash.controller.input;
+package it.unibo.geometrybash.commons.input;
 
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEventType;
 
 /**
@@ -13,7 +12,7 @@ final class StandardViewEvent implements ViewEventType {
 
     /**
      * Creates a standard view event.
-     * 
+     *
      * @param type the standard event type
      */
     StandardViewEvent(final StandardViewEventType type) {
@@ -25,7 +24,7 @@ final class StandardViewEvent implements ViewEventType {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>returns false because this class never contains a generic command.
      */
     @Override
@@ -34,8 +33,18 @@ final class StandardViewEvent implements ViewEventType {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * <p> return true if it is a user input
+     */
+    @Override
+    public boolean isFromUserInput() {
+        return type.isUserInput();
+    }
+
+    /**
      * * {@inheritDoc}
-     * 
+     *
      * <p>returns the type of the  standard event.
      */
     @Override
@@ -45,7 +54,7 @@ final class StandardViewEvent implements ViewEventType {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>returns the name of the standard event, because this can't contain a generic command.
      * differently to {@link it.unibo.geometrybash.controller.input.GenericViewEvent#getCommand()}
      */

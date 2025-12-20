@@ -1,13 +1,10 @@
-package it.unibo.geometrybash.controller.input;
+package it.unibo.geometrybash.commons.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
-
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
-
 /**
  * Tests for StandardViewEvent.
  */

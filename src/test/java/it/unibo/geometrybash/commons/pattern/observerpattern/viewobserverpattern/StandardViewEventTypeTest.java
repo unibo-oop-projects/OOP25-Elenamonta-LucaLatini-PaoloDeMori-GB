@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
+
 /**
  * Test class for {@link StandardViewEventType}.
  */
@@ -37,7 +39,7 @@ class StandardViewEventTypeTest {
         StandardViewEventType.CLOSE.getCommandName()
     );
     assertNotEquals(
-            StandardViewEventType.RESUME.getCommandName(), 
+            StandardViewEventType.RESUME.getCommandName(),
             StandardViewEventType.RESTART.getCommandName()
         );
     }

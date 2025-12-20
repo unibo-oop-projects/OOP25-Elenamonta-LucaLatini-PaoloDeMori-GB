@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
+import it.unibo.geometrybash.commons.input.InvalidViewEventCreationArgumentsException;
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
+import it.unibo.geometrybash.commons.input.ViewEventTypeFactory;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEventType;
 
 /**
@@ -32,21 +34,21 @@ class ViewEventTypeFactoryTest {
 
     @Test
     void testCannotCreateStandardWithGenericType() {
-        assertThrows(IllegalArgumentException.class, 
+        assertThrows(IllegalArgumentException.class,
             () -> ViewEventTypeFactory.standard(StandardViewEventType.GENERIC));
     }
 
     @Test
     void testCannotCreateGenericWithEmptyCommand() {
-        assertThrows(InvalidViewEventCreationArgumentsException.class, 
+        assertThrows(InvalidViewEventCreationArgumentsException.class,
             () -> ViewEventTypeFactory.generic(""));
     }
 
     @Test
     void testCannotCreateWithNull() {
-        assertThrows(NullPointerException.class, 
+        assertThrows(NullPointerException.class,
             () -> ViewEventTypeFactory.standard(null));
-        assertThrows(InvalidViewEventCreationArgumentsException.class, 
+        assertThrows(InvalidViewEventCreationArgumentsException.class,
             () -> ViewEventTypeFactory.generic(null));
     }
 }
