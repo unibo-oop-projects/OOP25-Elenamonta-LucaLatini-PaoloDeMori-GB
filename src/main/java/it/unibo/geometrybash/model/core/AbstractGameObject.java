@@ -89,14 +89,4 @@ public abstract class AbstractGameObject implements GameObject {
     public Class<? extends GameObject> getType() {
         return this.getClass();
     }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * Must be implemented by concrete game objects.
-     * </p>
-     */
-    @Override
-    public abstract void update(float dt);
 }
