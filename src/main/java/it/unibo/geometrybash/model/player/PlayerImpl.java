@@ -67,11 +67,4 @@ public class PlayerImpl extends AbstractGameObject implements Player, Collidable
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'copy'");
     }
-
-    @Override
-    public void update(float dt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-
 }
