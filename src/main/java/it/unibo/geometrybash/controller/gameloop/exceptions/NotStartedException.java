@@ -3,7 +3,7 @@ package it.unibo.geometrybash.model.exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import it.unibo.geometrybash.model.GameLoop;
+import it.unibo.geometrybash.controller.gameloop.GameLoop;
 
 /**
  * An exception thrown if the start method is called while the {@link GameLoop} hasn't been started yet.

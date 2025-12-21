@@ -1,8 +1,9 @@
-package it.unibo.geometrybash.model;
+package it.unibo.geometrybash.controller.gameloop;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.unibo.geometrybash.model.ActionOnLoopChange;
 import it.unibo.geometrybash.model.exceptions.FpsNotCalculatedException;
 import it.unibo.geometrybash.model.exceptions.InvalidGameLoopConfigurationException;
 import it.unibo.geometrybash.model.exceptions.InvalidGameLoopStatusException;

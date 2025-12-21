@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An Exception thrown if a client tries to execute the 
- * {@link it.unibo.geometrybash.model.GameLoop} without a correct initialization.
+ * {@link it.unibo.geometrybash.controller.gameloop.GameLoop} without a correct initialization.
  */
 public class InvalidGameLoopConfigurationException extends Exception {
 

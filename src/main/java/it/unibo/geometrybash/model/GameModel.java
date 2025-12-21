@@ -1,6 +1,7 @@
 package it.unibo.geometrybash.model;
 
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelObservable;
+import it.unibo.geometrybash.controller.gameloop.GameLoop;
 
 /**
  * The Business logic of the Game.
@@ -26,13 +27,6 @@ public interface GameModel extends ModelObservable {
      * @param status The new status.
      */
     void setStatus(Status status);
-
-    /**
-     * Starts for the first time the GameLoop.
-     * 
-     * @see GameLoop
-     */
-    void startGameLoop();
 
     /**
      * Returns the player of the game.

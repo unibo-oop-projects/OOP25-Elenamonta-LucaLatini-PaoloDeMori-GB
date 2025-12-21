@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.model;
+package it.unibo.geometrybash.controller.gameloop;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
+import it.unibo.geometrybash.controller.gameloop.GameLoop;
+import it.unibo.geometrybash.controller.gameloop.GameLoopImpl;
 import it.unibo.geometrybash.model.exceptions.FpsNotCalculatedException;
 import it.unibo.geometrybash.model.exceptions.InvalidGameLoopConfigurationException;
 import it.unibo.geometrybash.model.exceptions.InvalidGameLoopStatusException;
