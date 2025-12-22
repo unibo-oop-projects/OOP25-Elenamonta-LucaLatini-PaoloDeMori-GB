@@ -78,16 +78,4 @@ public interface GameObject {
      * @return the {@link Class} object corresponding to this object's type
      */
     Class<? extends GameObject> getType();
-
-    /**
-     * Updates the object-specific logic for the current frame.
-     *
-     * <p>
-     * This method advances the internal state of the object based on the
-     * elapsed time. The actual behavior depends on the concrete type.
-     * </p>
-     *
-     * @param dt the time elapsed since the last update, in seconds
-     */
-    void update(float dt);
 }
