@@ -4,14 +4,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * Swing key listener that forwards key presses to a provided strategy..
+ * Swing key listener that forwards key presses to a provided strategy.
  */
-public class SwingKeyboardListener extends KeyAdapter implements InputListener {
+public final class SwingKeyboardListener extends KeyAdapter implements InputListener {
 
     private InputListenerStrategy onClickStrategy;
 
     SwingKeyboardListener(final InputListenerStrategy strategy) {
-        this.setOnClickStrategy(strategy);
+        this.onClickStrategy = strategy;
     }
 
     /**
@@ -32,7 +32,7 @@ public class SwingKeyboardListener extends KeyAdapter implements InputListener {
      */
     @Override
     public void setOnReleasedStrategy(final InputListenerStrategy strategy) {
-        throw new UnsupportedOperationException("In our implemtation released keys aren't evaluated");
+        throw new UnsupportedOperationException("In our implementation released keys aren't evaluated");
     }
 
     /**

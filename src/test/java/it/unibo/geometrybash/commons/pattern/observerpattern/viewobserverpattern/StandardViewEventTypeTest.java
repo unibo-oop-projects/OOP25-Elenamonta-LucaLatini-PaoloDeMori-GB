@@ -19,8 +19,10 @@ class StandardViewEventTypeTest {
     private static final String RESTART_NAME = "restart";
     private static final String CLOSE_NAME = "close";
     private static final String INVENTORY_NAME = "inventory";
+    private static final String JUMP_NAME = "jump";
+    private static final String MENU_NAME = "menu";
     private static final String GENERIC_NAME = "generic";
-    private static final int SIZE = 7;
+    private static final int SIZE = 9;
 
     @Test
     void testGetCommandName() {
@@ -30,6 +32,8 @@ class StandardViewEventTypeTest {
         assertEquals(RESTART_NAME, StandardViewEventType.RESTART.getCommandName());
         assertEquals(CLOSE_NAME, StandardViewEventType.CLOSE.getCommandName());
         assertEquals(INVENTORY_NAME, StandardViewEventType.INVENTORY.getCommandName());
+        assertEquals(JUMP_NAME, StandardViewEventType.JUMP.getCommandName());
+        assertEquals(MENU_NAME, StandardViewEventType.MENU.getCommandName());
         assertEquals(GENERIC_NAME, StandardViewEventType.GENERIC.getCommandName());
     }
 

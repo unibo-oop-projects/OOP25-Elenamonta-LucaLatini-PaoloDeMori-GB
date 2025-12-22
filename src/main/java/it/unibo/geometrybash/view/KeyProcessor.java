@@ -10,6 +10,7 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern
  *
  * @see ViewEvent
  */
+@FunctionalInterface
 public interface KeyProcessor {
 
     /**
