@@ -8,9 +8,9 @@ package it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver;
  */
 public enum ModelEventType {
     /**
-     * Represents an update in the model.
+     * Represents a Victory in the model.
      */
-    UPDATE("Update"),
+    VICTORY("Victory"),
     /**
      * Represents a gameover in the model.
      */

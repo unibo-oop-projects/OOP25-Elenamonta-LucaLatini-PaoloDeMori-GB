@@ -32,13 +32,13 @@ public final class ModelEvent implements Event {
     }
 
     /**
-     * A factory static method to create an event that represents an update in the model. 
+     * A factory static method to create an event that represents a victory in the model. 
      * 
-     * @return a instance of this class with type  {@link ModelEventType#UPDATE}.
+     * @return a instance of this class with type  {@link ModelEventType#VICTORY}.
      */
-    public static ModelEvent createUpdateEvent() {
-        LOGGER.debug("Created a new UpdateEvent");
-        return new ModelEvent(ModelEventType.UPDATE);
+    public static ModelEvent createVictoryEvent() {
+        LOGGER.debug("Created a new Victory");
+        return new ModelEvent(ModelEventType.VICTORY);
     }
 
     /**

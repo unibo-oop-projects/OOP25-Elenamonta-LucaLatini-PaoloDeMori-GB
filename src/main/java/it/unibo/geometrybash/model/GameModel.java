@@ -1,31 +1,42 @@
 package it.unibo.geometrybash.model;
 
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelObservable;
-import it.unibo.geometrybash.model.exceptions.ErrorUpdatingModel;
 
 /**
  * The Business logic of the Game.
  * This interface offers a contract to access and modify the gamestatus and the main entities of the game.
  * 
  */
-public interface GameModel extends ModelObservable {
-
+public interface GameModel extends GameState, ModelObservable {
     /**
-     * Returns the player of the game.
+     * If possible sets the actual status of the game to Pause.
      * 
-     * @return The player of the game.
+     * @see Status
      */
-    Player getPlayer();
+    void pause();
 
     /**
-     * Returns the level of the game.
+     * If possible switches the actual status of the game from Pause to Running.
      * 
-     * @return the level of the game.
+     * @see Status
      */
-    Level getLevel();
+    void resume();
 
     /**
-     * Update the model
+     * Resets all the fields and restart the game.
      */
-    void update() throws ErrorUpdatingModel;
+    void restart();
+
+    /**
+     * Tries to make the player jump.
+     * 
+     */
+    void jumpSignal();
+
+    /**
+     * Updates the model.
+     * 
+     * @param deltaTime the time elapsed since last update.
+     */
+    void update(float deltaTime);
 }

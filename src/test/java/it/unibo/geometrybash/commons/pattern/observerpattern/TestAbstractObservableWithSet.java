@@ -14,7 +14,7 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.Model
  */
 class TestAbstractObservableWithSet {
     private final ModelEvent testGameOverEvent = ModelEvent.createGameOverEvent();
-    private ModelEvent testEventVar = ModelEvent.createUpdateEvent();
+    private ModelEvent testEventVar = ModelEvent.createVictoryEvent();
 
     /**
      * Test AbstractObservableWithSetTest using {@link ModelObserver}.

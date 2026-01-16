@@ -1,11 +1,10 @@
-package it.unibo.geometrybash.model.exceptions;
+package it.unibo.geometrybash.controller.gameloop.exceptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.unibo.geometrybash.controller.gameloop.exceptions.InvalidGameLoopStatusException;
 
 /*SpotBugs signals that this class has "exception" in its name even without being an exception
  but it's clear that this is the test for the exception class*/
