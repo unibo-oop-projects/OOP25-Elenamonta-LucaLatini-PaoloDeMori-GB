@@ -2,6 +2,7 @@ package it.unibo.geometrybash.model.core;
 
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
+import it.unibo.geometrybash.model.powerup.PowerUpType;
 
 /**
  * Abstract base implementation of a {@link GameObject}.
@@ -88,5 +89,10 @@ public abstract class AbstractGameObject implements GameObject {
     @Override
     public Class<? extends GameObject> getType() {
         return this.getClass();
+    }
+
+    public PowerUpType getPowerUpType() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPowerUpType'");
     }
 }
