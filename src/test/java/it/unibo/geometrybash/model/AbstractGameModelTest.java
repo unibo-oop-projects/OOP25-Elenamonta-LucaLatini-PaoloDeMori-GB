@@ -1,7 +1,9 @@
 package it.unibo.geometrybash.model;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
@@ -12,13 +14,22 @@ import org.junit.jupiter.api.Test;
 import it.unibo.geometrybash.commons.pattern.observerpattern.Observer;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.model.core.Updatable;
+import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationException;
 
 // CHECKSTYLE: AbstractClassName OFF
+/*Check style signals this name as invalid because it starts with Abstract without being an
+  abstract class, but it's clear that it is a test for the abstract class*/
 class AbstractGameModelTest {
     // CHECKSTYLE: AbstractClassName ON
 
     private static final String NOT_NECESSARY_METHOD = "this method is not tested here"; 
     private TestModel aGM;
+
+    @Test
+    void testConstructor() {
+        assertThrows(RunTimeModelInitializationException.class, () -> new TestModel(null));
+        assertDoesNotThrow(() -> new TestModel());
+    }
 
     @Test
     void testUpdateAndAfterGameObjectsUpdate() {
@@ -43,6 +54,67 @@ class AbstractGameModelTest {
         assertTrue(aGM.isAfterGameObjectsUpdateActionExecuted());
     }
 
+    @Test
+    void testGetUpdatables() {
+        final List<Updatable> list = new LinkedList<>();
+        final Updatable upd = new TestUpdatable();
+        list.add(upd);
+        aGM = new TestModel(list);
+        assertEquals(aGM.getUpdatables().size(), 1);
+        assertEquals(aGM.getUpdatables().get(0), upd);
+    }
+
+    @Test
+    void testAddUpdatable() {
+        final List<Updatable> list = new LinkedList<>();
+        final Updatable upd = new TestUpdatable();
+        aGM = new TestModel(list);
+        aGM.addUpdatableGameObjects(upd);
+        assertEquals(aGM.getUpdatables().size(), 0);
+        aGM.update(0);
+        assertEquals(aGM.getUpdatables().get(0), upd);
+    }
+
+    @Test
+    void testRemoveUpdatable() {
+        final List<Updatable> list = new LinkedList<>();
+        final Updatable upd = new TestUpdatable();
+        list.add(upd);
+        aGM = new TestModel(list);
+        aGM.removeUpdatableGameObjects(upd);
+        assertEquals(aGM.getUpdatables().get(0), upd);
+        aGM.update(0);
+        assertEquals(aGM.getUpdatables().size(), 0);
+    }
+
+    @Test
+    void testCleanUpdatables() {
+        final List<Updatable> list = new LinkedList<>();
+        final Updatable upd = new TestUpdatable();
+        final Updatable upd2 = new TestUpdatable();
+        list.add(upd);
+        list.add(upd2);
+        aGM = new TestModel(list);
+        assertEquals(aGM.getUpdatables().size(), 2);
+        aGM.clearUpdatableList();
+        assertEquals(aGM.getUpdatables().size(), 0);
+    }
+
+    @Test
+    void testClearToList() {
+        final List<Updatable> list = new LinkedList<>();
+        final Updatable upd = new TestUpdatable();
+        final Updatable upd2 = new TestUpdatable();
+        list.add(upd);
+        aGM = new TestModel(list);
+        aGM.addUpdatableGameObjects(upd2);
+        aGM.removeUpdatableGameObjects(upd);
+        aGM.clearToLists();
+        aGM.update(0);
+        assertEquals(aGM.getUpdatables().size(), 1);
+        assertEquals(aGM.getUpdatables().get(0), upd);
+    }
+
     class TestUpdatable implements Updatable {
 
         @Override
@@ -65,6 +137,10 @@ class AbstractGameModelTest {
 
         TestModel(final List<Updatable> updatables) {
             super(updatables);
+        }
+
+        TestModel() {
+            super();
         }
 
         @Override
@@ -129,6 +205,5 @@ class AbstractGameModelTest {
         protected boolean isUpdatable() {
             return this.isUpdatable;
         }
-
     }
 }

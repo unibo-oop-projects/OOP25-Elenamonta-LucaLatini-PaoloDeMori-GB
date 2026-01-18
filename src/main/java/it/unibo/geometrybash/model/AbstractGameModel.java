@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import it.unibo.geometrybash.model.core.Updatable;
+import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationException;
 
 /**
  * An abstract implementation of the gamemode that works by updating a list of
@@ -46,8 +47,20 @@ public abstract class AbstractGameModel implements GameModel {
     public AbstractGameModel(final List<Updatable> updatables) {
         if (updatables != null) {
             this.updatables.addAll(updatables);
+        } else {
+            throw new RunTimeModelInitializationException("The param passed is null, "
+            +
+            "if you want the default initialization call the void constructor");
         }
     }
+
+    /**
+     * The constructor of this class with void params.
+     */
+    public AbstractGameModel() {
+        super();
+    }
+
 
     /**
      * {@inheritDoc}
