@@ -6,45 +6,37 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.Model
  * The Business logic of the Game.
  * This interface offers a contract to access and modify the gamestatus and the main entities of the game.
  * 
- * @see GameLoop
  */
-public interface GameModel extends ModelObservable {
+public interface GameModel extends GameState, ModelObservable {
     /**
-     * Return the actual status of the game.
+     * If possible sets the actual status of the game to Pause.
      * 
-     * @return The status of the game.
      * @see Status
      */
-    Status getStatus();
+    void pause();
 
     /**
-     * Updates the status of the game.
+     * If possible switches the actual status of the game from Pause to Running.
      * 
-     * <p>The implementation of this method receive a {@link Status} instance as input
-     *  evaluate the transition from the previous status and perform necessary actions before applying the new status.
-     * 
-     * @param status The new status.
+     * @see Status
      */
-    void setStatus(Status status);
+    void resume();
 
     /**
-     * Starts for the first time the GameLoop.
-     * 
-     * @see GameLoop
+     * Resets all the fields and restart the game.
      */
-    void startGameLoop();
+    void restart();
 
     /**
-     * Returns the player of the game.
+     * Tries to make the player jump.
      * 
-     * @return The player of the game.
      */
-    Player getPlayer();
+    void jumpSignal();
 
     /**
-     * Returns the level of the game.
+     * Updates the model.
      * 
-     * @return the level of the game.
+     * @param deltaTime the time elapsed since last update.
      */
-    Level getLevel();
+    void update(float deltaTime);
 }

@@ -1,8 +1,7 @@
 package it.unibo.geometrybash.controller;
 
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObserver;
-import java.awt.event.KeyEvent;
 /**
  * Interface for handling user input events originating from the view.
  *
@@ -49,10 +48,4 @@ public interface InputHandler extends ViewObserver {
      */
     void setGenericCommandHandler(OnGenericCommandAction handler);
 
-    /**
-     * Handles a keyboard input event.
-     *
-     * @param event the keyboard event
-     */
-    void handleKeyboardInput(KeyEvent event);
 }

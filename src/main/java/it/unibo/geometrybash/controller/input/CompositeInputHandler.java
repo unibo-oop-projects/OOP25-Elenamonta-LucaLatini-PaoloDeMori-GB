@@ -1,9 +1,10 @@
 package it.unibo.geometrybash.controller.input;
 
-import java.awt.event.KeyEvent;
 import java.util.Objects;
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
+
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
+import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEventType;
 import it.unibo.geometrybash.controller.InputHandler;
 import it.unibo.geometrybash.controller.OnGenericCommandAction;
 import it.unibo.geometrybash.controller.OnInputEventAction;
@@ -14,31 +15,36 @@ import it.unibo.geometrybash.controller.OnInputEventAction;
  */
 public final class CompositeInputHandler implements InputHandler {
 
-    private final KeyboardHandler keyboardHandler;
+     private final UserInputHandler userInputHandler;
     private final GuiEventHandler guiEventHandler;
 
     /**
      * Creates a new CompositeInputHandler with default handlers.
      */
     public CompositeInputHandler() {
-        this.keyboardHandler = new KeyboardHandlerImpl();
+        this.userInputHandler = new UserInputHandlerImpl();
         this.guiEventHandler = new GuiEventHandlerImpl();
     }
 
     @Override
     public void update(final ViewEvent event) {
         Objects.requireNonNull(event, "ViewEvent cannot be null");
-        guiEventHandler.handleViewEvent(event);
+        final ViewEventType eventType = event.getType();
+        if (eventType.isFromUserInput()) {
+            userInputHandler.handleUserInputEvent(event);
+        } else {
+            guiEventHandler.handleViewEvent(event);
+        }
     }
 
     @Override
     public void setOnMainKeyPressed(final OnInputEventAction action) {
-        keyboardHandler.setMainKeyAction(action);
+        userInputHandler.setOnJumpAction(action);
     }
 
     @Override
     public void setOnMenuKeyPressed(final OnInputEventAction action) {
-        keyboardHandler.setMenuKeyAction(action);
+        userInputHandler.setOnMenuAction(action);
     }
 
     @Override
@@ -55,11 +61,4 @@ public final class CompositeInputHandler implements InputHandler {
     public void setGenericCommandHandler(final OnGenericCommandAction handler) {
         guiEventHandler.setGenericCommandHandler(handler);
     }
-
-      @Override
-    public void handleKeyboardInput(final KeyEvent event) {
-        Objects.requireNonNull(event, "KeyEvent cannot be null");
-        keyboardHandler.handleKeyPressed(event);
-    }
-
 }

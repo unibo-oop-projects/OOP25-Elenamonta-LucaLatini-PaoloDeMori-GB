@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import it.unibo.geometrybash.commons.input.InvalidViewEventCreationArgumentsException;
 
 
 /*SpotBugs signals that this class has "exception" in its name even without being an exception
@@ -20,14 +21,14 @@ class TestInvalidViewEventCreationArgumentsException {
 
     @Test
     void testDefaultConstructor() {
-        final InvalidViewEventCreationArgumentsException ex = 
+        final InvalidViewEventCreationArgumentsException ex =
             new InvalidViewEventCreationArgumentsException();
         assertEquals(DEFAULT_MESSAGE, ex.getMessage());
     }
 
     @Test
     void testConstructorWithMessage() {
-        final InvalidViewEventCreationArgumentsException ex = 
+        final InvalidViewEventCreationArgumentsException ex =
             new InvalidViewEventCreationArgumentsException(ADDED_MESSAGE);
         assertEquals(DEFAULT_MESSAGE + ADDED_MESSAGE, ex.getMessage());
     }

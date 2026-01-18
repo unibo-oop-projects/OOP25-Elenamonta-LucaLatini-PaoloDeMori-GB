@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEventType;
 
 class ModelEventTypeTest {
-    private static final String UPDATE_NAME = "Update";
+    private static final String VICTORY_NAME = "Victory";
     private static final String GAMEOVER_NAME = "GameOver";
 
     /*
@@ -16,8 +16,8 @@ class ModelEventTypeTest {
     */
     @Test
     void testGetName() {
-        assertEquals(ModelEventType.UPDATE.getName(), UPDATE_NAME);
+        assertEquals(ModelEventType.VICTORY.getName(), VICTORY_NAME);
         assertEquals(ModelEventType.GAMEOVER.getName(), GAMEOVER_NAME);
-        assertNotEquals(ModelEventType.GAMEOVER.getName(), UPDATE_NAME); //check that the names are different
+        assertNotEquals(ModelEventType.GAMEOVER.getName(), VICTORY_NAME); //check that the names are different
     }
 }

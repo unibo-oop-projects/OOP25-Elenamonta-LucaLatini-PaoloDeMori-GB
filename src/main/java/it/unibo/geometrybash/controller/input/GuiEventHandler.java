@@ -1,6 +1,6 @@
 package it.unibo.geometrybash.controller.input;
 
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.StandardViewEventType;
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
 import it.unibo.geometrybash.controller.OnGenericCommandAction;
 import it.unibo.geometrybash.controller.OnInputEventAction;

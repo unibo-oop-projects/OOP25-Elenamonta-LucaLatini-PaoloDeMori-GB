@@ -1,10 +1,14 @@
 package it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import it.unibo.geometrybash.commons.input.StandardViewEventType;
 
 /**
  * Test class for {@link StandardViewEventType}.
@@ -17,8 +21,10 @@ class StandardViewEventTypeTest {
     private static final String RESTART_NAME = "restart";
     private static final String CLOSE_NAME = "close";
     private static final String INVENTORY_NAME = "inventory";
+    private static final String JUMP_NAME = "jump";
+    private static final String MENU_NAME = "menu";
     private static final String GENERIC_NAME = "generic";
-    private static final int SIZE = 7;
+    private static final int SIZE = 9;
 
     @Test
     void testGetCommandName() {
@@ -28,18 +34,18 @@ class StandardViewEventTypeTest {
         assertEquals(RESTART_NAME, StandardViewEventType.RESTART.getCommandName());
         assertEquals(CLOSE_NAME, StandardViewEventType.CLOSE.getCommandName());
         assertEquals(INVENTORY_NAME, StandardViewEventType.INVENTORY.getCommandName());
+        assertEquals(JUMP_NAME, StandardViewEventType.JUMP.getCommandName());
+        assertEquals(MENU_NAME, StandardViewEventType.MENU.getCommandName());
         assertEquals(GENERIC_NAME, StandardViewEventType.GENERIC.getCommandName());
     }
 
     @Test
     void testCommandNamesAreDifferent() {
         assertNotEquals(StandardViewEventType.START.getCommandName(),
-        StandardViewEventType.CLOSE.getCommandName()
-    );
-    assertNotEquals(
-            StandardViewEventType.RESUME.getCommandName(), 
-            StandardViewEventType.RESTART.getCommandName()
-        );
+                StandardViewEventType.CLOSE.getCommandName());
+        assertNotEquals(
+                StandardViewEventType.RESUME.getCommandName(),
+                StandardViewEventType.RESTART.getCommandName());
     }
 
     @Test
@@ -49,5 +55,27 @@ class StandardViewEventTypeTest {
         for (final StandardViewEventType type : values) {
             assertNotNull(type.getCommandName());
         }
+    }
+
+    @Test
+    void testIsGuiEvent() {
+        assertTrue(StandardViewEventType.START.isGuiEvent());
+        assertTrue(StandardViewEventType.RESUME.isGuiEvent());
+        assertTrue(StandardViewEventType.HOME.isGuiEvent());
+        assertTrue(StandardViewEventType.RESTART.isGuiEvent());
+        assertTrue(StandardViewEventType.CLOSE.isGuiEvent());
+        assertTrue(StandardViewEventType.INVENTORY.isGuiEvent());
+        assertFalse(StandardViewEventType.JUMP.isGuiEvent());
+        assertFalse(StandardViewEventType.MENU.isGuiEvent());
+        assertFalse(StandardViewEventType.GENERIC.isGuiEvent());
+    }
+
+    @Test
+    void testIsUserInput() {
+        assertTrue(StandardViewEventType.JUMP.isUserInput());
+        assertTrue(StandardViewEventType.MENU.isUserInput());
+        assertFalse(StandardViewEventType.START.isUserInput());
+        assertFalse(StandardViewEventType.CLOSE.isUserInput());
+        assertFalse(StandardViewEventType.GENERIC.isUserInput());
     }
 }

@@ -9,16 +9,16 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.Model
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEventType;
 
 class ModelEventTest {
-    private static final String UPDATE_NAME = "Update";
+    private static final String VICTORY_NAME = "Victory";
     private static final String GAMEOVER_NAME = "GameOver";
 
     @Test
     void testFactories() {
         assertEquals(ModelEvent.createGameOverEvent().getType(), ModelEventType.GAMEOVER);
-        assertEquals(ModelEvent.createUpdateEvent().getType(), ModelEventType.UPDATE);
+        assertEquals(ModelEvent.createVictoryEvent().getType(), ModelEventType.VICTORY);
         assertEquals(ModelEvent.createGameOverEvent().getEventName(), GAMEOVER_NAME);
-        assertEquals(ModelEvent.createUpdateEvent().getEventName(), UPDATE_NAME);
+        assertEquals(ModelEvent.createVictoryEvent().getEventName(), VICTORY_NAME);
 
-        assertNotEquals(ModelEvent.createGameOverEvent().getType(), ModelEvent.createUpdateEvent().getType());
+        assertNotEquals(ModelEvent.createGameOverEvent().getType(), ModelEvent.createVictoryEvent().getType());
     }
 }
