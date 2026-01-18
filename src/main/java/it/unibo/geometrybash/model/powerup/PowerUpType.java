@@ -6,17 +6,17 @@ package it.unibo.geometrybash.model.powerup;
 public enum PowerUpType {
 
     /**
-     * Collectile coin, adds to the palyer's score, they can be used for shop new skins.
+     * Collectible coin, adds to the player's score, they can be used for shop new skins.
      */
     COIN("coin", false),
 
     /**
      * Shield, grants temporary invincibility.
      */
-    SHIELD("shield", true),
+    SHIELD("shield", false),
 
     /**
-     *  Speed boos temporarily increase player's speed.
+     *  Speed boost temporarily increase player's speed.
      */
     SPEED_BOOST("speedboost", true);
 
@@ -38,7 +38,7 @@ public enum PowerUpType {
     }
 
     /**
-     * Check ig this power-up has temporary effect.
+     * Check if this power-up has temporary effect.
      *
      * @return true if temporary, false if permament like the coin
      */

@@ -32,7 +32,7 @@ class BlockTest {
     }
 
     @Test
-    void testHitBoxIsTriangle() {
+    void testHitBoxIsSquare() {
         final Block block = new Block(new Vector2(0, 0));
         assertEquals(4, block.getHitBox().getVertices().size());
     }

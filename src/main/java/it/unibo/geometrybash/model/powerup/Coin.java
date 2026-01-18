@@ -67,7 +67,7 @@ public final class Coin extends AbstractPowerUp {
      * The copied coin preserves the same position and active state of the original.
      */
     @Override
-    public AbstractPowerUp copy() {
+    public Coin copy() {
         final Coin copy = new Coin(this.position);
         copy.setActive(this.active);
         return copy;
