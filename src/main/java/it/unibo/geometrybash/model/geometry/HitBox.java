@@ -1,9 +1,7 @@
 package it.unibo.geometrybash.model.geometry;
 
-import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.ToIntFunction;
 
 /**
  * The HitBox class represents a polygonal shape defined by a list of vertices.
@@ -25,14 +23,15 @@ public final class HitBox {
     /**
      * Constructs a HitBox with a list of vertices.
      *
-     * @param vertices the list of vertices; must contain at least {@value #MIN_VERTEX} points
-     * @throws IllegalArgumentException if the list contains fewer than {@value #MIN_VERTEX} vertices
+     * @param vertices the list of vertices; must contain at least
+     *                 {@value #MIN_VERTEX} points
+     * @throws IllegalArgumentException if the list contains fewer than
+     *                                  {@value #MIN_VERTEX} vertices
      */
     public HitBox(final List<Vector2> vertices) {
         if (vertices.size() < MIN_VERTEX) {
             throw new IllegalArgumentException(
-                "A HitBox must have at least " + MIN_VERTEX + " vertices"
-            );
+                    "A HitBox must have at least " + MIN_VERTEX + " vertices");
         }
         this.vertices = List.copyOf(vertices);
     }
@@ -47,32 +46,37 @@ public final class HitBox {
     }
 
     /**
-     * Calculates the width of the HitBox as the difference between the maximum and minimum X coordinates.
+     * Calculates the width of the HitBox as the difference between the maximum and
+     * minimum X coordinates.
      *
      * @return the width of the HitBox
      * @throws NoSuchElementException if the list of vertices is empty
      */
-    public int getWidth() {
-        return deltaInt(Axis.X);
+    public float getWidth() {
+        return delta(Axis.X);
     }
 
     /**
-     * Calculates the height of the HitBox as the difference between the maximum and minimum Y coordinates.
+     * Calculates the height of the HitBox as the difference between the maximum and
+     * minimum Y coordinates.
      *
      * @return the height of the HitBox
      * @throws NoSuchElementException if the list of vertices is empty
      */
-    public int getHeight() {
-        return deltaInt(Axis.Y);
+    public float getHeight() {
+        return delta(Axis.Y);
     }
 
-    private int deltaInt(final Axis axis) {
-        final ToIntFunction<Vector2> extractor = axis == Axis.X ? Vector2::x : Vector2::y;
+    private float delta(final Axis axis) {
+        float min = Float.POSITIVE_INFINITY;
+        float max = Float.NEGATIVE_INFINITY;
 
-        final IntSummaryStatistics stats = this.vertices.stream()
-                            .mapToInt(extractor)
-                            .summaryStatistics();
+        for (final Vector2 v : this.vertices) {
+            final float value = axis == Axis.X ? v.x() : v.y();
+            min = Math.min(min, value);
+            max = Math.max(max, value);
+        }
 
-        return stats.getMax() - stats.getMin();
+        return max - min;
     }
 }

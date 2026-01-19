@@ -10,4 +10,4 @@ package it.unibo.geometrybash.model.geometry;
  * @param x the X coordinate
  * @param y the Y coordinate
  */
-public record Vector2(int x, int y) { }
+public record Vector2(float x, float y) { }
