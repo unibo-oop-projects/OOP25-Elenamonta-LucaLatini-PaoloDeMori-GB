@@ -62,11 +62,4 @@ public interface GameObject {
      *               {@code false} to mark it as inactive
      */
     void setActive(boolean active);
-
-    /**
-     * Returns the runtime class of the object.
-     *
-     * @return the {@link Class} object corresponding to this object's type
-     */
-    Class<? extends GameObject> getType();
 }

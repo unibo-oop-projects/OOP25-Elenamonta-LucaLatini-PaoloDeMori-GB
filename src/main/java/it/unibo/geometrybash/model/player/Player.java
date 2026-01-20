@@ -3,15 +3,18 @@ package it.unibo.geometrybash.model.player;
 import it.unibo.geometrybash.model.geometry.Vector2;
 
 public interface Player {
-    void respawn(Vector2 position);
 
     void jump();
 
-    PlayerState getState();
+    void kill();
 
-    float getForwardSpeed();
+    void respawn(Vector2 position);
 
-    void setForwardSpeed(float speed);
+    void addCoin();
+
+    int getCoins();
+
+    void applySpeedModifier(float multiplier, float duration);
 
     Skin getSkin();
 
