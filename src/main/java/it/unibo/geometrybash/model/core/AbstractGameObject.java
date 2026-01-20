@@ -81,11 +81,4 @@ public abstract class AbstractGameObject<S extends Shape> implements GameObject<
     public void setActive(final boolean active) {
         this.active = active;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract Class<? extends GameObject<S>> getType();
-
 }
