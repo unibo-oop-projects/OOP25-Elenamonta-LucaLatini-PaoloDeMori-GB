@@ -1,5 +1,3 @@
 package it.unibo.geometrybash.model.player;
 
-public class Skin {
-    
-}
+public class Skin { }

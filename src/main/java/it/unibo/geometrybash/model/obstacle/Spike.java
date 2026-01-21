@@ -56,11 +56,6 @@ public final class Spike extends AbstractObstacle implements Collidable {
      */
     @Override
     public void onCollision(final Player player) {
-        if (player.getPowerUpManager().isShielded()) {
-            player.getPowerUpManager().consumeShield();
-            this.setActive(false);
-        } else {
-            player.kill();
-        }
+        player.onSpikeCollision();
     }
 }

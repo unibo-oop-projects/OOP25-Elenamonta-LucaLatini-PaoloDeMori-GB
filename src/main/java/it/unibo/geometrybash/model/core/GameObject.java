@@ -1,5 +1,6 @@
 package it.unibo.geometrybash.model.core;
 
+import it.unibo.geometrybash.model.geometry.CircleHitBox;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
@@ -8,7 +9,9 @@ import it.unibo.geometrybash.model.geometry.Vector2;
  * Represents a generic game object.
  *
  * <p>This interface defines the minimal behavior required for all game objects.
- * Each object must implement its own update logic in {@link #update(float)}.
+ *
+ * @param <S> the type of {@link Shape} used for this object's hitbox,
+ *            e.g., {@link CircleHitBox} or {@link HitBox}
  */
 public interface GameObject<S extends Shape> {
 
@@ -20,9 +23,10 @@ public interface GameObject<S extends Shape> {
     Vector2 getPosition();
 
     /**
-     * Returns the hitbox of the object, used for collision detection.
+     * Returns the hitbox of the game object.
      *
-     * @return a {@link HitBox} defining the object's physical boundaries
+     * @return the {@link Shape} representing this object's hitbox, which
+     *         may be a {@link CircleHitBox} or a {@link HitBox}
      */
     S getHitBox();
 

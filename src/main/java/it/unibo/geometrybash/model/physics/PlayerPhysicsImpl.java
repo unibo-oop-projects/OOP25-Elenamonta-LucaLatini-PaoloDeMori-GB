@@ -41,7 +41,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      *
      * @param body the JBox2D body associated with the player
      */
-    public PlayerPhysicsImpl(final Body body) {
+    protected PlayerPhysicsImpl(final Body body) {
         this.body = body;
         this.groundContacts = 0;
     }

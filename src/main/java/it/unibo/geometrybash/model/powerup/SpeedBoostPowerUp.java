@@ -73,7 +73,7 @@ public class SpeedBoostPowerUp extends AbstractPowerUp<CircleHitBox> implements 
      */
     @Override
     public void onCollision(final Player player) {
-        player.getPowerUpManager().applySpeedModifier(MULTIPLIER, DURATION);
+        player.onSpeedBoostCollected(MULTIPLIER, DURATION);
         this.setActive(false);
     }
 }

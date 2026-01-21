@@ -1,5 +1,7 @@
 package it.unibo.geometrybash.model.core;
 
+import it.unibo.geometrybash.model.geometry.CircleHitBox;
+import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 
@@ -10,6 +12,9 @@ import it.unibo.geometrybash.model.geometry.Vector2;
  * Provides common state and default behavior shared by game objects.
  * Concrete subclasses must implement object-specific update logic.
  * </p>
+ *
+ * @param <S> the type of {@link Shape} used for this object's hitbox,
+ *            e.g., {@link CircleHitBox} or {@link HitBox}
  */
 public abstract class AbstractGameObject<S extends Shape> implements GameObject<S> {
 
