@@ -1,6 +1,7 @@
 package it.unibo.geometrybash.model.player;
 
 import it.unibo.geometrybash.model.geometry.Vector2;
+import it.unibo.geometrybash.model.powerup.PowerUpManager;
 
 public interface Player {
 
@@ -10,7 +11,7 @@ public interface Player {
 
     void respawn(Vector2 position);
 
-    void addCoin();
+    void addCoin(int value);
 
     int getCoins();
 
@@ -19,4 +20,6 @@ public interface Player {
     Skin getSkin();
 
     void setSkin(Skin skin);
+
+    PowerUpManager getPowerUpManager();
 }

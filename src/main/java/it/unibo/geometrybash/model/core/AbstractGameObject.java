@@ -1,6 +1,6 @@
 package it.unibo.geometrybash.model.core;
 
-import it.unibo.geometrybash.model.geometry.HitBox;
+import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 
 /**
@@ -11,7 +11,7 @@ import it.unibo.geometrybash.model.geometry.Vector2;
  * Concrete subclasses must implement object-specific update logic.
  * </p>
  */
-public abstract class AbstractGameObject implements GameObject {
+public abstract class AbstractGameObject<S extends Shape> implements GameObject<S> {
 
     // CHECKSTYLE: VisibilityModifier OFF
     // Protected fields are required for subclasses; rule disabled because these are not truly public
@@ -24,7 +24,7 @@ public abstract class AbstractGameObject implements GameObject {
     /**
      * Hitbox associated with the game object.
      */
-    protected HitBox hitBox;
+    protected S hitBox;
 
     /**
      * Active state of the game object.
@@ -38,7 +38,7 @@ public abstract class AbstractGameObject implements GameObject {
      * @param position the initial position of the object
      * @param hitBox   the hitbox associated with the object
      */
-    protected AbstractGameObject(final Vector2 position, final HitBox hitBox) {
+    protected AbstractGameObject(final Vector2 position, final S hitBox) {
         this.position = position;
         this.hitBox = hitBox;
         this.active = true;
@@ -56,7 +56,7 @@ public abstract class AbstractGameObject implements GameObject {
      * {@inheritDoc}
      */
     @Override
-    public HitBox getHitBox() {
+    public S getHitBox() {
         return this.hitBox;
     }
 
@@ -72,7 +72,7 @@ public abstract class AbstractGameObject implements GameObject {
      * {@inheritDoc}
      */
     @Override
-    public abstract GameObject copy();
+    public abstract GameObject<S> copy();
 
     /**
      * {@inheritDoc}

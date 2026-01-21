@@ -25,12 +25,6 @@ class SpikeTest {
     }
 
     @Test
-    void testIsDeadly() {
-        final Spike spike = new Spike(new Vector2(0, 0));
-        assertTrue(spike.isDeadly());
-    }
-
-    @Test
     void testHitBoxIsTriangle() {
         final Spike spike = new Spike(new Vector2(0, 0));
         assertEquals(3, spike.getHitBox().getVertices().size());

@@ -1,8 +1,11 @@
 package it.unibo.geometrybash.model.obstacle;
 
 import java.util.List;
+
+import it.unibo.geometrybash.model.collision.Collidable;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
+import it.unibo.geometrybash.model.player.Player;
 
 /**
  * A triangular spike that kills the player on contact.
@@ -11,9 +14,9 @@ import it.unibo.geometrybash.model.geometry.Vector2;
  * The spike is modeled as a triangular hitbox and is considered a deadly
  * obstacle.
  */
-public final class Spike extends AbstractObstacle {
+public final class Spike extends AbstractObstacle implements Collidable {
 
-    public static final int SIZE = 32;
+    public static final float SIZE = 1.0f;
 
     /**
      * Creates a spike at the given position.
@@ -25,7 +28,8 @@ public final class Spike extends AbstractObstacle {
     }
 
     /**
-     * Creates and returns the hitbox representing the triangular shape of the spike.
+     * Creates and returns the hitbox representing the triangular shape of the
+     * spike.
      *
      * @return a triangular {@link HitBox} representing the spike
      */
@@ -40,4 +44,23 @@ public final class Spike extends AbstractObstacle {
         return copy;
     }
 
+    /**
+     * Handles the collision with the player.
+     *
+     * <p>
+     * If the player has an active shield, the shield is consumed and the spike
+     * is deactivated to allow the player to pass safely.
+     * Otherwise, the player dies.
+     *
+     * @param player the player that collided with this spike
+     */
+    @Override
+    public void onCollision(final Player player) {
+        if (player.getPowerUpManager().isShielded()) {
+            player.getPowerUpManager().consumeShield();
+            this.setActive(false);
+        } else {
+            player.kill();
+        }
+    }
 }

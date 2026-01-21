@@ -1,7 +1,6 @@
 package it.unibo.geometrybash.model.obstacle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,13 +25,7 @@ class BlockTest {
     }
 
     @Test
-    void testIsDeadly() {
-        final Block block = new Block(new Vector2(0, 0));
-        assertFalse(block.isDeadly());
-    }
-
-    @Test
-    void testHitBoxIsTriangle() {
+    void testHitBoxIsSquare() {
         final Block block = new Block(new Vector2(0, 0));
         assertEquals(4, block.getHitBox().getVertices().size());
     }

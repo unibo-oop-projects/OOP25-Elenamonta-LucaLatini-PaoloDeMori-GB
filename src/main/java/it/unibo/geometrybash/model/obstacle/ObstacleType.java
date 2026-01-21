@@ -8,19 +8,17 @@ public enum ObstacleType {
     /**
      *  Triangular spike kill the player on contact with it.
      */
-    SPIKE("spike", true),
+    SPIKE("spike"),
 
     /**
      *  Is a solid block where player can lands on it.
      */
-    BLOCK("block", false);
+    BLOCK("block");
 
     private final String name;
-    private final boolean deadly;
 
-    ObstacleType(final String name, final boolean deadly) {
+    ObstacleType(final String name) {
         this.name = name;
-        this.deadly = deadly;
     }
 
     /**
@@ -30,15 +28,6 @@ public enum ObstacleType {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * Check if this obstacle type can kills the player on contact.
-     *
-     * @return true if deadly, false otherwise
-     */
-    public boolean isDeadly() {
-        return this.deadly;
     }
 
 }

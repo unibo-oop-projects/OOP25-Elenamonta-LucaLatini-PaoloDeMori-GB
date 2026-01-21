@@ -42,8 +42,8 @@ public class CollisionHandler implements ContactListener {
     public void endContact(final Contact contact) { }
 
     private void processContact(final Contact contact) {
-        final GameObject a = getGameObject(contact.getFixtureA());
-        final GameObject b = getGameObject(contact.getFixtureB());
+        final GameObject<?> a = getGameObject(contact.getFixtureA());
+        final GameObject<?> b = getGameObject(contact.getFixtureB());
 
         if (a == null || b == null) {
             return;
@@ -52,12 +52,12 @@ public class CollisionHandler implements ContactListener {
         handleCollision(b, a);
     }
 
-    private GameObject getGameObject(final Fixture fixture) {
+    private GameObject<?> getGameObject(final Fixture fixture) {
         final Object userData = fixture.getBody().getUserData();
         return userData instanceof GameObject gameObject ? gameObject : null;
     }
 
-    private void handleCollision(final GameObject source, final GameObject other) {
+    private void handleCollision(final GameObject<?> source, final GameObject<?> other) {
         if (source instanceof Collidable collidable && other instanceof Player player) {
             collidable.onCollision(player);
         }

@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 /**
  * The HitBox class represents a polygonal shape defined by a list of vertices.
  */
-public final class HitBox {
+public final class HitBox implements Shape{
     /**
      * Represents the axes of a 2D coordinate system.
      */
@@ -52,6 +52,7 @@ public final class HitBox {
      * @return the width of the HitBox
      * @throws NoSuchElementException if the list of vertices is empty
      */
+    @Override
     public float getWidth() {
         return delta(Axis.X);
     }
@@ -63,6 +64,7 @@ public final class HitBox {
      * @return the height of the HitBox
      * @throws NoSuchElementException if the list of vertices is empty
      */
+    @Override
     public float getHeight() {
         return delta(Axis.Y);
     }

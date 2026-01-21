@@ -1,6 +1,7 @@
 package it.unibo.geometrybash.model.core;
 
 import it.unibo.geometrybash.model.geometry.HitBox;
+import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 
 /**
@@ -9,7 +10,7 @@ import it.unibo.geometrybash.model.geometry.Vector2;
  * <p>This interface defines the minimal behavior required for all game objects.
  * Each object must implement its own update logic in {@link #update(float)}.
  */
-public interface GameObject {
+public interface GameObject<S extends Shape> {
 
     /**
      * Returns the current position of the object in the game world.
@@ -23,7 +24,7 @@ public interface GameObject {
      *
      * @return a {@link HitBox} defining the object's physical boundaries
      */
-    HitBox getHitBox();
+    S getHitBox();
 
     /**
      * Returns a defensive copy of this {@link GameObject}.
@@ -36,7 +37,7 @@ public interface GameObject {
      *
      * @return a new {@link GameObject} instance duplicating this object's state
      */
-    GameObject copy();
+    GameObject<S> copy();
 
     /**
      * Returns whether the object is currently active.
