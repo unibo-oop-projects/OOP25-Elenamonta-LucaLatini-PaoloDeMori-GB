@@ -22,11 +22,9 @@ public final class ResourceLoaderImpl implements ResourceLoader {
     public InputStream openStream(final String name) {
         final String resourceName = normalizeResourceName(name);
 
-        InputStream in = Objects.requireNonNull(
+        return Objects.requireNonNull(
                 ClassLoader.getSystemResourceAsStream(resourceName),
                 "Resource not found in classpath: " + resourceName);
-
-        return in;
     }
 
     /**
