@@ -17,7 +17,8 @@ import it.unibo.geometrybash.model.player.Player;
 public final class Block extends AbstractObstacle implements Collidable {
 
     /**
-     * Default size for the block obstacle in the game, 1.0f represents 1 meter in Jbox2D.
+     * Default size for the block obstacle in the game, 1.0f represents 1 meter in
+     * Jbox2D.
      */
     public static final float SIZE = 1.0f;
 
@@ -35,7 +36,7 @@ public final class Block extends AbstractObstacle implements Collidable {
      *
      * @return a square {@link HitBox} representing the block
      */
-    public static HitBox createHitBox() {
+    private static HitBox createHitBox() {
         return new HitBox(
                 List.of(new Vector2(0, 0), new Vector2(SIZE, 0), new Vector2(SIZE, SIZE), new Vector2(0, SIZE)));
     }
@@ -54,15 +55,23 @@ public final class Block extends AbstractObstacle implements Collidable {
      * Handles the collision with the player.
      *
      * <p>
-     * Since the block is a solid, non-deadly obstacle, its physical
-     * presence is handled by the physics engine. No additional logic
-     * is required here.
+     * The block is normally a solid, non-deadly obstacle whose physical interaction
+     * is handled by the physics engine. However, if the collision does not satisfy
+     * the vertical position check (for example, the player hits the block from below or
+     * too close to its top within a tolerance), the block behaves as a deadly obstacle
+     * and the player is killed even if he has the shield. Otherwise, no additional action is performed.
      *
      * @param player the player that collided with this block
      */
     @Override
     public void onCollision(final Player<?> player) {
-        // No action required from stati block.
+        final float playerBottomY = player.getPosition().y();
+        final float blockTopY = this.getPosition().y() + this.getHitBox().getHeight();
+
+        final float tolerance = 0.15f;
+        if (playerBottomY < (blockTopY - tolerance)) {
+            player.die();
+        }
     }
 
 }

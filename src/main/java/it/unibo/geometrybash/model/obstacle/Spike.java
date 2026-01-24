@@ -37,7 +37,7 @@ public final class Spike extends AbstractObstacle implements Collidable {
      *
      * @return a triangular {@link HitBox} representing the spike
      */
-    public static HitBox createHitBox() {
+    private static HitBox createHitBox() {
         return new HitBox(List.of(new Vector2(0, 0), new Vector2(SIZE, 0), new Vector2(SIZE / 2, SIZE)));
     }
 
