@@ -52,7 +52,7 @@ public final class ShieldPowerUp extends AbstractPowerUp<CircleHitBox> implement
      * @param player the player that collected the shield
      */
     @Override
-    public void onCollision(final Player player) {
+    public void onCollision(final Player<?> player) {
         player.onShieldCollected();
         this.setActive(false);
     }

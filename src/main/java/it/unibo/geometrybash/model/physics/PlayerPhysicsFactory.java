@@ -1,6 +1,7 @@
 package it.unibo.geometrybash.model.physics;
 
 import it.unibo.geometrybash.model.geometry.Vector2;
+import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
 
 /**
  * Factory interface responsible for creating {@link PlayerPhysics} instances.

@@ -25,5 +25,5 @@ public interface Collidable {
      *
      * @param player the player involved in the collision
      */
-    void onCollision(Player player);
+    void onCollision(Player<?> player);
 }

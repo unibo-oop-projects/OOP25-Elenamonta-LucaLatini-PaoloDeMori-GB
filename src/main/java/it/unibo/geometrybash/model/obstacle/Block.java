@@ -61,7 +61,7 @@ public final class Block extends AbstractObstacle implements Collidable {
      * @param player the player that collided with this block
      */
     @Override
-    public void onCollision(final Player player) {
+    public void onCollision(final Player<?> player) {
         // No action required from stati block.
     }
 

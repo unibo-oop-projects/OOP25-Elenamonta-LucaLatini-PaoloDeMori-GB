@@ -1,5 +1,8 @@
 package it.unibo.geometrybash.model;
 
+import it.unibo.geometrybash.model.geometry.Shape;
+import it.unibo.geometrybash.model.player.Player;
+
 /**
  * The model state.
  */
@@ -9,7 +12,7 @@ public interface GameState {
      * 
      * @return The player of the game.
      */
-    Player getPlayer();
+    Player<? extends Shape> getPlayer();
 
     /**
      * Returns the level of the game.

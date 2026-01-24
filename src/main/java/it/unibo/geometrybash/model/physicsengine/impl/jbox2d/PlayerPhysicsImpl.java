@@ -1,6 +1,8 @@
-package it.unibo.geometrybash.model.physics;
+package it.unibo.geometrybash.model.physicsengine.impl.jbox2d;
 
 import it.unibo.geometrybash.model.geometry.Vector2;
+import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 

@@ -2,10 +2,11 @@ package it.unibo.geometrybash.view.core;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+
+import it.unibo.geometrybash.commons.assets.AssetStore;
 import it.unibo.geometrybash.commons.dtos.DtoObstaclesType;
 import it.unibo.geometrybash.commons.dtos.DtoPowerUpType;
 import it.unibo.geometrybash.commons.dtos.SkinDto;
-import it.unibo.geometrybash.view.assets.AssetStore;
 
 /**
  * Central registry for all sprites used by the view layer.

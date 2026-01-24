@@ -61,6 +61,14 @@ public abstract class AbstractGameObject<S extends Shape> implements GameObject<
      * {@inheritDoc}
      */
     @Override
+    public void setPosition(final Vector2 vC) {
+        this.position = vC;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public S getHitBox() {
         return this.hitBox;
     }

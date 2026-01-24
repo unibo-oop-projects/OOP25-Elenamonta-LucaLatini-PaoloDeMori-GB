@@ -15,6 +15,7 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.Observer;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.model.core.Updatable;
 import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationException;
+import it.unibo.geometrybash.model.player.Player;
 
 // CHECKSTYLE: AbstractClassName OFF
 /*Check style signals this name as invalid because it starts with Abstract without being an
@@ -164,7 +165,7 @@ class AbstractGameModelTest {
         }
 
         @Override
-        public Player getPlayer() {
+        public Player<?> getPlayer() {
             throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
 

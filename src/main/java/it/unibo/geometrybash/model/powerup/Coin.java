@@ -71,7 +71,7 @@ public final class Coin extends AbstractPowerUp<CircleHitBox> implements Collida
      * @param player the player that collected the coin
      */
     @Override
-    public void onCollision(final Player player) {
+    public void onCollision(final Player<?> player) {
         player.addCoin(DEFAULT_VALUE);
         this.setActive(false);
 

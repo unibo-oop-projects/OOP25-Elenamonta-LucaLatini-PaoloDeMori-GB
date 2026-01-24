@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.view.assets;
+package it.unibo.geometrybash.commons.assets;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

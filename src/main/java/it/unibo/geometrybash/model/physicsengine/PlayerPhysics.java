@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.model.physics;
+package it.unibo.geometrybash.model.physicsengine;
 
 import it.unibo.geometrybash.model.geometry.Vector2;
 

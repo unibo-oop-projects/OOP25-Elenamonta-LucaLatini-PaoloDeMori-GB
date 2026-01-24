@@ -23,6 +23,13 @@ public interface GameObject<S extends Shape> {
     Vector2 getPosition();
 
     /**
+     * Sets the position of the object in the game world.
+     *
+     * @param vC a {@link Vector2} object representing the object's coordinates
+     */
+    void setPosition(Vector2 vC);
+
+    /**
      * Returns the hitbox of the game object.
      *
      * @return the {@link Shape} representing this object's hitbox, which

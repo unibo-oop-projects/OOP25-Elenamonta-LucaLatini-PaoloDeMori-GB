@@ -21,9 +21,9 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObservable;
 import it.unibo.geometrybash.controller.input.CompositeInputHandler;
 import it.unibo.geometrybash.model.MenuModel;
-import it.unibo.geometrybash.view.assets.ResourceLoader;
-import it.unibo.geometrybash.view.assets.ResourceLoaderImpl;
-import it.unibo.geometrybash.view.assets.TextAssetReader;
+import it.unibo.geometrybash.commons.assets.ResourceLoader;
+import it.unibo.geometrybash.commons.assets.ResourceLoaderImpl;
+import it.unibo.geometrybash.commons.assets.TextAssetReader;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
 /**
