@@ -26,6 +26,9 @@ public final class CompositeInputHandler implements InputHandler {
         this.guiEventHandler = new GuiEventHandlerImpl();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(final ViewEvent event) {
         Objects.requireNonNull(event, "ViewEvent cannot be null");
@@ -37,26 +40,41 @@ public final class CompositeInputHandler implements InputHandler {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setOnMainKeyPressed(final OnInputEventAction action) {
         userInputHandler.setOnJumpAction(action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setOnMenuKeyPressed(final OnInputEventAction action) {
         userInputHandler.setOnMenuAction(action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setOnResumeKeyPressed(final OnInputEventAction action) {
         guiEventHandler.setActionForEvent(StandardViewEventType.RESUME, action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setActionForEvent(final StandardViewEventType type, final OnInputEventAction action) {
         guiEventHandler.setActionForEvent(type, action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setGenericCommandHandler(final OnGenericCommandAction handler) {
         guiEventHandler.setGenericCommandHandler(handler);
