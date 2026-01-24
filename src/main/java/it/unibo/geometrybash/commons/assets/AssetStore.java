@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.view.assets;
+package it.unibo.geometrybash.commons.assets;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
  * This allows you to upload and decode an image only once.
  * </p>
  */
-final class AssetStore {
+public final class AssetStore {
 
     private final ResourceLoader loader;
     private final Map<String, BufferedImage> imageCache = new ConcurrentHashMap<>();
@@ -27,7 +27,7 @@ final class AssetStore {
      * @param loader the resource loader used to access classpath resources
      * @throws NullPointerException if {@code loader} is {@code null}
      */
-    AssetStore(final ResourceLoader loader) {
+    public AssetStore(final ResourceLoader loader) {
         this.loader = Objects.requireNonNull(loader, "resource loader must not be null");
     }
 
@@ -40,7 +40,7 @@ final class AssetStore {
      * @throws NullPointerException if {@code resourceName} is {@code null}
      * @throws IllegalArgumentException if the resource cannot be read as an image
      */
-    BufferedImage getImage(final String resourceName) {
+    public BufferedImage getImage(final String resourceName) {
         Objects.requireNonNull(resourceName, "resource name must not be null");
         return imageCache.computeIfAbsent(resourceName, this::loadImage);
     }
