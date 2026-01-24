@@ -118,6 +118,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.appendText(" ERROR: '" + command + "' is not recognized as a command.");
         this.appendText("     Type 'help' or 'commands' to see the list of available actions.");
     }
+
     /**
      * Creates a scrollable panel for the output area.
      *
@@ -258,13 +259,13 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         final MenuModel mm = new MenuModel();
         cH.setGenericCommandHandler(command -> {
             mm.addCommand(command);
-            if ("riccio".equals(command)) {
+            if ("history".equals(command)) {
                 for (final String string : mm.getHistory()) {
                      menu.appendText(string);
                 }
-            }else if (command.equals("help") || command.equals("commands") || command.equals("cmds")) {
+            } else if ("help".equals(command) || "commands".equals(command) || "cmds".equals(command)) {
                 menu.showCommands();
-            }else{
+            } else {
                 menu.showUnknownCommandError(command);
             }
         });
