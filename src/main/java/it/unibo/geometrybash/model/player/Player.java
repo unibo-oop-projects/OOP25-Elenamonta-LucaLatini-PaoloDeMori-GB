@@ -5,6 +5,7 @@ import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.obstacle.Spike;
+import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
 
 /**
  * Represents the player entity in the game.
@@ -14,17 +15,16 @@ import it.unibo.geometrybash.model.obstacle.Spike;
  * player-controlled
  * entity in game.
  * </p>
- * 
+ *
  * @param <S> the type of shape used for collision detection
  */
-public interface Player<S extends Shape> extends GameObject<HitBox> { 
+public interface Player<S extends Shape> extends GameObject<HitBox> {
 
     /**
      * Makes the player jump, applying the appropriate vertical impulse.
      *
      * <p>
-     * The movement logic should be delegated to the physics component
-     * to update the player's position.
+     * The movement logic should be delegated to the physics component to update the player's position.
      * </p>
      */
     void jump();
@@ -33,8 +33,7 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      * Handles the player death event.
      *
      * <p>
-     * Triggers an immediate respawn at the initial position and resetting all
-     * temporary effects.
+     * Triggers an immediate respawn at the initial position and resetting all temporary effects.
      * </p>
      */
     void die();
@@ -45,6 +44,13 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      * @param position the position where the player should respawn
      */
     void respawn(Vector2 position);
+
+    /**
+     * Bind the physical representation of the player to its inner logic.
+     *
+     * @param physics the physics component associated with this player
+     */
+    void setPhysics(PlayerPhysics physics);
 
     /**
      * Increments the number of collected coins by a given value.

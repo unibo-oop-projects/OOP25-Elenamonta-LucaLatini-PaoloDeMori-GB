@@ -8,7 +8,6 @@ import it.unibo.geometrybash.model.core.Updatable;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.obstacle.Spike;
-import it.unibo.geometrybash.model.physics.PlayerPhysicsFactory;
 import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
 import it.unibo.geometrybash.model.powerup.PowerUpManager;
 
@@ -29,8 +28,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements Player<Hit
 
     private static final float SIZE = 1.0f;
     private final PowerUpManager powerUpManager;
-    private final PlayerPhysics physics;
-    private final PlayerPhysicsFactory factory;
+    private PlayerPhysics physics;
     private int coins;
     private Skin skin;
 
@@ -39,13 +37,11 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements Player<Hit
      *
      * @param position the initial position of the player in the game world
      * @param hitBox the collision hitbox associated with the player
-     * @param physicsFactory create the physics component responsible for movement and collisions
      */
-    public PlayerImpl(final Vector2 position, final HitBox hitBox, final PlayerPhysicsFactory physicsFactory) {
+    public PlayerImpl(final Vector2 position, final HitBox hitBox) {
         super(position, createHitBox());
-        this.physics = physicsFactory.createPhysics(position);
-        this.factory = physicsFactory;
         this.powerUpManager = new PowerUpManager();
+        this.physics = null;
         this.coins = 0;
         this.skin = null;
     }
@@ -85,6 +81,14 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements Player<Hit
     public void respawn(final Vector2 position) {
         this.physics.resetBodyTo(position);
         this.position = position;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPhysics(final PlayerPhysics physics) {
+        this.physics = physics;
     }
 
     /**
@@ -169,7 +173,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements Player<Hit
      */
     @Override
     public GameObject<HitBox> copy() {
-        final PlayerImpl copy = new PlayerImpl(new Vector2(position.x(), position.y()), hitBox, this.factory);
+        final PlayerImpl copy = new PlayerImpl(new Vector2(position.x(), position.y()), createHitBox());
         copy.coins = this.coins;
         copy.skin = this.skin;
         return copy;

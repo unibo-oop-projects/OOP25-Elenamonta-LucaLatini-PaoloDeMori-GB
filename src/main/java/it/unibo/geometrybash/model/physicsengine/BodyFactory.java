@@ -7,14 +7,14 @@ import it.unibo.geometrybash.model.powerup.PowerUp;
 
 /**
  * A factory that creates JBox2d instances.
- * 
+ *
  * @param <T> the body class that represents the objects in the physics engine.
  */
 public interface BodyFactory<T> {
 
     /**
      * Create the Obstacle representation in the physics engine.
-     * 
+     *
      * @param obj the obstacle to represent in the physical world
      * @return the obstacle just created
      */
@@ -22,7 +22,7 @@ public interface BodyFactory<T> {
 
     /**
      * Create the powerup representation in the physics engine.
-     * 
+     *
      * @param obj the powerup to represent in the physical world
      * @return the powerup just created
      */

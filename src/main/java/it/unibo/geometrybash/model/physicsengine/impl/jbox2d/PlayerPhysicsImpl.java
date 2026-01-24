@@ -18,24 +18,9 @@ import org.jbox2d.dynamics.Body;
  */
 public class PlayerPhysicsImpl implements PlayerPhysics {
 
-    /**
-     * Magnitude of the vertical impulse applied when a jump is performed.
-     */
     private static final float JUMP_IMPULSE = 6.5f;
-
-    /**
-     * Player's default speed.
-     */
     private static final float BASE_SPEED = 5.0f;
-
-    /**
-     * JBox2D body representing the player's physical presence in the world.
-     */
     private final Body body;
-
-    /**
-     * Number of active contacts between the player and ground surfaces.
-     */
     private int groundContacts;
 
     /**

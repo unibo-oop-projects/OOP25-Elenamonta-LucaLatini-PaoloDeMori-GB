@@ -16,14 +16,14 @@ import it.unibo.geometrybash.model.geometry.Vector2;
 public interface GameObject<S extends Shape> {
 
     /**
-     * Returns the current position of the object in the game world.
+     * Returns the position represented by the lower left corner of the object in the game world.
      *
      * @return a {@link Vector2} object representing the object's coordinates
      */
     Vector2 getPosition();
 
     /**
-     * Sets the position of the object in the game world.
+     * Sets the position represented by the lower left corner of the object in the game world.
      *
      * @param vC a {@link Vector2} object representing the object's coordinates
      */
@@ -32,8 +32,7 @@ public interface GameObject<S extends Shape> {
     /**
      * Returns the hitbox of the game object.
      *
-     * @return the {@link Shape} representing this object's hitbox, which
-     *         may be a {@link CircleHitBox} or a {@link HitBox}
+     * @return the {@link Shape} representing this object's hitbox, which may be a {@link CircleHitBox} or a {@link HitBox}
      */
     S getHitBox();
 
