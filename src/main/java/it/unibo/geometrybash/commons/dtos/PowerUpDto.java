@@ -7,9 +7,8 @@ package it.unibo.geometrybash.commons.dtos;
  * @param y        the Y position
  * @param width    the width
  * @param height   the height
- * @param type     the power-up type identifier
  * @param isActive if the power-up is active
- * @param type     the obstacle type identifier ({@link DtoPowerUpType})
+ * @param type     the power-up type identifier ({@link DtoPowerUpType})
  */
 public record PowerUpDto(
         float x,

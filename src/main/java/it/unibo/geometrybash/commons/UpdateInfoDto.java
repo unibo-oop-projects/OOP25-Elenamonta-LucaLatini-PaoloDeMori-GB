@@ -18,6 +18,10 @@ import it.unibo.geometrybash.commons.dtos.GameStateDto;
  */
 public final class UpdateInfoDto implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * The current game state to be sent to the view.
+     */
     private final GameStateDto gameState;
 
     /**

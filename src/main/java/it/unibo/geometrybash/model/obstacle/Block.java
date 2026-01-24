@@ -16,6 +16,9 @@ import it.unibo.geometrybash.model.player.Player;
  */
 public final class Block extends AbstractObstacle implements Collidable {
 
+    /**
+     * Default size for the block obstacle in the game, 1.0f represents 1 meter in Jbox2D.
+     */
     public static final float SIZE = 1.0f;
 
     /**
