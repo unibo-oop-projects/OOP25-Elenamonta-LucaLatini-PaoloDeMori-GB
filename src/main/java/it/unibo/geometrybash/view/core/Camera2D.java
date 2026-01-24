@@ -1,8 +1,7 @@
 package it.unibo.geometrybash.view.core;
 
 /**
- * Handles coordinate transformation from world which uses meters to screen, it
- * uses pixel.
+ * Handles coordinate transformation from world which uses meters to screen, it uses pixel.
  * The Y-axis is inverted since Swing has Y=0 at top but Jbox2D has it at the
  * bottom.
  */
@@ -11,13 +10,13 @@ public final class Camera2D {
     /**
      * Conversion factor from meters to pixels.
      */
-    private static final float pixelPerMeter = 50.0f;
+    private static final float PIXEL_PER_METER = 50.0f;
 
     private float offsetX;
     private int viewportHeight;
 
     /**
-     * Create new Camera2D
+     * Create new Camera2D.
      */
     public Camera2D() {
         // Default constructor for Javadoc compliance
@@ -48,7 +47,7 @@ public final class Camera2D {
      * @return the corresponding X coordinate in pixels
      */
     public int xToPx(final float xMeters) {
-        return Math.toIntExact(Math.round((xMeters - offsetX) * pixelPerMeter));
+        return Math.toIntExact(Math.round((xMeters - offsetX) * PIXEL_PER_METER));
     }
 
     /**
@@ -58,7 +57,7 @@ public final class Camera2D {
      * @return the corresponding Y coordinate in pixels
      */
     public int yToPx(final float yMeters) {
-        return viewportHeight - Math.toIntExact(Math.round(yMeters * pixelPerMeter));
+        return viewportHeight - Math.toIntExact(Math.round(yMeters * PIXEL_PER_METER));
     }
 
     /**
@@ -68,7 +67,19 @@ public final class Camera2D {
      * @return the corresponding size in pixels
      */
     public int sizeToPx(final float meters) {
-        return Math.toIntExact(Math.round(meters * pixelPerMeter));
+        return Math.toIntExact(Math.round(meters * PIXEL_PER_METER));
+    }
+
+    /**
+     * Create a defensive copy of the camersa used in the RenderContext.
+     *
+     * @return a Camera2D copy
+     */
+    public Camera2D copy() {
+        final Camera2D copy = new Camera2D();
+        copy.setOffset(this.offsetX);
+        copy.setViewportHeight(this.viewportHeight);
+        return copy;
     }
 
 }
