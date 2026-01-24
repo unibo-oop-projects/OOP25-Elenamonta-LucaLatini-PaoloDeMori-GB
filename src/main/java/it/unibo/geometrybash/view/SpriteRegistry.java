@@ -1,7 +1,9 @@
-package it.unibo.geometrybash.view.assets;
+package it.unibo.geometrybash.view;
 
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+
+import it.unibo.geometrybash.commons.assets.AssetStore;
 import it.unibo.geometrybash.commons.dtos.DtoObstaclesType;
 import it.unibo.geometrybash.commons.dtos.DtoPowerUpType;
 import it.unibo.geometrybash.commons.dtos.SkinDto;

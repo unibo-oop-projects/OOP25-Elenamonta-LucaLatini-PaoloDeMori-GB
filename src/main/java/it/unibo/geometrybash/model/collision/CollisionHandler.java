@@ -23,7 +23,7 @@ public class CollisionHandler implements ContactListener {
      * Creates a new CollisionHandler.
      */
     public CollisionHandler() {
-        // Default constructor for Javadoc compliance
+        // Default constructor
     }
 
     /**
