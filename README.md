@@ -1,4 +1,5 @@
-# Sample Gradle Project
+# Geometry-Bash
 
-This is a repository that can be used as a base to develop an OOP project.
-The tools seen in the lab are pre-integrated in the build file.
+Project for OOP 24/25 course.
+A 2D-HorizontalScrolling Videogame inspired by GeometryDash and bash terminals aestethic.
+Developed in java

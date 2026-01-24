@@ -24,8 +24,6 @@ dependencies {
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
 
     // Maven dependencies are composed by a group name, a name and a version, separated by colons
-    implementation("com.omertron:API-OMDB:1.5")
-    implementation("org.jooq:jool:0.9.15")
 
     /*
      * Simple Logging Facade for Java (SLF4J) with Apache Log4j
@@ -33,19 +31,30 @@ dependencies {
      */
     val slf4jVersion = "2.0.17"
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation ("org.jbox2d:jbox2d-library:2.2.1.1")
     // Logback backend for SLF4J
     runtimeOnly("ch.qos.logback:logback-classic:1.5.20")
+
+    /*
+     * JBox2D: A Java Physics Engine
+     * See: https://www.jbox2d.org/
+     */
+    val jbox2dVersion="2.2.1.1"
+    implementation("org.jbox2d:jbox2d-library:$jbox2dVersion")
 
     // JUnit API and testing engine
     testImplementation(platform("org.junit:junit-bom:6.0.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+    //spotbugs annotations
+    testCompileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
 }
 
 application {
     // Define the main class for the application.
-    mainClass.set("it.unibo.sampleapp.RateAMovie")
+    mainClass.set("it.unibo.geometrybash.view.menus.MainMenuView")
 }
 
 tasks.withType<Test>().configureEach {
