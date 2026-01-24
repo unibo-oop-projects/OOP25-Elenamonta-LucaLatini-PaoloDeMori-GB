@@ -28,11 +28,19 @@ public abstract class AbstractObstacle extends AbstractGameObject<HitBox> implem
         this.obstacleType = type;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final ObstacleType getObstacleType() {
         return this.obstacleType;
     }
 
+    /**
+     * Creates and returns a deep copy of this obstacle.
+     *
+     * @return a new {@link AbstractObstacle} with the same state as this one
+     */
     @Override
     public abstract AbstractObstacle copy();
 }

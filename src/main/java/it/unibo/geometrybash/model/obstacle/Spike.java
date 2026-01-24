@@ -17,7 +17,8 @@ import it.unibo.geometrybash.model.player.Player;
 public final class Spike extends AbstractObstacle implements Collidable {
 
     /**
-     * Default size for the spike obstacle in the game, 1.0f represents 1 meter in Jbox2D.
+     * Default size for the spike obstacle in the game, 1.0f represents 1 meter in
+     * Jbox2D.
      */
     public static final float SIZE = 1.0f;
 
@@ -40,6 +41,9 @@ public final class Spike extends AbstractObstacle implements Collidable {
         return new HitBox(List.of(new Vector2(0, 0), new Vector2(SIZE, 0), new Vector2(SIZE / 2, SIZE)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Spike copy() {
         final Spike copy = new Spike(this.position);

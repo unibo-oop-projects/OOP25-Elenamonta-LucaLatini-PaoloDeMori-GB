@@ -32,11 +32,19 @@ public abstract class AbstractPowerUp<S extends Shape> extends AbstractGameObjec
         this.powerUpType = powerUpType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final PowerUpType getPowerUpType() {
         return this.powerUpType;
     }
 
+    /**
+     * Creates and returns a deep copy of this power-up.
+     *
+     * @return a new {@link AbstractPowerUp} with the same state as this one
+     */
     @Override
     public abstract AbstractPowerUp<S> copy();
 

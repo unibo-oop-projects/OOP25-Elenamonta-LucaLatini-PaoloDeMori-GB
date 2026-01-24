@@ -15,7 +15,7 @@ public final class ObstacleFactory {
      * Create new obstacle.
      */
     private ObstacleFactory() {
-        // Default constructor for Javadoc compliance
+        // Default constructor .
     }
 
     /**

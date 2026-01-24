@@ -30,6 +30,9 @@ public final class GuiEventHandlerImpl implements GuiEventHandler {
         this.actionMap = new EnumMap<>(StandardViewEventType.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void handleViewEvent(final ViewEvent event) {
         Objects.requireNonNull(event, "ViewEvent cannot be null");
@@ -51,6 +54,9 @@ public final class GuiEventHandlerImpl implements GuiEventHandler {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setActionForEvent(final StandardViewEventType type, final OnInputEventAction action) {
         Objects.requireNonNull(type, "Event type cannot be null");
@@ -63,6 +69,9 @@ public final class GuiEventHandlerImpl implements GuiEventHandler {
         actionMap.put(type, action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setGenericCommandHandler(final OnGenericCommandAction handler) {
         this.genericCommandHandler = Objects.requireNonNull(handler, "Handler cannot be null");

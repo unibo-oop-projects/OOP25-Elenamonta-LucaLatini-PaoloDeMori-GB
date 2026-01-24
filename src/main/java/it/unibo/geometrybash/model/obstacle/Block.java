@@ -24,7 +24,7 @@ public final class Block extends AbstractObstacle implements Collidable {
     /**
      * Creates a block at the given position.
      *
-     * @param position the bottom left corner of the spike
+     * @param position the bottom left corner of the block
      */
     protected Block(final Vector2 position) {
         super(position, createHitBox(), ObstacleType.BLOCK);
@@ -40,6 +40,9 @@ public final class Block extends AbstractObstacle implements Collidable {
                 List.of(new Vector2(0, 0), new Vector2(SIZE, 0), new Vector2(SIZE, SIZE), new Vector2(0, SIZE)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Block copy() {
         final Block copy = new Block(this.position);

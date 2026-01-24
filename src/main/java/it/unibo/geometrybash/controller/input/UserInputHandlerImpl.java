@@ -29,6 +29,9 @@ public final class UserInputHandlerImpl implements UserInputHandler {
         //used EnumMap for efficiency.
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void handleUserInputEvent(final ViewEvent event) {
         Objects.requireNonNull(event, "ViewEvent cannot be null");
@@ -46,12 +49,18 @@ public final class UserInputHandlerImpl implements UserInputHandler {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setOnJumpAction(final OnInputEventAction action) {
         Objects.requireNonNull(action, "Jump action cannot be null");
         actionMap.put(StandardViewEventType.JUMP, action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setOnMenuAction(final OnInputEventAction action) {
         Objects.requireNonNull(action, "Menu action cannot be null");

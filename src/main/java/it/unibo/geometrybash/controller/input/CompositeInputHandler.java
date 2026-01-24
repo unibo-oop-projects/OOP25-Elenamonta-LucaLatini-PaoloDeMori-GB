@@ -15,7 +15,7 @@ import it.unibo.geometrybash.controller.OnInputEventAction;
  */
 public final class CompositeInputHandler implements InputHandler {
 
-     private final UserInputHandler userInputHandler;
+    private final UserInputHandler userInputHandler;
     private final GuiEventHandler guiEventHandler;
 
     /**

@@ -14,6 +14,13 @@ public final class MenuModel {
     private final List<String> history = new LinkedList<>();
 
     /**
+     * Creates a new {@code MenuModel}.
+     */
+    public MenuModel() {
+        // default constructor.
+    }
+
+    /**
      * Adds a command to the history.
      *
      * @param command the command to store

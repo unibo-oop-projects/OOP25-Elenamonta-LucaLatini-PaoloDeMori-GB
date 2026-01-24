@@ -15,7 +15,7 @@ public final class PowerUpFactory {
      * Create new power-up.
      */
     private PowerUpFactory() {
-        // Default constructor for Javadoc compliance
+        // Default constructor.
     }
 
     /**

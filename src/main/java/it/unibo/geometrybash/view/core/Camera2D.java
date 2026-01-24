@@ -19,7 +19,7 @@ public final class Camera2D {
      * Create new Camera2D.
      */
     public Camera2D() {
-        // Default constructor for Javadoc compliance
+        // Default constructor.
     }
 
     /**
