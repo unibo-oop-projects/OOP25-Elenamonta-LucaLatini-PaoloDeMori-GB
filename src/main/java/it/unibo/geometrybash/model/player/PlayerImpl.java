@@ -177,11 +177,12 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings(value = "EI2", justification = "\"The reference to PlayerPhysics is intentionally stored as part of a one-time binding. \"\r\n" + //
-                "                  + \"The method enforces immutability of the association by preventing reassignment \"\r\n" + //
-                "                  + \"through an explicit state check inside the method.\"")
+    @SuppressFBWarnings(value = "EI2",
+                        justification = "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
+                                + "The method enforces immutability of the association by preventing reassignment "
+                                + "through an explicit state check inside the method. ")
     @Override
-    public void bindPhysics(final PlayerPhysics physics) {
+    public void bindPhysics(final PlayerPhysics phy) {
         /*
          * This check ensures that the physics component is bound exactly once.
          * The physical representation is assigned during the physics engine
@@ -190,7 +191,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         if (this.physics != null) {
             throw new IllegalStateException("Physics already bound");
         }
-        this.physics = Objects.requireNonNull(physics);
+        this.physics = Objects.requireNonNull(phy);
     }
 
     private static HitBox createHitBox() {

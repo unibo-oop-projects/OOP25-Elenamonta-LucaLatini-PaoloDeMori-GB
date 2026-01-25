@@ -71,6 +71,7 @@ public interface PlayerPhysics {
     /**
      * Returns the position of the player.
      *
+     * @param hB represent the hitBox of teh player
      * @return the body's position of the player
      */
     Vector2 getPosition(HitBox hB);

@@ -92,7 +92,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      * {@inheritDoc}
      */
     @Override
-    public Vector2 getPosition(HitBox hB) {
+    public Vector2 getPosition(final HitBox hB) {
         // Converts the physics body position to the model position, which represents the bottom-left corner of the entity.
         return new Vector2(
                 body.getPosition().x - (hB.getWidth() / 2f),
