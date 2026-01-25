@@ -42,6 +42,9 @@ dependencies {
     val jbox2dVersion="2.2.1.1"
     implementation("org.jbox2d:jbox2d-library:$jbox2dVersion")
 
+    val gsonVersion = "2.13.2"
+    implementation("com.google.code.gson:gson:$gsonVersion")
+
     // JUnit API and testing engine
     testImplementation(platform("org.junit:junit-bom:6.0.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
