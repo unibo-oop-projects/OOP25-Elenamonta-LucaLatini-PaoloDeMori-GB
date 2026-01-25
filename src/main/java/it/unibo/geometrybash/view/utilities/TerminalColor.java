@@ -19,6 +19,11 @@ public final class TerminalColor {
     public static final Color FOREGROUND = new Color(51, 255, 51);
 
     /**
+     * Set the yellow color for the pause.
+     */
+    public static final Color PAUSE = new Color(255, 255, 102);
+
+    /**
      * Set the green color for the prompt.
      */
     public static final Color PROMPT = new Color(51, 255, 51);
