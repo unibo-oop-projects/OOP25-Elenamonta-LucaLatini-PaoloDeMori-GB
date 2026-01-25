@@ -1,17 +1,11 @@
 package it.unibo.geometrybash.model.level.map.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationException;
-
 /**
  * Exception thrown when an invalid operation is performed on the game map.
  */
 public class GameMapOperationException extends Exception {
 
     private static final String DEFAULT_MESSAGE = "Error during an operation using a game map ";
-    private static final Logger LOGGER = LoggerFactory.getLogger(RunTimeModelInitializationException.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +16,6 @@ public class GameMapOperationException extends Exception {
      */
     public GameMapOperationException(final String message) {
         super(DEFAULT_MESSAGE + " " + message);
-        LOGGER.debug("GameMapOperationException thrown: {} ", message);
     }
 
     /**

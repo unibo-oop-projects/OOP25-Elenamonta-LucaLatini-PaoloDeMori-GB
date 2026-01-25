@@ -37,7 +37,7 @@ public final class ViewEvent implements Event {
      * @return a new ViewEvent instance
      */
     public static ViewEvent createEvent(final ViewEventType type) {
-        LOGGER.debug("Created ViewEvent: {}", type);
+        LOGGER.debug("Created ViewEvent: " + type.getCommand());
         return new ViewEvent(type);
 
     }

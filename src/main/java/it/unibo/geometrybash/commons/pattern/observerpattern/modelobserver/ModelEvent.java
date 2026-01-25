@@ -37,7 +37,7 @@ public final class ModelEvent implements Event {
      * @return a instance of this class with type  {@link ModelEventType#VICTORY}.
      */
     public static ModelEvent createVictoryEvent() {
-        LOGGER.debug("Created a new Victory");
+        LOGGER.debug("Created a new Victory Event");
         return new ModelEvent(ModelEventType.VICTORY);
     }
 

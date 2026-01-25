@@ -1,7 +1,5 @@
 package it.unibo.geometrybash.controller.gameloop.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import it.unibo.geometrybash.controller.gameloop.GameLoop;
 
 /**
@@ -11,7 +9,6 @@ public class InvalidGameLoopStatusException extends Exception {
 
     private static final String DEFAULT_MESSAGE = "Error during a method call in the gameloop";
     private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = LoggerFactory.getLogger(InvalidGameLoopStatusException.class);
 
     /**
      * Constructs a new Exception for a generic error during a method call in the {@link GameLoop}.
@@ -22,7 +19,6 @@ public class InvalidGameLoopStatusException extends Exception {
      */
     public InvalidGameLoopStatusException(final String message) {
         super(DEFAULT_MESSAGE + " " + message);
-        LOGGER.debug("An InvalidGameLoopStatusException was Created");
     }
 
     /**
@@ -32,6 +28,5 @@ public class InvalidGameLoopStatusException extends Exception {
      */
     public InvalidGameLoopStatusException() {
         super(DEFAULT_MESSAGE);
-        LOGGER.debug("An InvalidGameLoopStatusException was Created");
     }
 }

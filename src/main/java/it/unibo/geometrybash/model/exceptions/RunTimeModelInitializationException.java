@@ -1,14 +1,10 @@
 package it.unibo.geometrybash.model.exceptions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * An Exception thrown if an object of the model isnt correctly initialise.
  */
 public class RunTimeModelInitializationException extends RuntimeException {
     private static final String DEFAULT_MESSAGE = "Error during initialization in model";
-    private static final Logger LOGGER = LoggerFactory.getLogger(RunTimeModelInitializationException.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +17,6 @@ public class RunTimeModelInitializationException extends RuntimeException {
      */
     public RunTimeModelInitializationException(final String message) {
         super(DEFAULT_MESSAGE + " " + message);
-        LOGGER.debug("An FPSNoTCalculatedException was Created");
     }
 
     /**
@@ -31,6 +26,5 @@ public class RunTimeModelInitializationException extends RuntimeException {
      */
     public RunTimeModelInitializationException() {
         super(DEFAULT_MESSAGE);
-        LOGGER.debug("An FPSNoTCalculatedException was Created");
     }
 }

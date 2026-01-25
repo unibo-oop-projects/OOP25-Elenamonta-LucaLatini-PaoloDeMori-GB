@@ -147,7 +147,7 @@ public class GameLoopImpl implements GameLoop {
                             return;
                             } else {
                                 isStarted = false;
-                                LOGGER.error("The thread was unexpectedly interrupted.", e);
+                                LOGGER.error("The thread was unexpectedly interrupted.");
                                 isTerminatedSafely = false;
                                 return;
                             }
@@ -184,7 +184,7 @@ public class GameLoopImpl implements GameLoop {
                             return;
                             } else {
                                 isStarted = false;
-                                LOGGER.error("The game loop thread was unexpectedly interrupted.", e);
+                                LOGGER.error("The game loop thread was unexpectedly interrupted.");
                                 isTerminatedSafely = false;
                                 return;
                             }
