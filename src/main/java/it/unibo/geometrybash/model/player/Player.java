@@ -5,7 +5,6 @@ import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.obstacle.Spike;
-import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
 
 /**
  * Represents the player entity in the game.
@@ -45,12 +44,7 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      */
     void respawn(Vector2 position);
 
-    /**
-     * Bind the physical representation of the player to its inner logic.
-     *
-     * @param physics the physics component associated with this player
-     */
-    void setPhysics(PlayerPhysics physics);
+    //void setPhysics(PlayerPhysics physics);
 
     /**
      * Increments the number of collected coins by a given value.

@@ -3,6 +3,8 @@ package it.unibo.geometrybash.model.physicsengine.impl.jbox2d;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
 
+import java.util.Objects;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 
@@ -29,7 +31,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      * @param body the JBox2D body associated with the player
      */
     protected PlayerPhysicsImpl(final Body body) {
-        this.body = body;
+        this.body = Objects.requireNonNull(body);
         this.groundContacts = 0;
     }
 

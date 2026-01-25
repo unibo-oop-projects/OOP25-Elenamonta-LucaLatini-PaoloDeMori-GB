@@ -21,6 +21,8 @@ import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObservable;
 import it.unibo.geometrybash.controller.input.CompositeInputHandler;
 import it.unibo.geometrybash.model.MenuModel;
+import it.unibo.geometrybash.commons.assets.AudioManager;
+import it.unibo.geometrybash.commons.assets.AudioStore;
 import it.unibo.geometrybash.commons.assets.ResourceLoader;
 import it.unibo.geometrybash.commons.assets.ResourceLoaderImpl;
 import it.unibo.geometrybash.commons.assets.TextAssetReader;
@@ -29,7 +31,8 @@ import it.unibo.geometrybash.view.utilities.TerminalColor;
 /**
  * Creates and manages the main menu graphical interface.
  * Handles user input and notifies observers with view events.
- * extends the {@link AbstractObservableWithSet} and implements {@link ViewObservable}
+ * extends the {@link AbstractObservableWithSet} and implements
+ * {@link ViewObservable}
  */
 @SuppressWarnings("checkstyle:LineLength")
 public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> implements ViewObservable {
@@ -40,6 +43,9 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     private final JTextField inputField;
     private final TextAssetReader textReader;
     private final ResourceLoader resourceLoader;
+
+    private final AudioStore audioStore;
+    private final AudioManager manage;
 
     /**
      * Initializes the main menu view and its graphical components.
@@ -53,6 +59,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
 
         this.resourceLoader = new ResourceLoaderImpl();
         this.textReader = new TextAssetReader(this.resourceLoader);
+        this.audioStore = new AudioStore(resourceLoader);
+        this.manage = new AudioManager(audioStore);
 
         this.outputArea = createOutputArea();
         this.inputField = createInputField();
@@ -79,7 +87,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         margin.setBackground(TerminalColor.BACKGROUND);
         header.add(margin, BorderLayout.NORTH);
 
-        final String title = textReader.readAll("it/unibo/view/startMenu/logo.txt");
+        final String title = textReader.readAll("it/unibo/geometrybash/startMenu/logo.txt");
         final JTextArea logo = new JTextArea(title);
         logo.setBackground(TerminalColor.BACKGROUND);
         logo.setForeground(TerminalColor.FOREGROUND);
@@ -208,7 +216,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.START)));
                     break;
                 case "inventory":
-                    notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.INVENTORY)));
+                    notifyObservers(
+                            ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.INVENTORY)));
                     break;
                 case "close":
                 case "exit":
@@ -225,6 +234,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * Displays the main menu in full screen mode.
      */
     public void display() {
+        this.manage.loop("it/unibo/geometrybash/audio/menu.wav");
         GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice().setFullScreenWindow(frame);
         this.frame.setVisible(true);
@@ -235,6 +245,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * Hides the main menu window.
      */
     public void hide() {
+        this.manage.stop("it/unibo/geometrybash/audio/menu.wav");
         this.frame.setVisible(false);
     }
 
@@ -261,7 +272,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
             mm.addCommand(command);
             if ("history".equals(command)) {
                 for (final String string : mm.getHistory()) {
-                     menu.appendText(string);
+                    menu.appendText(string);
                 }
             } else if ("help".equals(command) || "commands".equals(command) || "cmds".equals(command)) {
                 menu.showCommands();
