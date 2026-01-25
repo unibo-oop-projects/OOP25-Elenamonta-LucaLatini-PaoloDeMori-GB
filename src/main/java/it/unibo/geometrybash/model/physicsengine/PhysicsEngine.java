@@ -45,7 +45,7 @@ public interface PhysicsEngine<T> {
      * 
      * @param obj the player to create in the physics-engine world
      */
-     void addPlayer(final PlayerWithPhysics obj);
+    void addPlayer(PlayerWithPhysics obj);
 
     /**
      * Resets the physics engine.

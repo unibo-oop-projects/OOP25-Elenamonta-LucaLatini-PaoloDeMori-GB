@@ -27,7 +27,7 @@ import it.unibo.geometrybash.model.powerup.PowerUpManager;
  * {@link #update(float)} method.
  * </p>
  */
-public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWithPhysics, Updatable  {
+public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWithPhysics, Updatable {
 
     private static final float SIZE = 1.0f;
     private final PowerUpManager powerUpManager;
@@ -185,8 +185,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      * {@inheritDoc}
      */
     @Override
-    public void bindPhysics(final PlayerPhysics physics) {
-        this.physics = Objects.requireNonNull(physics);
+    public void bindPhysics(final PlayerPhysics phy) {
+        this.physics = Objects.requireNonNull(phy);
     }
 
     private static HitBox createHitBox() {
