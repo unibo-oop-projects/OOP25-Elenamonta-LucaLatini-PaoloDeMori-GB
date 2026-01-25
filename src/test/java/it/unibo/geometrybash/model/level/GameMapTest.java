@@ -1,9 +1,12 @@
 package it.unibo.geometrybash.model.level;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,11 +48,44 @@ class GameMapTest {
         final int startX = 10;
         final int startY = 20;
         final GameMap map = new GameMapImpl(Map.of(
-            c1, new CellImpl(ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(0, 0))),
-            c2, new CellImpl(ObstacleFactory.create(ObstacleType.SPIKE, new Vector2(0, 0)))
-        ));
+                c1, new CellImpl(ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(0, 0))),
+                c2, new CellImpl(ObstacleFactory.create(ObstacleType.SPIKE, new Vector2(0, 0)))));
         assertEquals(2, map.getCellInRange(1, 2).size());
         assertEquals(0, map.getCellInRange(startX, startY).size());
         assertEquals(2, map.getAllCells().size());
+    }
+
+    @Test
+    void testIsCoordinateValid() {
+        final Coordinate valid = new Coordinate(5, 5);
+        final Coordinate notValid = new Coordinate(0, 0);
+        final GameMap map = new GameMapImpl(
+                Map.of(valid, new CellImpl(ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(5, 5)))));
+        assertTrue(map.isCoordinateValid(valid));
+        assertFalse(map.isCoordinateValid(notValid));
+    }
+
+    @Test
+    void testGetCell() {
+        final Coordinate c = new Coordinate(5, 5);
+        final Cell cell = new CellImpl(ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(0, 0)));
+        final GameMap map = new GameMapImpl(Map.of(c, cell));
+        assertTrue(map.getCell(c).isPresent());
+        assertEquals(cell, map.getCell(c).get());
+        assertTrue(map.getCell(new Coordinate(0, 0)).isEmpty());
+        assertEquals(Optional.empty(), map.getCell(new Coordinate(0, 0)));
+    }
+
+    @Test
+    void testGetPresentCellExceptionHandling() {
+        final int invalid = 99;
+        final GameMap map = new GameMapImpl(Map.of(
+                new Coordinate(1, 1), new CellImpl(ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(0, 0)))));
+        assertThrows(GameMapOperationException.class, () -> {
+            map.getPresentCell(new Coordinate(invalid, 1));
+        });
+        assertThrows(GameMapOperationException.class, () -> {
+            map.getPresentCell(new Coordinate(1, invalid));
+        });
     }
 }
