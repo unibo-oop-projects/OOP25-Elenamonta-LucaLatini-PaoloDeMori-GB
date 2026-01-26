@@ -44,7 +44,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      * @param hitBox   the collision hitbox associated with the player
      */
     public PlayerImpl(final Vector2 position, final HitBox hitBox) {
-        super(position, createHitBox());
+        super(position);
+        this.hitBox = createHitBox();
         this.powerUpManager = new PowerUpManager();
         this.coins = 0;
     }
@@ -177,10 +178,10 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings(value = "EI2",
-                        justification = "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
-                                + "The method enforces immutability of the association by preventing reassignment "
-                                + "through an explicit state check inside the method. ")
+    @SuppressFBWarnings(value = "EI2", justification = 
+    "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
+            + "The method enforces immutability of the association by preventing reassignment "
+            + "through an explicit state check inside the method. ")
     @Override
     public void bindPhysics(final PlayerPhysics phy) {
         /*

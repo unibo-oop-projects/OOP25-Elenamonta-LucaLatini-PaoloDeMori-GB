@@ -28,7 +28,8 @@ public final class Spike extends AbstractObstacle implements Collidable {
      * @param position the bottom left corner of the spike
      */
     protected Spike(final Vector2 position) {
-        super(position, createHitBox(), ObstacleType.SPIKE);
+        super(position, ObstacleType.SPIKE);
+        this.hitBox = createHitBox();
     }
 
     /**

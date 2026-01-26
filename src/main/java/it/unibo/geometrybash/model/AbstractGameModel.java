@@ -3,6 +3,9 @@ package it.unibo.geometrybash.model;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import it.unibo.geometrybash.commons.pattern.observerpattern.AbstractObservableWithSet;
+import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.model.core.Updatable;
 import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationException;
 
@@ -15,7 +18,7 @@ import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationExceptio
  * gamemodel that updates updatable gameobjects and after that,
  * executes a custom action.
  */
-public abstract class AbstractGameModel implements GameModel {
+public abstract class AbstractGameModel extends AbstractObservableWithSet<ModelEvent> implements GameModel {
     /**
      * The list of updatables gameobjects to update.
      */
@@ -49,8 +52,8 @@ public abstract class AbstractGameModel implements GameModel {
             this.updatables.addAll(updatables);
         } else {
             throw new RunTimeModelInitializationException("The param passed is null, "
-            +
-            "if you want the default initialization call the void constructor");
+                    +
+                    "if you want the default initialization call the void constructor");
         }
     }
 
@@ -60,7 +63,6 @@ public abstract class AbstractGameModel implements GameModel {
     public AbstractGameModel() {
         super();
     }
-
 
     /**
      * {@inheritDoc}
@@ -81,10 +83,10 @@ public abstract class AbstractGameModel implements GameModel {
         toRemove.clear();
 
         if (isUpdatable()) {
-                if (!updatables.isEmpty()) {
-                    updatables.forEach(i -> i.update(deltaTime));
-                }
-                this.afterGameObjectsUpdate();
+            if (!updatables.isEmpty()) {
+                updatables.forEach(i -> i.update(deltaTime));
+            }
+            this.afterGameObjectsUpdate();
         }
     }
 
@@ -127,14 +129,15 @@ public abstract class AbstractGameModel implements GameModel {
     protected abstract boolean isUpdatable();
 
     /**
-     * Removes all the elements in the list that contains the updatables. 
+     * Removes all the elements in the list that contains the updatables.
      */
     protected void clearUpdatableList() {
         this.updatables.clear();
     }
 
     /**
-     * Removes all the elements in the lists that contain the updatables waiting to be removed or to be added. 
+     * Removes all the elements in the lists that contain the updatables waiting to
+     * be removed or to be added.
      */
     protected void clearToLists() {
         this.clearToAddList();
@@ -151,14 +154,16 @@ public abstract class AbstractGameModel implements GameModel {
     }
 
     /**
-     * Removes all the elements in the lists that contain the updatables to waiting to be added. 
+     * Removes all the elements in the lists that contain the updatables to waiting
+     * to be added.
      */
     private void clearToAddList() {
         this.toAdd.clear();
     }
 
     /**
-     * Removes all the elements in the lists that contain the updatables to waiting to be removed. 
+     * Removes all the elements in the lists that contain the updatables to waiting
+     * to be removed.
      */
     private void clearToRemoveList() {
         this.toRemove.clear();

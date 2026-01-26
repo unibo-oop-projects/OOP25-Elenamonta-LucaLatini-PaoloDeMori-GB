@@ -21,14 +21,13 @@ public abstract class AbstractPowerUp<S extends Shape> extends AbstractGameObjec
      * Creates a new power-up.
      *
      * @param position    the position of the power-up
-     * @param hitBox      the collision shape used for detecting the interactions
      * @param powerUpType the power-up type, defining its effect and whether it is
      *                    temporary
      * @param duration    the effect duration which is 0 for the permanent one
      */
-    protected AbstractPowerUp(final Vector2 position, final S hitBox, final PowerUpType powerUpType,
+    protected AbstractPowerUp(final Vector2 position, final PowerUpType powerUpType,
             final float duration) {
-        super(position, hitBox);
+        super(position);
         this.powerUpType = powerUpType;
     }
 

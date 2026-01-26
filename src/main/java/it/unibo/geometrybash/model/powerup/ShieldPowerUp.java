@@ -24,7 +24,8 @@ public final class ShieldPowerUp extends AbstractPowerUp<CircleHitBox> implement
      * @param position the initial position of the power-up in the game world
      */
     public ShieldPowerUp(final Vector2 position) {
-        super(position, new CircleHitBox(RADIUS), PowerUpType.SHIELD, 0);
+        super(position, PowerUpType.SHIELD, 0);
+        this.hitBox = new CircleHitBox(RADIUS);
     }
 
     /**

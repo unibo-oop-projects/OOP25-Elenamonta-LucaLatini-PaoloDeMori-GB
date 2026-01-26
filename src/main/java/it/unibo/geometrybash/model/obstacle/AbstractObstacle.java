@@ -20,11 +20,10 @@ public abstract class AbstractObstacle extends AbstractGameObject<HitBox> implem
      * Creates a new obstacle.
      *
      * @param position the position of the obstacle
-     * @param hitBox   the collision shape
      * @param type     the obstacle type
      */
-    protected AbstractObstacle(final Vector2 position, final HitBox hitBox, final ObstacleType type) {
-        super(position, hitBox);
+    protected AbstractObstacle(final Vector2 position, final ObstacleType type) {
+        super(position);
         this.obstacleType = type;
     }
 

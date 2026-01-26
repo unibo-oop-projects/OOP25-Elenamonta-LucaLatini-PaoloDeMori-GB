@@ -28,7 +28,8 @@ public final class Block extends AbstractObstacle implements Collidable {
      * @param position the bottom left corner of the block
      */
     protected Block(final Vector2 position) {
-        super(position, createHitBox(), ObstacleType.BLOCK);
+        super(position, ObstacleType.BLOCK);
+        this.hitBox = createHitBox();
     }
 
     /**
@@ -57,9 +58,12 @@ public final class Block extends AbstractObstacle implements Collidable {
      * <p>
      * The block is normally a solid, non-deadly obstacle whose physical interaction
      * is handled by the physics engine. However, if the collision does not satisfy
-     * the vertical position check (for example, the player hits the block from below or
-     * too close to its top within a tolerance), the block behaves as a deadly obstacle
-     * and the player is killed even if he has the shield. Otherwise, no additional action is performed.
+     * the vertical position check (for example, the player hits the block from
+     * below or
+     * too close to its top within a tolerance), the block behaves as a deadly
+     * obstacle
+     * and the player is killed even if he has the shield. Otherwise, no additional
+     * action is performed.
      *
      * @param player the player that collided with this block
      */

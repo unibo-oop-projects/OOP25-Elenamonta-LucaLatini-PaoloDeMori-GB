@@ -35,7 +35,8 @@ public class SpeedBoostPowerUp extends AbstractPowerUp<CircleHitBox> implements 
      * @param position the initial position of the power-up in the world
      */
     public SpeedBoostPowerUp(final Vector2 position) {
-        super(position, new CircleHitBox(RADIUS), PowerUpType.SPEED_BOOST, DURATION);
+        super(position, PowerUpType.SPEED_BOOST, DURATION);
+        this.hitBox = new CircleHitBox(RADIUS);
     }
 
     /**

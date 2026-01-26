@@ -34,7 +34,8 @@ public final class Coin extends AbstractPowerUp<CircleHitBox> implements Collida
      * @param position the initial coin's position
      */
     public Coin(final Vector2 position) {
-        super(position, new CircleHitBox(RADIUS), PowerUpType.COIN, 0);
+        super(position, PowerUpType.COIN, 0);
+        this.hitBox = new CircleHitBox(RADIUS);
         this.value = DEFAULT_VALUE;
     }
 

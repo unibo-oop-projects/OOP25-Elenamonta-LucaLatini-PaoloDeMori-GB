@@ -1,13 +1,27 @@
 package it.unibo.geometrybash.model;
 
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelObservable;
+import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
 
 /**
  * The Business logic of the Game.
- * This interface offers a contract to access and modify the gamestatus and the main entities of the game.
+ * This interface offers a contract to access and modify the gamestatus and the
+ * main entities of the game.
  * 
  */
 public interface GameModel extends GameState, ModelObservable {
+
+    /**
+     * If possible sets the actual status of the game to Start.
+     * 
+     * <p>
+     * Configures the model with the correct init data.
+     * 
+     * @param levelname the name of the level.
+     * @see Status
+     */
+    void start(String levelName) throws InvalidModelMethodInvocationException;
+
     /**
      * If possible sets the actual status of the game to Pause.
      * 

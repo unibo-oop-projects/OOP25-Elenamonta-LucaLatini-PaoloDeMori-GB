@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.geometrybash.commons.pattern.observerpattern.Observer;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.model.core.Updatable;
+import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
 import it.unibo.geometrybash.model.exceptions.RunTimeModelInitializationException;
 import it.unibo.geometrybash.model.level.Level;
 import it.unibo.geometrybash.model.player.Player;
@@ -39,7 +40,7 @@ class AbstractGameModelTest {
         list.add(new TestUpdatable());
         aGM = new TestModel(list);
         assertDoesNotThrow(() -> aGM.update(0));
-        //check if after the update the update
+        // check if after the update the update
         assertTrue(aGM.isAfterGameObjectsUpdateActionExecuted());
     }
 
@@ -206,6 +207,11 @@ class AbstractGameModelTest {
         @Override
         protected boolean isUpdatable() {
             return this.isUpdatable;
+        }
+
+        @Override
+        public void start(final String levelName) throws InvalidModelMethodInvocationException {
+            throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
     }
 }

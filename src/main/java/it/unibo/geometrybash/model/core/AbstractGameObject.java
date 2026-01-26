@@ -41,11 +41,9 @@ public abstract class AbstractGameObject<S extends Shape> implements GameObject<
      * Creates a new game object with the given position and hitbox.
      *
      * @param position the initial position of the object
-     * @param hitBox   the hitbox associated with the object
      */
-    protected AbstractGameObject(final Vector2 position, final S hitBox) {
+    protected AbstractGameObject(final Vector2 position) {
         this.position = position;
-        this.hitBox = hitBox;
         this.active = true;
     }
 
