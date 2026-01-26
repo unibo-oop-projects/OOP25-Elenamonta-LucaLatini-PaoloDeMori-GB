@@ -53,7 +53,7 @@ class BlockTest {
     void testOnCollision() {
         final Block block = new Block(new Vector2(0, 0));
         final boolean[] player1Died = {false};
-        final Player<?> playerSafe = new PlayerImpl(new Vector2(0, 0.9f), null) {
+        final Player<?> playerSafe = new PlayerImpl(new Vector2(0, 0.9f)) {
             @Override
             public void die() {
                 player1Died[0] = true;
@@ -63,7 +63,7 @@ class BlockTest {
         assertFalse(player1Died[0]);
 
         final boolean[] player2Died = {false};
-        final Player<?> playerDied = new PlayerImpl(new Vector2(0, 0.8f), null) {
+        final Player<?> playerDied = new PlayerImpl(new Vector2(0, 0.8f)) {
             @Override
             public void die() {
                 player2Died[0] = true;

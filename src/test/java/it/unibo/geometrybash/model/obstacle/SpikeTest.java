@@ -53,7 +53,7 @@ class SpikeTest {
     void testOnCollision() {
         final Spike spike = new Spike(new Vector2(0, 0));
         final boolean[] player1Died = {false};
-        final Player<?> playerWithNoShield = new PlayerImpl(new Vector2(0, 0), null) {
+        final Player<?> playerWithNoShield = new PlayerImpl(new Vector2(0, 0)) {
             @Override
             public void die() {
                 player1Died[0] = true;
@@ -71,7 +71,7 @@ class SpikeTest {
 
         final Spike spike2 = new Spike(new Vector2(0, 0));
         final boolean[] player2Died = {false};
-        final Player<?> playerWithShield = new PlayerImpl(new Vector2(0, 0), null) {
+        final Player<?> playerWithShield = new PlayerImpl(new Vector2(0, 0)) {
             @Override
             public void die() {
                 player2Died[0] = true;

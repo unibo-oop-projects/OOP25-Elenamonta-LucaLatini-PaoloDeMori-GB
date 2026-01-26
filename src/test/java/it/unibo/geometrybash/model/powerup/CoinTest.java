@@ -45,7 +45,7 @@ class CoinTest {
 
     @Test
     void testOnCollision() {
-        final Player<?> player = new PlayerImpl(new Vector2(0, 0), null);
+        final Player<?> player = new PlayerImpl(new Vector2(0, 0));
         assertEquals(0, player.getCoins());
         assertTrue(coin.isActive());
         coin.onCollision(player);
