@@ -22,7 +22,7 @@ public enum GameResolution {
     private final float ppm;
 
     /**
-     *Set the variable ppm with the correct value.
+     * Set the variable ppm with the correct value.
      *
      * @param ppm the pixel per meter value.
      */

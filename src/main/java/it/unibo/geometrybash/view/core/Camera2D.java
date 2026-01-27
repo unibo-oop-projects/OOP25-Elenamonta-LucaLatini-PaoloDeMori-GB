@@ -10,10 +10,11 @@ import it.unibo.geometrybash.view.utilities.GameResolution;
 public final class Camera2D {
 
     /**
-     * Conversion factor from meters to pixels with the default value of 50.0f.
+     * Default value for pixel per meters.
      */
-    private float pixelPerMeter = 50.0f;
+    private static final float DEFAULT_VALUE = 50.0f;
 
+    private float pixelPerMeter = DEFAULT_VALUE;
     private float offsetX;
     private int viewportHeight;
 
