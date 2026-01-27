@@ -82,7 +82,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      * 
      * @param gO the object calling this method that lived a state change.
      */
-    private void resetStateObjects(GameObject<?> gO) {
+    private void resetStateObjects(final GameObject<?> gO) {
         this.changedStateObjects.add(gO);
     }
 
@@ -224,11 +224,12 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     protected void afterGameObjectsUpdate(final float deltaTime) {
-        if (this.level.playerWin(this.player.getPosition())) {
-            this.onPlayerWin();
-        }
-        ;
-        this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
+        if (player != null && level != null && this.level.playerWin(this.player.getPosition())) {
+                this.onPlayerWin();
+            }
+
+    this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
+
     }
 
     /**

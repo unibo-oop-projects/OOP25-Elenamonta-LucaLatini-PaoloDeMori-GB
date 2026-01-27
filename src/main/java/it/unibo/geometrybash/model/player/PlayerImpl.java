@@ -35,7 +35,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     private int coins;
     private Skin skin;
     private OnDeathExecute onDeath;
-    private Vector2 startPos;
+    private final Vector2 startPos;
 
     /**
      * Creates a new {@code PlayerImpl} instance with a position, hitbox, and

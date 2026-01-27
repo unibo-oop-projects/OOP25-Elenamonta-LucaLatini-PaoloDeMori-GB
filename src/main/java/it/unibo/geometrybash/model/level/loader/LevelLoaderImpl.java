@@ -40,7 +40,13 @@ public class LevelLoaderImpl implements LevelLoader {
 
     private final OnStateModifiedContact onStateModifiedContact;
 
-    public LevelLoaderImpl(OnStateModifiedContact onStateModifiedContact) {
+    /**
+     * The default constructor with the functional interface to assign to objects
+     * whose state has to be reset on player's death.
+     * 
+     * @param onStateModifiedContact the functional interface to assign.
+     */
+    public LevelLoaderImpl(final OnStateModifiedContact onStateModifiedContact) {
         this.onStateModifiedContact = onStateModifiedContact;
     }
 
@@ -100,7 +106,7 @@ public class LevelLoaderImpl implements LevelLoader {
                 }
                 final Obstacle ob = ObstacleFactory.create(type,
                         new Vector2((float) coordinate.x(), (float) coordinate.y()));
-                if(ob.getObstacleType()==ObstacleType.SPIKE){
+                if (ob.getObstacleType() == ObstacleType.SPIKE) {
                     ob.addOnStateModifierContact(onStateModifiedContact);
                 }
                 final Cell cell = new CellImpl(ob);
