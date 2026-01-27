@@ -35,6 +35,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     private int coins;
     private Skin skin;
     private OnDeathExecute onDeath;
+    private Vector2 startPos;
 
     /**
      * Creates a new {@code PlayerImpl} instance with a position, hitbox, and
@@ -44,6 +45,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      */
     public PlayerImpl(final Vector2 position) {
         super(position);
+        this.startPos = position;
         this.hitBox = createHitBox();
         this.powerUpManager = new PowerUpManager();
         this.coins = 0;
@@ -74,7 +76,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     public void die() {
         this.coins = 0;
         this.powerUpManager.reset();
-        respawn(new Vector2(0f, 0f));
+        respawn(this.startPos);
         this.onDeath.onDeath();
     }
 
