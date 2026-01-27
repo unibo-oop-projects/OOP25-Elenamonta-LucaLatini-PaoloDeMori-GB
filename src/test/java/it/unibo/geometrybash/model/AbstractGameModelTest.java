@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.pattern.observerpattern.Observer;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.model.core.Updatable;
@@ -211,6 +212,11 @@ class AbstractGameModelTest {
 
         @Override
         public void start(final String levelName) throws InvalidModelMethodInvocationException {
+            throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
+        }
+
+        @Override
+        public UpdateInfoDto tDto() {
             throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
     }

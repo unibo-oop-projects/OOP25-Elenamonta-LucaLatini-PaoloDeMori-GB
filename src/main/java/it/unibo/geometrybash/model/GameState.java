@@ -13,6 +13,7 @@ public interface GameState {
      * Returns the player of the game.
      *
      * @return The player of the game.
+     * @throws ModelExecutionException if the player isn't initialized
      */
     Player<? extends Shape> getPlayer() throws ModelExecutionException;
 

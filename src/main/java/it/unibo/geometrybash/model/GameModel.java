@@ -1,5 +1,6 @@
 package it.unibo.geometrybash.model;
 
+import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelObservable;
 import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
 import it.unibo.geometrybash.model.physicsengine.exception.ModelExecutionException;
@@ -65,6 +66,11 @@ public interface GameModel extends GameState, ModelObservable {
      *                                 the normal execution of the
      *                                 start method
      * 
+     * @throws InvalidModelMethodInvocationException  if the method is called when
+     *                                                the
+     *                                                finite state machine is not in
+     *                                                the correct state
+     * 
      */
     void restart() throws InvalidModelMethodInvocationException, ModelExecutionException;
 
@@ -80,4 +86,12 @@ public interface GameModel extends GameState, ModelObservable {
      * @param deltaTime the time elapsed since last update.
      */
     void update(float deltaTime);
+
+    /**
+     * Creates the dto representing the level.
+     * 
+     * @return the dto representing the level.
+     * @throws ModelExecutionException if the model is not configured correctly.
+     */
+    UpdateInfoDto tDto() throws ModelExecutionException;
 }

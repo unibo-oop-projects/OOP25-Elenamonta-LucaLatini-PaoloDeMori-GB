@@ -9,6 +9,7 @@ import org.jbox2d.dynamics.Body;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.assets.ResourceLoader;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.model.core.GameObject;
@@ -42,6 +43,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private String levelName;
     private final PhysicsEngineFactory<Body> physicsFactory;
     private final List<GameObject<?>> changedStateObjects;
+    private final GameStateMapper gameStateMapper;
 
     /**
      * The constructor of this gamemodel implementation.
@@ -54,6 +56,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         this.levelLoader = new LevelLoaderImpl(this::resetStateObjects);
         this.physicsFactory = pEF;
         this.changedStateObjects = new ArrayList<>();
+        this.gameStateMapper = new GameStateMapper();
     }
 
     /**
@@ -225,10 +228,10 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     @Override
     protected void afterGameObjectsUpdate(final float deltaTime) {
         if (player != null && level != null && this.level.playerWin(this.player.getPosition())) {
-                this.onPlayerWin();
-            }
+            this.onPlayerWin();
+        }
 
-    this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
+        this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
 
     }
 
@@ -243,6 +246,11 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
             default:
                 return false;
         }
+    }
+
+    @Override
+    public UpdateInfoDto tDto() throws ModelExecutionException {
+        return new UpdateInfoDto(this.gameStateMapper.toDto(this));
     }
 
 }
