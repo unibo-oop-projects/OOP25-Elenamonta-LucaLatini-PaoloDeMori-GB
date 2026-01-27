@@ -73,4 +73,16 @@ public interface GameObject<S extends Shape> {
      *               {@code false} to mark it as inactive
      */
     void setActive(boolean active);
+
+    /**
+     * Sets the OnStateModifiedContact called if a contact that modifies the state happens.
+     *
+     * @param onState the functional interface calls
+     */
+    void addOnStateModifierContact(OnStateModifiedContact onState);
+
+    /**
+     * Call the method of type {@link OnStateModifiedContact}.
+     */
+    void activateContact();
 }

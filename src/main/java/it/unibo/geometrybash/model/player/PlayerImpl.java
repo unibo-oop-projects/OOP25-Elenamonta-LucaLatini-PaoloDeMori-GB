@@ -34,6 +34,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     private PlayerPhysics physics;
     private int coins;
     private Skin skin;
+    private OnDeathExecute onDeath;
 
     /**
      * Creates a new {@code PlayerImpl} instance with a position, hitbox, and
@@ -74,6 +75,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         this.coins = 0;
         this.powerUpManager.reset();
         respawn(new Vector2(0f, 0f));
+        this.onDeath.onDeath();
     }
 
     /**
@@ -191,6 +193,14 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
             throw new IllegalStateException("Physics already bound");
         }
         this.physics = Objects.requireNonNull(phy);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOnDeath(final OnDeathExecute onDeath) {
+        this.onDeath = Objects.requireNonNull(onDeath);
     }
 
     private static HitBox createHitBox() {

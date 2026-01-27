@@ -58,6 +58,7 @@ public class CollisionHandler implements ContactListener {
     private void handleCollision(final GameObject<?> source, final GameObject<?> other) {
         if (source instanceof Collidable collidable && other instanceof Player player) {
             collidable.onCollision(player);
+            source.activateContact();
         }
     }
 

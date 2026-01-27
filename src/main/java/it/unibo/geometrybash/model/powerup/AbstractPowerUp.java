@@ -1,6 +1,6 @@
 package it.unibo.geometrybash.model.powerup;
 
-import it.unibo.geometrybash.model.core.AbstractGameObject;
+import it.unibo.geometrybash.model.core.AbstractGameObject; 
 import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 
@@ -46,5 +46,4 @@ public abstract class AbstractPowerUp<S extends Shape> extends AbstractGameObjec
      */
     @Override
     public abstract AbstractPowerUp<S> copy();
-
 }
