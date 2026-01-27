@@ -1,5 +1,7 @@
 package it.unibo.geometrybash.view.core;
 
+import it.unibo.geometrybash.view.utilities.GameResolution;
+
 /**
  * Handles coordinate transformation from world which uses meters to screen, it uses pixel.
  * The Y-axis is inverted since Swing has Y=0 at top but Jbox2D has it at the
@@ -8,10 +10,11 @@ package it.unibo.geometrybash.view.core;
 public final class Camera2D {
 
     /**
-     * Conversion factor from meters to pixels.
+     * Default value for pixel per meters.
      */
-    private static final float PIXEL_PER_METER = 50.0f;
+    private static final float DEFAULT_VALUE = 50.0f;
 
+    private float pixelPerMeter = DEFAULT_VALUE;
     private float offsetX;
     private int viewportHeight;
 
@@ -47,7 +50,7 @@ public final class Camera2D {
      * @return the corresponding X coordinate in pixels
      */
     public int xToPx(final float xMeters) {
-        return Math.toIntExact(Math.round((xMeters - offsetX) * PIXEL_PER_METER));
+        return Math.toIntExact(Math.round((xMeters - offsetX) * this.pixelPerMeter));
     }
 
     /**
@@ -57,7 +60,7 @@ public final class Camera2D {
      * @return the corresponding Y coordinate in pixels
      */
     public int yToPx(final float yMeters) {
-        return viewportHeight - Math.toIntExact(Math.round(yMeters * PIXEL_PER_METER));
+        return viewportHeight - Math.toIntExact(Math.round(yMeters * this.pixelPerMeter));
     }
 
     /**
@@ -67,7 +70,7 @@ public final class Camera2D {
      * @return the corresponding size in pixels
      */
     public int sizeToPx(final float meters) {
-        return Math.toIntExact(Math.round(meters * PIXEL_PER_METER));
+        return Math.toIntExact(Math.round(meters * this.pixelPerMeter));
     }
 
     /**
@@ -80,6 +83,15 @@ public final class Camera2D {
         copy.setOffset(this.offsetX);
         copy.setViewportHeight(this.viewportHeight);
         return copy;
+    }
+
+    /**
+     * Sets the scaling factor based on the chosen resolution.
+     *
+     * @param res the resolution to adapt to.
+     */
+    public void setPixelPerMeter(final GameResolution res) {
+        this.pixelPerMeter = res.getPpm();
     }
 
 }
