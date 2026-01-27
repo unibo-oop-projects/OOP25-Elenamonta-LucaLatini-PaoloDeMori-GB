@@ -22,7 +22,8 @@ public record GameStateDto(
         List<PowerUpDto> powerUps,
         float cameraOffsetX,
         int score,
-        Status gameStatus) implements Serializable {
+        Status gameStatus,
+        float deltaTime) implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,6 +36,7 @@ public record GameStateDto(
      * @param cameraOffsetX the camera X offset
      * @param score         the current score
      * @param gameStatus    the game status
+     * @param deltaTime     the elapsed time since the previous frame, in seconds
      */
     public GameStateDto {
         Objects.requireNonNull(player, "player");

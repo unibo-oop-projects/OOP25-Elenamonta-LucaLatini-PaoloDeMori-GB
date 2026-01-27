@@ -44,8 +44,6 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      */
     void respawn(Vector2 position);
 
-    //void setPhysics(PlayerPhysics physics);
-
     /**
      * Increments the number of collected coins by a given value.
      *
