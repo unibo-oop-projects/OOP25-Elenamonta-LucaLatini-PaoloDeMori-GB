@@ -44,7 +44,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private final PhysicsEngineFactory<Body> physicsFactory;
     private final List<GameObject<?>> changedStateObjects;
     private final GameStateMapper gameStateMapper;
-    private volatile boolean isJumpSignalActive = false;
+    private volatile boolean isJumpSignalActive;
 
     /**
      * The constructor of this gamemodel implementation.
@@ -263,7 +263,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     protected void beforeGameObjectsUpdate(final float deltaTime) {
-        if (this.isJumpSignalActive) {
+        if (this.isJumpSignalActive && this.player != null) {
             this.player.jump();
             this.isJumpSignalActive = false;
         }

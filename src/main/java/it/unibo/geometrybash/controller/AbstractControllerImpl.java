@@ -11,11 +11,11 @@ import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.controller.gameloop.GameLoop;
-import it.unibo.geometrybash.controller.gameloop.GameLoopImpl;
 import it.unibo.geometrybash.controller.gameloop.exceptions.InvalidGameLoopConfigurationException;
 import it.unibo.geometrybash.controller.gameloop.exceptions.InvalidGameLoopStatusException;
 import it.unibo.geometrybash.controller.gameloop.exceptions.NotOnPauseException;
 import it.unibo.geometrybash.controller.gameloop.exceptions.NotStartedException;
+import it.unibo.geometrybash.controller.input.CompositeInputHandler;
 import it.unibo.geometrybash.model.GameModel;
 import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
 import it.unibo.geometrybash.model.physicsengine.exception.ModelExecutionException;
@@ -24,47 +24,51 @@ import it.unibo.geometrybash.view.View;
 import it.unibo.geometrybash.view.ViewScene;
 import it.unibo.geometrybash.view.exceptions.ExecutionWithIllegalThreadException;
 import it.unibo.geometrybash.view.exceptions.NotStartedViewException;
+import it.unibo.geometrybash.controller.gameloop.GameLoopFactory;
 
 /**
- * Abstract Implementation of the controller interface with an undefined method to evaluate deltatime.
+ * Abstract Implementation of the controller interface with an undefined method
+ * to evaluate deltatime.
  */
 public abstract class AbstractControllerImpl implements Controller {
     /**
      * Logger instance to handle errors and sending debug information.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractControllerImpl.class);
+    private static final String LEVEL_NAME = "Primo livello";
 
     private final GameModel gameModel;
     private final View view;
     private final InputHandler inputHandler;
-    private final GameLoop gameLoop;
-    private String levelName = "Primo livello";
+    private GameLoop gameLoop;
+    private final GameLoopFactory gameLoopFactory;
 
     /**
-     * The constructor of the controller with game model, view and input handler creation delegated.
+     * The constructor of the controller with game model, view and input handler
+     * creation delegated.
      * 
-     * @param gameModel the model of the game
-     * @param view the main view class of the game
-     * @param inputHandler the input handler and view listener of the game
+     * @param gameModel       the model of the game
+     * @param view            the main view class of the game
+     * @param gameLoopFactory the factory to init the gameloop.
      */
-    public AbstractControllerImpl(final GameModel gameModel, final View view, final InputHandler inputHandler) {
+    public AbstractControllerImpl(final GameModel gameModel, final View view, final GameLoopFactory gameLoopFactory) {
         this.gameModel = gameModel;
         this.gameModel.addObserver(this);
         this.view = view;
-        this.inputHandler = inputHandler;
-        this.initInputHandler();
+        this.inputHandler = new CompositeInputHandler();
         this.view.addObserver(inputHandler);
-        gameLoop = new GameLoopImpl(this::onEveryFrame);
-
+        this.gameLoopFactory = gameLoopFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * A method that returns the delta time, it can either be static or evluated.
+     * 
+     * @return the delta time.
      */
-    abstract protected float evaluateDeltaTime();
+    protected abstract float evaluateDeltaTime();
 
     /**
-     * Sets the action to execute on input messages receiver
+     * Sets the action to execute on input messages receiver.
      */
     private void initInputHandler() {
         this.inputHandler.setOnMainKeyPressed(this::onJumpAction);
@@ -75,21 +79,39 @@ public abstract class AbstractControllerImpl implements Controller {
         this.inputHandler.setGenericCommandHandler(this::onGenericCommand);
     }
 
+    /**
+     * Checks if the gameloop exists if it doesn't this function creates it.
+     */
+    private void gameLoopSetting() {
+        if (this.gameLoop == null) {
+            this.gameLoop = gameLoopFactory.createGameLoop(this::onEveryFrame);
+        }
+    }
+
+    /**
+     * The action to execute on.
+     */
     private void onJumpAction() {
         this.gameModel.jumpSignal();
     }
 
+    /**
+     * The actions to execute if a generic command represented as a string is
+     * received.
+     * 
+     * @param command the string received.
+     */
     private void onGenericCommand(final String command) {
         switch (command) {
             case "close":
             case "quit":
                 try {
                     gameLoop.stop();
-                } catch (NotStartedException e) {
+                } catch (final NotStartedException e) {
                     LOGGER.warn("Gameloop never started");
                 } finally {
                     LOGGER.info("Chiusura del gioco");
-                    System.exit(0);
+                    safeClosing();
                 }
                 break;
             case "resolution -big":
@@ -101,28 +123,37 @@ public abstract class AbstractControllerImpl implements Controller {
 
     }
 
+    /**
+     * The action to execute on every frame refresh.
+     */
     private void onEveryFrame() {
         this.gameModel.update(evaluateDeltaTime());
-        UpdateInfoDto dto;
+        final UpdateInfoDto dto;
         try {
             dto = gameModel.toDto();
             SwingUtilities.invokeLater(() -> {
-                    if (dto != null) {
-                        callViewUpdate(dto);
-                    }
+                if (dto != null) {
+                    callViewUpdate(dto);
+                }
             });
 
-        } catch (ModelExecutionException e) {
+        } catch (final ModelExecutionException e) {
             handleError("Error while updating the game", Optional.of(e));
         }
 
     }
 
-    private void handleError(String message, Optional<Exception> ex) {
+    /**
+     * A utility function to handle a critic error.
+     * 
+     * @param message the message to log and to display
+     * @param ex      the exception that caused this method execution
+     */
+    private void handleError(final String message, final Optional<Exception> ex) {
 
         try {
             gameLoop.stop();
-        } catch (NotStartedException e) {
+        } catch (final NotStartedException e) {
             LOGGER.info("The safe thread interruption wasn't necessary");
         } finally {
             errorMessage(message, ex);
@@ -130,16 +161,27 @@ public abstract class AbstractControllerImpl implements Controller {
 
     }
 
-    private void callViewUpdate(UpdateInfoDto dto) {
+    /**
+     * A method to update the view and handle its exceptions.
+     * 
+     * @param dto the dto used by the view to its update
+     */
+    private void callViewUpdate(final UpdateInfoDto dto) {
         try {
             this.view.update(dto);
-        } catch (NotStartedViewException | ExecutionWithIllegalThreadException e) {
+        } catch (final NotStartedViewException | ExecutionWithIllegalThreadException e) {
             handleError("Error while updating the view", Optional.of(e));
         }
     }
 
-    private void errorMessage(String message, Optional<Exception> e) {
-        ErrorMessageView.ShowError(message);
+    /**
+     * The method to show a gui with the error and log it.
+     * 
+     * @param message the message to show in the gui and log.
+     * @param e       the exception that caused this one.
+     */
+    private void errorMessage(final String message, final Optional<Exception> e) {
+        ErrorMessageView.showError(message);
         if (e.isPresent()) {
             LOGGER.error(message, e);
         } else {
@@ -147,80 +189,110 @@ public abstract class AbstractControllerImpl implements Controller {
         }
     }
 
+    /**
+     * A utility method to resume the game.
+     */
     private void gameResume() {
         try {
             gameModel.resume();
+            gameLoopSetting();
             gameLoop.resume();
-        } catch (NotOnPauseException | NotStartedException | InvalidModelMethodInvocationException e) {
+        } catch (final NotOnPauseException | NotStartedException | InvalidModelMethodInvocationException e) {
             handleError("Error while resuming the game", Optional.of(e));
         }
     }
 
+    /**
+     * A utility method to pause the game.
+     */
     private void gamePause() {
         try {
+            gameLoopSetting();
             gameLoop.pause();
             gameModel.pause();
-        } catch (InvalidGameLoopStatusException | InvalidModelMethodInvocationException e) {
+        } catch (final InvalidGameLoopStatusException | InvalidModelMethodInvocationException e) {
             handleError("Error while resuming the thread", Optional.of(e));
         }
     }
 
+    /**
+     * A utility method to restart the game.
+     */
     private void gameRestart() {
         try {
+            gameLoopSetting();
             this.gameLoop.start();
             this.gameModel.restart();
-        } catch (InvalidGameLoopStatusException | InvalidGameLoopConfigurationException
+        } catch (final InvalidGameLoopStatusException | InvalidGameLoopConfigurationException
                 | InvalidModelMethodInvocationException | ModelExecutionException e) {
             handleError("Error while restarting the match", Optional.of(e));
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     */
     @Override
     public void update(final ModelEvent event) {
         switch (event.getType()) {
             case VICTORY:
                 view.changeView(ViewScene.START_MENU);
-                try {
-                    this.gameLoop.stop();
-                } catch (NotStartedException e) {
-                    ErrorMessageView.ShowError("Errore durante l'update della partita");
-                }
+                handleError("Errore durante l'update della partita", Optional.empty());
                 break;
             case GAMEOVER:
-                break;
-            default:
                 break;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GameModel getModel() {
         return this.gameModel;
     }
 
-    @Override
-    public InputHandler getInputHandler() {
-        return this.inputHandler;
-    }
-
+    /**
+     * A utility method that start the game model and the game loop handling their
+     * errors.
+     */
     private void startLevel() {
         try {
-            gameModel.start(this.levelName);
+            gameLoopSetting();
+            gameModel.start(LEVEL_NAME);
             gameLoop.start();
         } catch (InvalidGameLoopStatusException | InvalidGameLoopConfigurationException | ModelExecutionException
                 | InvalidModelMethodInvocationException e) {
-            handleError(levelName, Optional.of(e));
+            handleError(LEVEL_NAME, Optional.of(e));
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View getView() {
         return this.view;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() {
+        this.initInputHandler();
         this.view.changeView(ViewScene.START_MENU);
+    }
+
+    private void safeClosing() {
+        try {
+            gameLoop.stop();
+        } catch (final NotStartedException e) {
+            LOGGER.info("The safe thread interruption wasn't necessary");
+        } finally {
+            this.view.disposeView();
+        }
     }
 
 }

@@ -221,7 +221,7 @@ class AbstractGameModelTest {
         }
 
         @Override
-        protected void beforeGameObjectsUpdate(float deltaTime) {
+        protected void beforeGameObjectsUpdate(final float deltaTime) {
             throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
     }
