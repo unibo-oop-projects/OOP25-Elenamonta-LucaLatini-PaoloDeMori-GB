@@ -93,5 +93,5 @@ public interface GameModel extends GameState, ModelObservable {
      * @return the dto representing the level.
      * @throws ModelExecutionException if the model is not configured correctly.
      */
-    UpdateInfoDto tDto() throws ModelExecutionException;
+    UpdateInfoDto toDto() throws ModelExecutionException;
 }

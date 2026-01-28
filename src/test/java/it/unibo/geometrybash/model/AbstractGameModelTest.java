@@ -216,7 +216,7 @@ class AbstractGameModelTest {
         }
 
         @Override
-        public UpdateInfoDto tDto() {
+        public UpdateInfoDto toDto() {
             throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
     }

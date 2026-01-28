@@ -249,7 +249,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     }
 
     @Override
-    public UpdateInfoDto tDto() throws ModelExecutionException {
+    public UpdateInfoDto toDto() throws ModelExecutionException {
         return new UpdateInfoDto(this.gameStateMapper.toDto(this));
     }
 
