@@ -10,6 +10,7 @@ package it.unibo.geometrybash.commons.dtos;
  * @param isActive  if the player is active
  * @param hasShield whether player has active shield
  * @param skin      the player skin configuration
+ * @param rotationRad the rotation angle of the player
  */
 public record PlayerDto(
         float x,
@@ -18,5 +19,6 @@ public record PlayerDto(
         float height,
         boolean isActive,
         boolean hasShield,
-        SkinDto skin) {
+        SkinDto skin,
+        double rotationRad) {
 }

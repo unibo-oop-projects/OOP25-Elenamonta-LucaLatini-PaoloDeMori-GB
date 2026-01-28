@@ -1,5 +1,6 @@
 package it.unibo.geometrybash.view.core;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
@@ -13,6 +14,11 @@ import it.unibo.geometrybash.commons.dtos.SkinDto;
  */
 public final class SpriteRegistry {
 
+    private static final int ALL_BITS_MASK = 0xFF;
+    private static final int MAX_CHANNEL_VALUE = 255;
+    private static final int ALPHA_SHIFT = 24;
+    private static final int RED_SHIFT = 16;
+    private static final int GREEN_SHIFT = 8;
     private final AssetStore assets;
 
     /**
@@ -54,12 +60,13 @@ public final class SpriteRegistry {
      * @param skin the skin descriptor containing the resource identifier for the
      *             outer sprite
      * @return the base {@link BufferedImage} for the player's outer sprite
-     * @throws NullPointerException if {@code skin} or {@code skin.outerSprite()} is {@code null}
+     * @throws NullPointerException if {@code skin} or {@code skin.outerSprite()} is
+     *                              {@code null}
      */
     public BufferedImage playerOuterBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
         Objects.requireNonNull(skin.outerSprite(), "skin.outerSprite must not be null");
-        return assets.getImage(skin.outerSprite());
+        return tint(assets.getImage(skin.outerSprite()), new Color(skin.primaryColor()));
     }
 
     /**
@@ -73,8 +80,8 @@ public final class SpriteRegistry {
      */
     public BufferedImage playerInnerBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
-        Objects.requireNonNull(skin.innerSprite(), "skin.innerSprite must not be null");
-        return assets.getImage(skin.innerSprite());
+        Objects.requireNonNull(skin.innerSprite(), "ski n.innerSprite must not be null");
+        return tint(assets.getImage(skin.innerSprite()), new Color(skin.secondaryColor()));
     }
 
     private String obstaclePath(final DtoObstaclesType type) {
@@ -90,5 +97,38 @@ public final class SpriteRegistry {
             case SPEED_BOOST -> "images/powerups/speed.png";
             case SHIELD -> "images/powerups/shield.png";
         };
+    }
+
+    private static BufferedImage tint(final BufferedImage src, final Color tint) {
+        final int w = src.getWidth();
+        final int h = src.getHeight();
+        final BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+
+        final int tr = tint.getRed();
+        final int tg = tint.getGreen();
+        final int tb = tint.getBlue();
+
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                final int argb = src.getRGB(x, y);
+                final int a = (argb >>> ALPHA_SHIFT) & ALL_BITS_MASK;
+
+                if (a == 0) {
+                    out.setRGB(x, y, 0);
+                    continue;
+                }
+
+                int r = (argb >>> RED_SHIFT) & ALL_BITS_MASK;
+                int g = (argb >>> GREEN_SHIFT) & ALL_BITS_MASK;
+                int b = argb & ALL_BITS_MASK;
+
+                r = r * tr / MAX_CHANNEL_VALUE;
+                g = g * tg / MAX_CHANNEL_VALUE;
+                b = b * tb / MAX_CHANNEL_VALUE;
+
+                out.setRGB(x, y, (a << ALPHA_SHIFT) | (r << RED_SHIFT) | (g << GREEN_SHIFT) | b);
+            }
+        }
+        return out;
     }
 }

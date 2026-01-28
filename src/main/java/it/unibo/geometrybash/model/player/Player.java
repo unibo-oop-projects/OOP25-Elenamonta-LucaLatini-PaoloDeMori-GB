@@ -23,7 +23,8 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      * Makes the player jump, applying the appropriate vertical impulse.
      *
      * <p>
-     * The movement logic should be delegated to the physics component to update the player's position.
+     * The movement logic should be delegated to the physics component to update the
+     * player's position.
      * </p>
      */
     void jump();
@@ -32,7 +33,8 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      * Handles the player death event.
      *
      * <p>
-     * Triggers an immediate respawn at the initial position and resetting all temporary effects.
+     * Triggers an immediate respawn at the initial position and resetting all
+     * temporary effects.
      * </p>
      */
     void die();
@@ -43,8 +45,6 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      * @param position the position where the player should respawn
      */
     void respawn(Vector2 position);
-
-    //void setPhysics(PlayerPhysics physics);
 
     /**
      * Increments the number of collected coins by a given value.
@@ -109,6 +109,16 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
     boolean isShielded();
 
     /**
+     * Notifies the player that a ground contact has started.
+     */
+    void notifyGroundContactBegin();
+
+    /**
+     * Notifies the player that a ground contact has ended.
+     */
+    void notifyGroundContactEnd();
+
+    /**
      * Returns the currently assigned skin of the player.
      *
      * @return the player's skin, or {@code null} if none is set
@@ -123,11 +133,25 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
     void setSkin(Skin skin);
 
     /**
+     * Returns the actual state of the player.
+     *
+     * @return the string represent the current state of the player
+     */
+    String getState();
+
+    /**
      * Set onDeath param.
      *
      * @param onDeath the functional interface to set
      */
     void setOnDeath(OnDeathExecute onDeath);
+
+    /**
+     * Returns the rotation angle computed using the delta time and normalized to a valid range.
+     *
+     * @return the player rotation angle
+     */
+    double getAngularRotation();
 
     /**
      * Returns a defensive copy of this Player.

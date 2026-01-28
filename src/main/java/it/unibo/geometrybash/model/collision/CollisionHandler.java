@@ -7,21 +7,28 @@ import org.jbox2d.collision.Manifold;
 import org.jbox2d.callbacks.ContactImpulse;
 
 import it.unibo.geometrybash.model.core.GameObject;
+import it.unibo.geometrybash.model.obstacle.Block;
 import it.unibo.geometrybash.model.player.Player;
 
 /**
  * Detects collisions between game objects using the JBox2D physics engine.
  *
  * <p>
- * Implements {@link ContactListener} to receive notifications when two fixtures begin or end contact.
+ * Implements {@link ContactListener} to receive notifications when two fixtures
+ * begin or end contact.
  * </p>
  */
 public class CollisionHandler implements ContactListener {
 
+    // enum Phase {
+    // END,
+    // BEGIN
+    // }
+
     /**
      * Creates a new CollisionHandler.
      */
-    public CollisionHandler() {
+    CollisionHandler() {
         // Default constructor.
     }
 
@@ -37,7 +44,9 @@ public class CollisionHandler implements ContactListener {
      * {@inheritDoc}
      */
     @Override
-    public void endContact(final Contact contact) { }
+    public void endContact(final Contact contact) {
+        processContact(contact);
+    }
 
     private void processContact(final Contact contact) {
         final GameObject<?> a = getGameObject(contact.getFixtureA());
@@ -46,8 +55,8 @@ public class CollisionHandler implements ContactListener {
         if (a == null || b == null) {
             return;
         }
-        handleCollision(a, b);
-        handleCollision(b, a);
+        handleBeginContact(a, b);
+        handleBeginContact(b, a);
     }
 
     private GameObject<?> getGameObject(final Fixture fixture) {
@@ -55,8 +64,11 @@ public class CollisionHandler implements ContactListener {
         return userData instanceof GameObject gameObject ? gameObject : null;
     }
 
-    private void handleCollision(final GameObject<?> source, final GameObject<?> other) {
+    private void handleBeginContact(final GameObject<?> source, final GameObject<?> other) {
         if (source instanceof Collidable collidable && other instanceof Player player) {
+            if (source instanceof Block) {
+                player.notifyGroundContactBegin();
+            }
             collidable.onCollision(player);
             source.activateContact();
         }

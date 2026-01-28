@@ -33,6 +33,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      */
     protected PlayerPhysicsImpl(final Body body) {
         this.body = Objects.requireNonNull(body);
+        this.body.setLinearVelocity(new Vec2(BASE_SPEED, 0f));
         this.groundContacts = 0;
     }
 
@@ -74,14 +75,6 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      * {@inheritDoc}
      */
     @Override
-    public boolean isGrounded() {
-        return this.groundContacts > 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void resetBodyTo(final Vector2 position) {
         this.body.setTransform(new Vec2(position.x(), position.y()), 0f);
         this.body.setLinearVelocity(new Vec2(0f, 0f));
@@ -111,7 +104,15 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      * {@inheritDoc}
      */
     @Override
-    public void incrementGroundContacts() {
+    public boolean isGrounded() {
+        return this.groundContacts > 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onGroundContactBegin() {
         this.groundContacts++;
     }
 
@@ -119,8 +120,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      * {@inheritDoc}
      */
     @Override
-    public void decrementGroundContacts() {
+    public void onGroundContactEnd() {
         this.groundContacts = Math.max(0, this.groundContacts - 1);
     }
-
 }

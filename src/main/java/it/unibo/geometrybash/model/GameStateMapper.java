@@ -58,7 +58,7 @@ public final class GameStateMapper {
          * <p>
          * The method performs culling based on the player position and maps all
          * visible game objects into their corresponding DTO representations.
-         * 
+         *
          * @param model the game model to convert
          * @return the corresponding {@link GameStateDto}
          * @throws ModelExecutionException if a problem occured while collecting the
@@ -141,6 +141,7 @@ public final class GameStateMapper {
                                 player.getHitBox().getHeight(),
                                 player.isActive(),
                                 player.isShielded(),
-                                null);
+                                null,
+                                player.getAngularRotation());
         }
 }
