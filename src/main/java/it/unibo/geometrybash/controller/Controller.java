@@ -25,14 +25,6 @@ public interface Controller extends ModelObserver {
     View getView();
 
     /**
-     * Returns the instance of the {@link InputHandler}of this class.
-     * 
-     * @return The instance of the input handler
-     * @see InputHandler
-     */
-    InputHandler getInputHandler();
-
-    /**
      * Start the game.
      */
     void start();

@@ -44,6 +44,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private final PhysicsEngineFactory<Body> physicsFactory;
     private final List<GameObject<?>> changedStateObjects;
     private final GameStateMapper gameStateMapper;
+    private volatile boolean isJumpSignalActive;
 
     /**
      * The constructor of this gamemodel implementation.
@@ -111,7 +112,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     public void start(final String levName) throws InvalidModelMethodInvocationException,
             ModelExecutionException {
         switch (state) {
-            case Status.NEVERSTARTED:
+            case NEVERSTARTED:
                 this.levelName = levName;
                 try (InputStream levelIS = rLoader.openStream("it/unibo/geometrybash/level/" + levName + ".json")) {
                     this.setPhysicsEngine(physicsFactory);
@@ -150,7 +151,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     @Override
     public void pause() throws InvalidModelMethodInvocationException {
         switch (state) {
-            case Status.PLAYING:
+            case PLAYING:
                 this.state = Status.ONPAUSE;
                 break;
             default:
@@ -164,7 +165,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     @Override
     public void resume() throws InvalidModelMethodInvocationException {
         switch (state) {
-            case Status.ONPAUSE:
+            case ONPAUSE:
                 this.state = Status.PLAYING;
                 break;
             default:
@@ -188,9 +189,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     public void jumpSignal() {
-        if (this.player != null) {
-            this.player.jump();
-        }
+        this.isJumpSignalActive = true;
     }
 
     /**
@@ -251,6 +250,23 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     @Override
     public UpdateInfoDto toDto() throws ModelExecutionException {
         return new UpdateInfoDto(this.gameStateMapper.toDto(this));
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * <p>
+     * In this implementation of {@link GameModel} i use this method to call the
+     * jump signal in a thread
+     * safe wai.
+     * </p>
+     */
+    @Override
+    protected void beforeGameObjectsUpdate(final float deltaTime) {
+        if (this.isJumpSignalActive && this.player != null) {
+            this.player.jump();
+            this.isJumpSignalActive = false;
+        }
     }
 
 }

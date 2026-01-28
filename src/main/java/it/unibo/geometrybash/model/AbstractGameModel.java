@@ -98,6 +98,13 @@ public abstract class AbstractGameModel extends AbstractObservableWithSet<ModelE
     protected abstract void afterGameObjectsUpdate(float deltaTime);
 
     /**
+     * The actions to implement befor updating all the updatables.
+     * 
+     * @param deltaTime the time elapsed since last update.
+     */
+    protected abstract void beforeGameObjectsUpdate(float deltaTime);
+
+    /**
      * Add an updatable game object to the list of updatables to update when an
      * update signal is received.
      * 

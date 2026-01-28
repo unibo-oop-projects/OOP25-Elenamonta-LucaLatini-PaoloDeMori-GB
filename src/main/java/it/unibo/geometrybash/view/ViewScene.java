@@ -15,5 +15,6 @@ public enum ViewScene {
     /**
      * The scene that starts when the player starts the game.
      */
-    IN_GAME
+    IN_GAME,
+    PAUSE
 }
