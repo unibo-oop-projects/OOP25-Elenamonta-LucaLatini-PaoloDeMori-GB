@@ -37,6 +37,35 @@ import it.unibo.geometrybash.view.utilities.TerminalColor;
 public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> implements ViewObservable {
     /** Prompt displayed before the user input. */
     private static final String PROMPT = "geometrybash@oop24:~# ";
+    /** Command to start the game session. */
+    private static final String CMD_START = "start";
+    /** Command to open user's inventory. */
+    private static final String CMD_INVENTORY = "inventory";
+    /** Command to close the application. */
+    private static final String CMD_CLOSE = "close";
+    /** Command to close the application. */
+    private static final String CMD_EXIT = "exit";
+    /** Command to resume the game from pause state. */
+    private static final String CMD_RESUME = "resume";
+    /** Command to display commands help. */
+    private static final String CMD_HELP = "help";
+    /** Command to display commands help. */
+    private static final String CMD_COMMANDS = "commands";
+    /** Argument for the man command specifying the resolution manual. */
+    private static final String ARG_RESOLUTION = "resolution";
+    /** Full command to display the manual for screen resolutions. */
+    private static final String CMD_MAN_RESOLUTION = "man " + ARG_RESOLUTION;
+    /** Command for set the 1920x1080 resolution. */
+    private static final String BIG = "big";
+    /** Command for set the 1600x9000 resolution. */
+    private static final String MEDIUM = "medium";
+    /** Command for set the 1024x768 resolution. */
+    private static final String SMALL = "small";
+    /** Prefix for command list items. */
+    private static final String CMD_PREFIX = " > ";
+    /** Command for create new line. */
+    private static final String NEW_LINE = "\n";
+
     private final JFrame frame;
     private final JTextArea outputArea;
     private final JTextField inputField;
@@ -98,7 +127,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.logo.setFocusable(false);
         header.add(logo, BorderLayout.CENTER);
 
-        this.insertLabel = new JLabel("Insert 'commands' or 'help' to show the list of available actions");
+        this.insertLabel = new JLabel(
+                "Insert" + CMD_COMMANDS + "or" + CMD_HELP + "to show the list of available actions");
         this.insertLabel.setForeground(TerminalColor.FOREGROUND);
         this.insertLabel.setFont(TerminalColor.MAIN_FONT);
         this.insertLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -110,11 +140,11 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * Displays the list of available commands to the user.
      */
     public void showCommands() {
-        this.appendText("\n --- AVAILABLE COMMANDS ---");
-        this.appendText(" > start      : begin your geometry bash adventure");
-        this.appendText(" > inventory  : check your equipment");
-        this.appendText(" > close/exit : quit the terminal");
-        this.appendText(" > help/cmds  : show this list");
+        this.appendText(NEW_LINE + " --- AVAILABLE COMMANDS ---");
+        this.appendText(CMD_PREFIX + CMD_START + "      : begin your geometry bash adventure");
+        this.appendText(CMD_PREFIX + CMD_INVENTORY + "  : check your equipment");
+        this.appendText(CMD_PREFIX + CMD_HELP + "  : show this list");
+        this.appendText(CMD_PREFIX + CMD_MAN_RESOLUTION + "  : display available game resolutions");
         this.appendText("---------------------------");
     }
 
@@ -130,7 +160,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.promptLabel.setForeground(TerminalColor.PAUSE);
 
         this.appendText("\n GAME PAUSED");
-        this.appendText(" Type 'resume' to continue your run in Geometry Bash");
+        this.appendText(" Type" + CMD_RESUME + "to continue your run in Geometry Bash");
         this.appendText(" ----------------------------------------------------");
 
     }
@@ -141,11 +171,11 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * @param coins the number of coins collected during the level
      */
     public void showVictoryMessage(final int coins) {
-        this.appendText("\n LEVEL COMPLETED! YOU WON!");
+        this.appendText(NEW_LINE + " LEVEL COMPLETED! YOU WON!");
         this.appendText(" -----------------------------");
         this.appendText(" total coins collected: " + coins);
         this.appendText(" -----------------------------");
-        this.appendText(" type 'start' for start new challenge");
+        this.appendText(" type" + CMD_START + "for start new challenge");
     }
 
     /**
@@ -155,8 +185,46 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * @param command the invalid command entered by the user
      */
     public void showUnknownCommandError(final String command) {
-        this.appendText("\n ERROR: '" + command + "' is not recognized as a command.");
-        this.appendText("     Type 'help' or 'commands' to see the list of available actions.");
+        this.appendText(NEW_LINE + " ERROR: '" + command + "' is not recognized as a command.");
+        this.appendText("     Type" + CMD_HELP + "or" + CMD_COMMANDS + "to see the list of available actions.");
+    }
+
+    /**
+     * Prints on the terminal a manual-style description of all supported screen
+     * resolutions, similar to the Unix {@code man} command.
+     */
+    public void showManResolution() {
+        appendText(
+                NEW_LINE + " " + ARG_RESOLUTION.toUpperCase(Locale.ROOT) + "(1)               Geometry Bash Manual"
+                        + NEW_LINE);
+        appendText(" NAME");
+        appendText(" " + ARG_RESOLUTION + " - show supported screen resolutions" + NEW_LINE);
+
+        appendText(" SYNOPSIS");
+        appendText(" " + CMD_MAN_RESOLUTION + NEW_LINE);
+
+        appendText(" DESCRIPTION");
+        appendText(" Displays all screen resolutions supported by Geometry Bash." + NEW_LINE);
+
+        appendText(" SUPPORTED RESOLUTIONS");
+        appendText(" " + BIG + "     - 1920 x 1080");
+        appendText(" " + MEDIUM + "  - 1600 x 900");
+        appendText(" " + SMALL + "   - 1024 x 768" + NEW_LINE);
+
+        appendText("-----------------------------------------------");
+    }
+
+    /**
+     * Displays a message when an error occurs during game execution.
+     *
+     * @param executionError the description of the error occurred
+     */
+    public void showGameExecutionError(final String executionError) {
+        this.appendText(NEW_LINE + "  CRITICAL ERROR !");
+        this.appendText("An unexpected issue occurred during the game session:");
+        this.appendText(CMD_PREFIX + executionError);
+        this.appendText(" ----------------------------------------------------");
+        this.appendText("Please try to restart the game or contact support.");
     }
 
     /**
@@ -244,18 +312,18 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         if (!rawCmd.isEmpty()) {
             final String cmd = rawCmd.toLowerCase(Locale.ROOT);
             switch (cmd) {
-                case "start":
+                case CMD_START:
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.START)));
                     break;
-                case "inventory":
+                case CMD_INVENTORY:
                     notifyObservers(
                             ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.INVENTORY)));
                     break;
-                case "close":
-                case "exit":
+                case CMD_CLOSE:
+                case CMD_EXIT:
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.CLOSE)));
                     break;
-                case "resume":
+                case CMD_RESUME:
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.RESUME)));
                 default:
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.generic(rawCmd)));
@@ -315,6 +383,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
                 menu.showPauseMessage();
             } else if ("victory".equals(command)) {
                 menu.showVictoryMessage(coinsCollected);
+            } else if ("man resolution".equals(command)) {
+                menu.showManResolution();
             } else {
                 menu.showUnknownCommandError(command);
             }
