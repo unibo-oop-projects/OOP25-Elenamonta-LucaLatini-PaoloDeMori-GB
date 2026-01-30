@@ -2,10 +2,10 @@ package it.unibo.geometrybash.controller;
 
 import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.assets.ResourceLoaderImpl;
-import it.unibo.geometrybash.commons.input.InputHandlerFactoryImpl;
 import it.unibo.geometrybash.commons.pattern.observerpattern.Observer;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
 import it.unibo.geometrybash.controller.gameloop.GameLoopFixedExecutionTimeFactory;
+import it.unibo.geometrybash.controller.input.InputHandlerFactoryImpl;
 import it.unibo.geometrybash.model.GameModel;
 import it.unibo.geometrybash.model.GameModelImpl;
 import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
