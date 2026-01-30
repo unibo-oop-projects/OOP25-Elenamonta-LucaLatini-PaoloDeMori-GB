@@ -271,7 +271,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
 
     @Override
     public void respawnPlayer() {
-        player.respawn(this.level.getPlayerStartPosition());
+        if (player != null && level != null) {
+            player.respawn(this.level.getPlayerStartPosition());
+        }
     }
 
 }

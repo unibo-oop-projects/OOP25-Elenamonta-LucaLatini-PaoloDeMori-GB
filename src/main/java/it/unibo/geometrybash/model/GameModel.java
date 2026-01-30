@@ -62,14 +62,14 @@ public interface GameModel extends GameState, ModelObservable {
     /**
      * Resets all the fields and restart the game.
      *
-     * @throws ModelExecutionException if an error is thrown during
-     *                                 the normal execution of the
-     *                                 start method
+     * @throws ModelExecutionException               if an error is thrown during
+     *                                               the normal execution of the
+     *                                               start method
      *
-     * @throws InvalidModelMethodInvocationException  if the method is called when
-     *                                                the
-     *                                                finite state machine is not in
-     *                                                the correct state
+     * @throws InvalidModelMethodInvocationException if the method is called when
+     *                                               the
+     *                                               finite state machine is not in
+     *                                               the correct state
      *
      */
     void restart() throws InvalidModelMethodInvocationException, ModelExecutionException;
@@ -95,5 +95,8 @@ public interface GameModel extends GameState, ModelObservable {
      */
     UpdateInfoDto toDto() throws ModelExecutionException;
 
+    /**
+     * The method that resets the player to its start position.
+     */
     void respawnPlayer();
 }

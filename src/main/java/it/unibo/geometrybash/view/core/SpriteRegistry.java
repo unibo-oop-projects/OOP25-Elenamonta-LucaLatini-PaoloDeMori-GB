@@ -92,7 +92,7 @@ public final class SpriteRegistry {
     private String powerUpPath(final DtoPowerUpType type) {
         return switch (type) {
             case COIN -> "it/unibo/geometrybash/graphics/powerups/coin.png";
-            case SPEED_BOOST -> "it/unibo/geometrybash/graphics/powerups/speed.png";
+            case SPEED_BOOST -> "it/unibo/geometrybash/graphics/powerups/speedBoost.png";
             case SHIELD -> "it/unibo/geometrybash/graphics/powerups/shield.png";
         };
     }

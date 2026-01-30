@@ -1,7 +1,6 @@
 package it.unibo.geometrybash.view.gamepanel;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import java.util.List;
@@ -27,63 +26,129 @@ import it.unibo.geometrybash.view.core.RenderContext;
 import it.unibo.geometrybash.view.utilities.GameResolution;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
-
+/**
+ * The builder for a JFrame of this project.
+ * 
+ * <p>
+ * Implemented with Builder pattern.
+ * </p>
+ * 
+ * @see PanelWithEntities
+ * @see JFrame
+ * @see GameResolution
+ */
 public class GameFrameBuilder {
 
     private String title = "Default-Game-Title";
     private GameResolution gameResolution = GameResolution.BIG;
     private Runnable runnable;
-    private JPanel mainPanel;
+    private PanelWithEntities mainPanel;
     private Color backGroundColor = TerminalColor.BACKGROUND;
-    private boolean isResizable = false;
+    private boolean isResizable;
 
+    /**
+     * The void constructore of this class.
+     */
     public GameFrameBuilder() {
+        //Default Constructor.
     }
 
-    private void addCustomizableOnCLoseOperation(JFrame frame, Runnable runnable) {
+    /**
+     * Adds a new customizable action to execute when closing the frame.
+     * 
+     * @param frame       the frame to close.
+     * @param newRunnable the action to execute.
+     */
+    private void addCustomizableOnCLoseOperation(final JFrame frame, final Runnable newRunnable) {
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         frame.addWindowListener(
                 new WindowAdapter() {
                     @Override
-                    public void windowClosing(WindowEvent e) {
-                        runnable.run();
+                    public void windowClosing(final WindowEvent e) {
+                        newRunnable.run();
                     }
                 });
     }
 
-    public GameFrameBuilder setGameTitle(final String title) {
-        this.title = title;
+    /**
+     * Sets a new game title.
+     * 
+     * @param newTitle The new title.
+     * @return the instance of the builder executing this action.
+     */
+    public GameFrameBuilder setGameTitle(final String newTitle) {
+        this.title = newTitle;
         return this;
     }
 
-    public GameFrameBuilder setResolution(final GameResolution gameResolution) {
-        this.gameResolution = gameResolution;
+    /**
+     * Sets the gameResolution.
+     * 
+     * @param newGameResolution the game resolution
+     * @return the instance of the builder executing this action.
+     */
+    public GameFrameBuilder setResolution(final GameResolution newGameResolution) {
+        this.gameResolution = newGameResolution;
         return this;
     }
 
-    public GameFrameBuilder setOnCloseAction(final Runnable runnable) {
-        this.runnable = runnable;
+    /**
+     * Sets the custom on close action.
+     * 
+     * @param newRunnable the action to execute.
+     * @return the instance of the builder executing this action.
+     */
+    public GameFrameBuilder setOnCloseAction(final Runnable newRunnable) {
+        this.runnable = newRunnable;
         return this;
     }
 
-    public GameFrameBuilder setMainPanel(final JPanel mainPanel) {
-        this.mainPanel = mainPanel;
+    /**
+     * Sets the first shown Jpanel.
+     * 
+     * @param newMainPanelFactory the panel to set.
+     * @param renderContext       the information useful to render this frame.
+     * @param assetStore          the object that retrieves resources.
+     * @return the instance of the builder executing this action.
+     */
+    public GameFrameBuilder setMainPanel(final PanelsFactory newMainPanelFactory, final RenderContext renderContext,
+            final AssetStore assetStore) {
+        final PanelWithEntities panelWithEntities = newMainPanelFactory.createPanelWithEntities(renderContext,
+                assetStore);
+        this.mainPanel = panelWithEntities;
         return this;
     }
 
+    /**
+     * Sets the background color .
+     * 
+     * @param color the color to set.
+     * @return the instance of the builder executing this action.
+     */
     public GameFrameBuilder setBackGroundColor(final Color color) {
         this.backGroundColor = color;
         return this;
     }
 
-    public GameFrameBuilder setResizable(final boolean isResizable) {
-        this.isResizable = isResizable;
+    /**
+     * Sets if the windows is resible or not .
+     * 
+     * @param newIsResizable true if it's resiable fals otherwise.
+     * @return the instance of the builder executing this action.
+     */
+    public GameFrameBuilder setResizable(final boolean newIsResizable) {
+        this.isResizable = newIsResizable;
         return this;
     }
 
-    public JFrame build() {
-        JFrame mainFrame = new JFrame(this.title);
+    /**
+     * Creates the {@link JFrame} using the set values.
+     * 
+     * @return the created JFrame.
+     */
+    public GameFrame<GameStateDto> build() {
+        final GameFrame<GameStateDto> mainFrame = new GameFrame<>(this.title);
         mainFrame.setSize(new Dimension(gameResolution.getViewPortWidth(), gameResolution.getViewPortHeight()));
         mainFrame.setBackground(backGroundColor);
         if (runnable == null) {
@@ -97,6 +162,7 @@ public class GameFrameBuilder {
         mainFrame.setLayout(new BorderLayout());
         if (mainPanel != null) {
             mainFrame.add(mainPanel, BorderLayout.CENTER);
+            mainFrame.setUpdatablePanel(mainPanel);
         }
 
         mainFrame.setLocationRelativeTo(null);
@@ -108,22 +174,24 @@ public class GameFrameBuilder {
     public static void main(String[] args) {
         Camera2D camera = new Camera2D();
         camera.setOffset(10);
-        GameResolution gameResolution = GameResolution.SMALL;
+        GameResolution gameResolution = GameResolution.BIG;
+        camera.setPixelPerMeter(gameResolution);
         camera.setViewportHeight(gameResolution.getViewPortHeight());
         RenderContext renderContext = new RenderContext(camera, gameResolution.getViewPortWidth(),
                 gameResolution.getViewPortHeight());
 
         AssetStore assetStore = new AssetStore(new ResourceLoaderImpl());
 
-        PanelWithEntities panelwithEntities = new PanelWithEntities(renderContext, assetStore);
+        GameFrame<GameStateDto> frame = new GameFrameBuilder().setGameTitle("Geometry-Bash").setResizable(false)
+                .setResolution(gameResolution).setMainPanel(new PanelsFactoryImpl(), renderContext, assetStore).build();
 
-        JFrame frame = new GameFrameBuilder().setGameTitle("Geometry-Bash").setResizable(false)
-                .setResolution(gameResolution).setMainPanel(panelwithEntities).build();
-
-        panelwithEntities.update(
+        frame.update(
                 new GameStateDto(new PlayerDto(11, 3, 1, 1, true, false, new SkinDto(0XFFFF0000, 0XFF880000), 0),
                         List.of(new ObstacleDto(10, 3, 1, 1, true, DtoObstaclesType.BLOCK)),
-                        List.of(new PowerUpDto(20, 3, 1, 1, true, DtoPowerUpType.COIN)), 10f, 20, Status.PLAYING, 50));
+                        List.of(new PowerUpDto(21, 3, 1, 1, true, DtoPowerUpType.COIN),
+                                new PowerUpDto(22, 3, 1, 1, true, DtoPowerUpType.SHIELD),
+                                new PowerUpDto(23, 3, 1, 1, true, DtoPowerUpType.SPEED_BOOST)),
+                        10f, 20, Status.PLAYING, 50));
         frame.setVisible(true);
 
     }

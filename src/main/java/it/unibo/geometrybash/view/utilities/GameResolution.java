@@ -27,8 +27,10 @@ public enum GameResolution {
      * Set the variable ppm with the correct value.
      *
      * @param ppm the pixel per meter value.
+     * @param x   the width of the viewport.
+     * @param y   the height of the viewport.
      */
-    GameResolution(final float ppm, int x, int y) {
+    GameResolution(final float ppm, final int x, final int y) {
         this.ppm = ppm;
         this.viewPortWidth = x;
         this.viewPortHeight = y;

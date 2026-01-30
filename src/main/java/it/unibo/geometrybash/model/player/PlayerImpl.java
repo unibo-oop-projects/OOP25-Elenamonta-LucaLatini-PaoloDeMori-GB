@@ -224,7 +224,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings(value = "EI2", justification = "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
+    @SuppressFBWarnings(value = "EI2", justification = ""
+            + "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
             + "The method enforces immutability of the association by preventing reassignment "
             + "through an explicit state check inside the method. ")
     @Override
@@ -291,6 +292,9 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
                 "Player physics not bound yet");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isDead() {
         return this.state.equals(PlayerState.DEAD);
