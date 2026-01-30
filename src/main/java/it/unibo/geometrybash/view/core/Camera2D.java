@@ -9,13 +9,7 @@ import it.unibo.geometrybash.view.utilities.GameResolution;
  * bottom.
  */
 public final class Camera2D {
-
-    /**
-     * Default value for pixel per meters.
-     */
-    private static final float DEFAULT_VALUE = 50.0f;
-
-    private float pixelPerMeter = DEFAULT_VALUE;
+    private final float pixelPerMeter;
     private float offsetX;
     private int viewportHeight;
 
@@ -23,12 +17,25 @@ public final class Camera2D {
      * creates a new 2D camera with the parameter values of the current session.
      *
      * @param resolution the game's resolution.
-     * @param offset
+     * @param offset     the current offset.
      */
     public Camera2D(final GameResolution resolution, final int offset) {
         this.pixelPerMeter = resolution.getPpm();
         this.offsetX = offset;
         this.viewportHeight = resolution.getViewPortHeight();
+    }
+
+    /**
+     * A private constructor useful for thread security.
+     *
+     * @param ppm    the current pixel per meter value.
+     * @param height the current view port height.
+     * @param offset the current camera's offset.
+     */
+    private Camera2D(final float ppm, final int height, final float offset) {
+        this.pixelPerMeter = ppm;
+        this.viewportHeight = height;
+        this.offsetX = offset;
     }
 
     /**
@@ -87,19 +94,7 @@ public final class Camera2D {
      * @return a Camera2D copy
      */
     public Camera2D copy() {
-        final Camera2D copy = new Camera2D(this.pixelPerMeter, this.viewportHeight, this.offsetX);
-        return copy;
-    }
+        return new Camera2D(this.pixelPerMeter, this.viewportHeight, this.offsetX);
 
-    /**
-     * A private constructor useful for thread security.
-     *
-     * @param ppm the current pixel per meter value.
-     * @param height the current view port height.
-     */
-    private Camera2D(final float ppm, final int height, final float offset) {
-        this.pixelPerMeter = ppm;
-        this.viewportHeight = height;
-        this.offsetX = offset;
     }
 }

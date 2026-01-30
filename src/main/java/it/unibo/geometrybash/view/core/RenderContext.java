@@ -30,8 +30,16 @@ public record RenderContext(Camera2D camera, int viewportWidth, int viewportHeig
      *
      * @return a defensive copy of the camera
      */
-    @Override
     public Camera2D camera() {
         return this.camera.copy();
+    }
+
+    /**
+     * Set the camera's offset.
+     *
+     * @param offset a float represents the camera's offset.
+     */
+    public void setOffset(final float offset) {
+        this.camera.setOffset(offset);
     }
 }
