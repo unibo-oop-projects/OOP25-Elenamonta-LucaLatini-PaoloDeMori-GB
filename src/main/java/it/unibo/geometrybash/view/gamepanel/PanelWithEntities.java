@@ -17,11 +17,14 @@ import it.unibo.geometrybash.view.renderer.Drawable;
 import it.unibo.geometrybash.view.renderer.LevelView;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
+/**
+ * A panel that draws the entities in the level,
+ */
 public class PanelWithEntities extends JPanel implements UpdatableWithDto<GameStateDto> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PanelWithEntities.class);
 
-    private final RenderContext renderContext;
+    private RenderContext renderContext;
 
     private GameStateDto gameStateDto;
     private Drawable<GameStateDto> levelView;
@@ -43,6 +46,10 @@ public class PanelWithEntities extends JPanel implements UpdatableWithDto<GameSt
         } else {
             LOGGER.warn("Panel with entities drawn without any information about world entities");
         }
+    }
+
+    public void setRenderContext(RenderContext r) {
+        this.renderContext = r;
     }
 
     @Override
