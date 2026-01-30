@@ -65,7 +65,7 @@ public final class SpriteRegistry {
      */
     public BufferedImage playerOuterBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
-        return tint(assets.getImage("images/player/outherLayer.png"), new Color(skin.primaryColor()));
+        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/outher1.png"), new Color(skin.primaryColor()));
     }
 
     /**
@@ -79,21 +79,21 @@ public final class SpriteRegistry {
      */
     public BufferedImage playerInnerBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
-        return tint(assets.getImage("images/player/innerLayer.png"), new Color(skin.secondaryColor()));
+        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/inner1.png"), new Color(skin.secondaryColor()));
     }
 
     private String obstaclePath(final DtoObstaclesType type) {
         return switch (type) {
-            case SPIKE -> "images/obstacles/spike.png";
-            case BLOCK -> "images/obstacles/block.png";
+            case SPIKE -> "it/unibo/geometrybash/graphics/obstacles/spike.png";
+            case BLOCK -> "it/unibo/geometrybash/graphics/obstacles/block.png";
         };
     }
 
     private String powerUpPath(final DtoPowerUpType type) {
         return switch (type) {
-            case COIN -> "images/powerups/coin.png";
-            case SPEED_BOOST -> "images/powerups/speed.png";
-            case SHIELD -> "images/powerups/shield.png";
+            case COIN -> "it/unibo/geometrybash/graphics/powerups/coin.png";
+            case SPEED_BOOST -> "it/unibo/geometrybash/graphics/powerups/speed.png";
+            case SHIELD -> "it/unibo/geometrybash/graphics/powerups/shield.png";
         };
     }
 
