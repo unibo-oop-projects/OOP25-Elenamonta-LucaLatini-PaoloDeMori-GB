@@ -18,22 +18,30 @@ import it.unibo.geometrybash.view.menus.MainMenuView;
 import it.unibo.geometrybash.view.utilities.GameResolution;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
+/**
+ * Implementation of the view of the game.
+ */
 public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements View {
 
     private static final String TITLE_GAME = "Geometry Bash - Playing";
     private final ResourceLoader resourceLoader;
     private final AssetStore assetStore;
-    private final Camera2D camera;
-    private RenderContext renderContext;
-    private MainMenuView menuView;
-    private PanelsFactory panelsFactory;
+    private final MainMenuView menuView;
+    private final PanelsFactory panelsFactory;
     private GameFrame<GameStateDto> gameFrame;
+    private RenderContext renderContext;
 
-    public ViewImpl(final ResourceLoader resourceLoader, final AssetStore assetStore, final Camera2D camera) {
+    /**
+     * The constructor of the view of the game.
+     *
+     * @param resourceLoader the object used to retrieve resources
+     * @param assetStore     the object that retrieves resources
+     */
+    public ViewImpl(final ResourceLoader resourceLoader, final AssetStore assetStore) {
         this.resourceLoader = resourceLoader;
         this.assetStore = assetStore;
-        this.camera = camera;
         this.menuView = new MainMenuView(this.resourceLoader);
+        this.panelsFactory = new PanelsFactoryImpl();
     }
 
     /**
@@ -41,8 +49,8 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
      */
     @Override
     public void init(final GameResolution resolution) {
-        this.renderContext = new RenderContext(camera, resolution.getViewPortWidth(), resolution.getViewPortHeight());
-        this.panelsFactory = new PanelsFactoryImpl();
+        this.renderContext = new RenderContext(new Camera2D(resolution, 0), resolution.getViewPortWidth(),
+                resolution.getViewPortHeight());
         this.gameFrame = new GameFrameBuilder()
                 .setMainPanel(this.panelsFactory, this.renderContext, this.assetStore)
                 .setBackGroundColor(TerminalColor.BACKGROUND)
@@ -62,7 +70,8 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
      * {@inheritDoc}
      */
     @Override
-    public void update(UpdateInfoDto dto) throws NotStartedViewException, ExecutionWithIllegalThreadException {
+    public void update(final UpdateInfoDto dto) throws NotStartedViewException, ExecutionWithIllegalThreadException {
+        this.renderContext.setOffset(dto.getStateDto().cameraOffsetX());
         this.gameFrame.update(dto.getStateDto());
     }
 
@@ -70,7 +79,7 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
      * {@inheritDoc}
      */
     @Override
-    public void changeView(ViewScene scene) {
+    public void changeView(final ViewScene scene) {
         switch (scene) {
             case ViewScene.START_MENU:
                 if (this.gameFrame != null) {
@@ -81,11 +90,11 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
             case ViewScene.IN_GAME:
                 this.menuView.hide();
                 this.gameFrame.setVisible(true);
+                break;
             case ViewScene.PAUSE:
                 this.menuView.showPauseMessage();
                 this.gameFrame.setVisible(false);
                 this.menuView.display();
-            default:
                 break;
         }
     }
@@ -99,4 +108,43 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
         this.menuView.hide();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void victory(final int coins, final int totalCoins) {
+        this.menuView.showVictoryMessage(coins);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void pause() {
+        this.menuView.showPauseMessage();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showResolutionOptions() {
+        this.menuView.showManResolution();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showCommandsError(final String command) {
+        this.menuView.showUnknownCommandError(command);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showExecutionError(final String executionError) {
+        this.menuView.showGameExecutionError(executionError);
+    }
 }

@@ -77,6 +77,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
 
     /**
      * Initializes the main menu view and its graphical components.
+     *
+     * @param resourceLoader the object used to retrieve resources
      */
     public MainMenuView(final ResourceLoader resourceLoader) {
         this.frame = new JFrame();

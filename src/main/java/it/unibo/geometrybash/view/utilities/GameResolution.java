@@ -1,7 +1,7 @@
 package it.unibo.geometrybash.view.utilities;
 
 /**
- * Supported resolutions fot he game.
+ * Supported resolutions for the game.
  */
 public enum GameResolution {
     /**
@@ -47,7 +47,7 @@ public enum GameResolution {
 
     /**
      * Retrieves the viewport horizontal dimension.
-     * 
+     *
      * @return the viewport horizontal dimension.
      */
     public int getViewPortWidth() {
@@ -56,7 +56,7 @@ public enum GameResolution {
 
     /**
      * Retrieves the viewport horizontal dimension.
-     * 
+     *
      * @return the viewport horizontal dimension.
      *
      */

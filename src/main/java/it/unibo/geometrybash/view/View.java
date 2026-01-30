@@ -15,6 +15,8 @@ public interface View extends ViewObservable {
 
     /**
      * Method to init the game panel view.
+     *
+     * @param resolution resolutions for the game
      */
     void init(GameResolution resolution);
 
@@ -60,4 +62,36 @@ public interface View extends ViewObservable {
      * Method called by the controller to dispose the view.
      */
     void disposeView();
+
+    /**
+     * Methos called by the controller to show the victory message with the total number of coins collected.
+     *
+     * @param coins number of coins taken by the player
+     * @param totalCoins total number of coins in the level
+     */
+    void victory(int coins, int totalCoins);
+
+    /**
+     * Methos called by the controller to show pause menu.
+     */
+    void pause();
+
+    /**
+     * Method called by the controller to show an error message when a command is not found.
+     *
+     * @param command represent the command typed from the user
+     */
+    void showCommandsError(String command);
+
+    /**
+     * Methos called by the controller to show all options to reset resolution of the screen.
+     */
+    void showResolutionOptions();
+
+    /**
+     * Methos called by the controller to show error message when an error occurs during game execution.
+     *
+     * @param executionError the description of the error occurred
+     */
+    void showExecutionError(String executionError);
 }
