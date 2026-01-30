@@ -19,12 +19,9 @@ import it.unibo.geometrybash.commons.input.ViewEventTypeFactory;
 import it.unibo.geometrybash.commons.pattern.observerpattern.AbstractObservableWithSet;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObservable;
-import it.unibo.geometrybash.controller.input.CompositeInputHandler;
-import it.unibo.geometrybash.model.MenuModel;
 import it.unibo.geometrybash.commons.assets.AudioManager;
 import it.unibo.geometrybash.commons.assets.AudioStore;
 import it.unibo.geometrybash.commons.assets.ResourceLoader;
-import it.unibo.geometrybash.commons.assets.ResourceLoaderImpl;
 import it.unibo.geometrybash.commons.assets.TextAssetReader;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
@@ -81,14 +78,13 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     /**
      * Initializes the main menu view and its graphical components.
      */
-    public MainMenuView() {
+    public MainMenuView(final ResourceLoader resourceLoader) {
         this.frame = new JFrame();
         this.frame.setUndecorated(true);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.getContentPane().setBackground(TerminalColor.BACKGROUND);
         this.frame.setLayout(new BorderLayout());
-
-        this.resourceLoader = new ResourceLoaderImpl();
+        this.resourceLoader = resourceLoader;
         this.textReader = new TextAssetReader(this.resourceLoader);
         this.audioStore = new AudioStore(resourceLoader);
         this.manage = new AudioManager(audioStore);
@@ -361,39 +357,5 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.outputArea.setCaretPosition(outputArea.getDocument().getLength());
     }
 
-    /**
-     * Launches the main menu view for testing purposes.
-     *
-     * @param args program arguments
-     */
-    public static void main(final String[] args) {
-        final MainMenuView menu = new MainMenuView();
-        final CompositeInputHandler cH = new CompositeInputHandler();
-        final int coinsCollected = 5;
-        final MenuModel mm = new MenuModel();
-        cH.setGenericCommandHandler(command -> {
-            mm.addCommand(command);
-            if ("history".equals(command)) {
-                for (final String string : mm.getHistory()) {
-                    menu.appendText(string);
-                }
-            } else if ("help".equals(command) || "commands".equals(command) || "cmds".equals(command)) {
-                menu.showCommands();
-            } else if ("pause".equals(command)) {
-                menu.showPauseMessage();
-            } else if ("victory".equals(command)) {
-                menu.showVictoryMessage(coinsCollected);
-            } else if ("man resolution".equals(command)) {
-                menu.showManResolution();
-            } else {
-                menu.showUnknownCommandError(command);
-            }
-        });
-        cH.setActionForEvent(StandardViewEventType.CLOSE, () -> {
-            System.exit(0);
-        });
-        menu.addObserver(cH);
-        menu.display();
-    }
-
 }
+
