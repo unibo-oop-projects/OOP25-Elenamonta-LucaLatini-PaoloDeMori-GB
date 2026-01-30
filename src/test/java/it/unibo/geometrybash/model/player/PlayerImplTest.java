@@ -1,4 +1,5 @@
 package it.unibo.geometrybash.model.player;
+
 import org.junit.jupiter.api.BeforeEach;
 
 import it.unibo.geometrybash.model.geometry.HitBox;
@@ -7,64 +8,64 @@ import it.unibo.geometrybash.model.physicsengine.PlayerPhysics;
 
 final class MockPlayerPhysics implements PlayerPhysics {
 
+    private static final String NOT_NECESSARY_METHOD = "this method is not tested here";
+    private static final float BASE_SPEED = 5.0f;
+    private Vector2 velocity;
+    private boolean grounded;
+
+    MockPlayerPhysics() {
+        this.velocity = new Vector2(BASE_SPEED, 0f);
+        this.grounded = true;
+    }
+
     @Override
     public void applyJump() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyJump'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
     @Override
     public void setVelocity(float multiplier) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setVelocity'");
+        velocity = new Vector2(BASE_SPEED * multiplier, velocity.y());
     }
 
     @Override
     public Vector2 getVelocity() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getVelocity'");
+        return velocity;
     }
 
     @Override
     public void resetBodyTo(Vector2 pos) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'resetBodyTo'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
     @Override
     public Vector2 getPosition(HitBox hB) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
     @Override
     public void setUserData(Object userData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setUserData'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
     @Override
     public boolean isGrounded() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isGrounded'");
+        return grounded;
     }
 
     @Override
     public void onGroundContactBegin() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onGroundContactBegin'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
     @Override
     public void onGroundContactEnd() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onGroundContactEnd'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
     @Override
     public void setActive(boolean activeState) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setActive'");
+        throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
     }
 
 }
@@ -76,6 +77,11 @@ class PlayerImplTest {
     @BeforeEach
     void setup() {
         this.player = new PlayerImpl(new Vector2(5.0f, 5.0f));
+        this.physics = new MockPlayerPhysics();
+        this.player.bindPhysics(physics);
     }
+
+    
+
 
 }
