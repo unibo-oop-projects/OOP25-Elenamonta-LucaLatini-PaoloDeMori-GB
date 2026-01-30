@@ -133,13 +133,6 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
     void setSkin(Skin skin);
 
     /**
-     * Returns the actual state of the player.
-     *
-     * @return the string represent the current state of the player
-     */
-    String getState();
-
-    /**
      * Set onDeath param.
      *
      * @param onDeath the functional interface to set

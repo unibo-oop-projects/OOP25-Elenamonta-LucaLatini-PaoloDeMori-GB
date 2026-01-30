@@ -35,7 +35,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     private static final double ANGULAR_SPEED_RAD_S = Math.toRadians(720.0);
     private final PowerUpManager powerUpManager;
     private Skin skin;
-    private PlayerState state;
+    private boolean dead;
     private PlayerPhysics physics;
     private int coins;
     private OnDeathExecute onDeath;
@@ -54,7 +54,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         this.skin = new Skin();
         this.coins = 0;
         this.physics = null;
-        this.state = PlayerState.ON_GROUND;
+        this.dead = false;
     }
 
     /**
@@ -65,8 +65,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         this.powerUpManager.update(deltaTime);
         getNotEmptyPhysics().setVelocity(this.powerUpManager.getSpeedMultiplier());
         this.position = getNotEmptyPhysics().getPosition(hitBox);
-        if (this.physics.isGrounded()) {
-            this.state = PlayerState.ON_GROUND;
+        if (!this.physics.isGrounded()) {
             // player rotate with a angular rotation of 4PI/s
             rotationRad += ANGULAR_SPEED_RAD_S * deltaTime;
             // normalize angle to the [0, 2PI) range
@@ -81,7 +80,6 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
                 snapped += TWO_PI;
             }
             rotationRad = snapped;
-            this.state = PlayerState.JUMPING;
         }
     }
 
@@ -98,7 +96,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      */
     @Override
     public void die() {
-        this.state = PlayerState.DEAD;
+        this.dead = true;
         this.coins = 0;
         this.powerUpManager.reset();
         this.onDeath.onDeath();
@@ -109,10 +107,10 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      */
     @Override
     public void respawn(final Vector2 position) {
-        if (this.state.equals(PlayerState.DEAD)) {
+        if (this.dead) {
             getNotEmptyPhysics().resetBodyTo(position);
             this.position = position;
-            this.state = PlayerState.ON_GROUND;
+            this.dead = false;
         }
     }
 
@@ -156,7 +154,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         if (powerUpManager.isShielded()) {
             powerUpManager.consumeShield();
             obstacle.setActive(false);
-        } else if (this.state != PlayerState.DEAD) {
+        } else if (!this.dead) {
             die();
         }
     }
@@ -201,7 +199,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         final PlayerImpl copy = new PlayerImpl(new Vector2(position.x(), position.y()));
         copy.coins = this.coins;
         copy.skin = this.skin;
-        copy.state = this.state;
+        copy.dead = false;
         return copy;
     }
 
@@ -224,7 +222,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings(value = "EI2", justification = "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
+    @SuppressFBWarnings(value = "EI2",
+            justification = "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
             + "The method enforces immutability of the association by preventing reassignment "
             + "through an explicit state check inside the method. ")
     @Override
@@ -238,14 +237,6 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
             throw new IllegalStateException("Physics already bound");
         }
         this.physics = Objects.requireNonNull(phy);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getState() {
-        return this.state.getName();
     }
 
     /**
@@ -293,6 +284,6 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
 
     @Override
     public boolean isDead() {
-        return this.state.equals(PlayerState.DEAD);
+        return this.dead;
     }
 }

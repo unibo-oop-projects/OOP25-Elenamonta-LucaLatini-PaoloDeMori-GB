@@ -12,8 +12,8 @@ package it.unibo.geometrybash.model.player;
  */
 public class Skin {
 
-    private static final int DEFAULT_INNER_COLOR = 0xFFFFFFFF;
-    private static final int DEFAULT_OUTER_COLOR = 0xFF000000;
+    private static final int DEFAULT_INNER_COLOR = 0xFF0000FF;
+    private static final int DEFAULT_OUTER_COLOR = 0xFFFF0000;
     private final int innerColor;
     private final int outerColor;
 
