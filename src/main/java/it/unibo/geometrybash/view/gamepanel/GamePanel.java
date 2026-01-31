@@ -1,22 +1,21 @@
 package it.unibo.geometrybash.view.gamepanel;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import it.unibo.geometrybash.commons.assets.AssetStore;
 import it.unibo.geometrybash.commons.dtos.GameStateDto;
-import it.unibo.geometrybash.commons.input.StandardViewEventType;
-import it.unibo.geometrybash.commons.input.ViewEventTypeFactory;
 import it.unibo.geometrybash.commons.pattern.observerpattern.AbstractObservableWithSet;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
 import it.unibo.geometrybash.view.UpdatableWithDto;
 import it.unibo.geometrybash.view.core.RenderContext;
+import it.unibo.geometrybash.view.userinteraction.SwingKeyboardListener;
+import it.unibo.geometrybash.view.userinteraction.SwingStrategyWithObservable;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
 public class GamePanel extends AbstractObservableWithSet<ViewEvent> implements UpdatableWithDto<GameStateDto> {
 
     private GameFrame<GameStateDto> gameFrame;
     private PanelsFactory panelsFactory;
+    private SwingKeyboardListener swingKeyboardListener = new SwingKeyboardListener(new SwingStrategyWithObservable(
+            e -> notifyObservers(e)));
 
     public GamePanel(PanelsFactory panelsFactory) {
         this.panelsFactory = panelsFactory;
@@ -30,15 +29,7 @@ public class GamePanel extends AbstractObservableWithSet<ViewEvent> implements U
                 .setGameTitle(gameTitle)
                 .build();
         this.gameFrame.addKeyListener(
-                new KeyAdapter() {
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                            notifyObservers(
-                                    ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.JUMP)));
-                        }
-                    }
-                });
+                this.swingKeyboardListener);
     }
 
     public void show() {

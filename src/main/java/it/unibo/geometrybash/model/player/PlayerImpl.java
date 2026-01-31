@@ -110,9 +110,9 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     @Override
     public void respawn(final Vector2 position) {
         if (this.state.equals(PlayerState.DEAD)) {
+            this.state = PlayerState.ON_GROUND;
             getNotEmptyPhysics().resetBodyTo(position);
             this.position = position;
-            this.state = PlayerState.ON_GROUND;
         }
     }
 

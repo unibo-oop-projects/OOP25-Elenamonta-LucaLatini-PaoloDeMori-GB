@@ -48,7 +48,6 @@ public class PlayerView implements Drawable<PlayerDto> {
 
         try {
             g2d.rotate(data.rotationRad(), centerX, centerY);
-
             g2d.drawImage(innerImg, x, y, width, height, null);
             g2d.drawImage(outerImg, x, y, width, height, null);
         } finally {

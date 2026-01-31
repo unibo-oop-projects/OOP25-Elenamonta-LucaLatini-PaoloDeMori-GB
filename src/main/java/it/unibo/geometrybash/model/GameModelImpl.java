@@ -182,6 +182,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         clearUpdatableList();
         this.changedStateObjects.clear();
         start(levelName);
+        
     }
 
     /**
@@ -189,7 +190,6 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     public void jumpSignal() {
-        LOGGER.info("SALTO NEL MODEL");
         this.isJumpSignalActive = true;
     }
 

@@ -22,9 +22,12 @@ import org.jbox2d.dynamics.Body;
 public class PlayerPhysicsImpl implements PlayerPhysics {
 
     private static final float JUMP_IMPULSE = 15.0f;
-    private static final float BASE_SPEED = 5.0f;
+    private static final float BASE_SPEED = 6.0f;
     private final Body body;
     private int groundContacts;
+
+    private Vec2 lastPosition;
+    private short counter;
 
     /**
      * Creates a new physics component for a player entity.
@@ -60,6 +63,19 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
     @Override
     public void setVelocity(final float multiplier) {
         final float currentSpeed = BASE_SPEED * multiplier;
+
+        if (lastPosition != null &&
+                Math.abs(this.body.getPosition().x - lastPosition.x) < 0.001f && isGrounded()) {
+            counter++;
+            if (counter > 2) {
+                this.body.setTransform(new Vec2(this.body.getPosition().x + 0.1f, this.body.getPosition().y + 0.08f),
+                        0f);
+                counter = 0;
+            }
+        } else {
+            counter = 0;
+        }
+        lastPosition = this.body.getPosition().clone();
         this.body.setLinearVelocity(new Vec2(currentSpeed, this.body.getLinearVelocity().y));
     }
 
@@ -80,7 +96,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
         this.body.setAngularVelocity(0f);
         this.body.setTransform(new Vec2(position.x(), position.y()), 0f);
         this.body.setAwake(true);
-        this.groundContacts=0;
+        this.groundContacts = 0;
     }
 
     /**
@@ -88,7 +104,8 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      */
     @Override
     public Vector2 getPosition(final HitBox hB) {
-        // Converts the physics body position to the model position, which represents the bottom-left corner of the entity.
+        // Converts the physics body position to the model position, which represents
+        // the bottom-left corner of the entity.
         return new Vector2(
                 body.getPosition().x - (hB.getWidth() / 2f),
                 body.getPosition().y - (hB.getHeight() / 2f));

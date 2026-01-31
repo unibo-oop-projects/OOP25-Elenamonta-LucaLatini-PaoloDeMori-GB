@@ -42,7 +42,7 @@ public abstract class AbstractControllerImpl implements Controller {
     private final InputHandler inputHandler;
     private GameLoop gameLoop;
     private final GameLoopFactory gameLoopFactory;
-    private final GameResolution gameResolution= GameResolution.BIG;
+    private final GameResolution gameResolution = GameResolution.MEDIUM;
 
     /**
      * The constructor of the controller with game model, view and input handler
@@ -96,7 +96,6 @@ public abstract class AbstractControllerImpl implements Controller {
      * The action to execute on.
      */
     private void onJumpAction() {
-        LOGGER.info("SALTO");
         this.gameModel.jumpSignal();
     }
 
@@ -204,6 +203,7 @@ public abstract class AbstractControllerImpl implements Controller {
             gameModel.resume();
             gameLoopSetting();
             gameLoop.resume();
+            view.changeView(ViewScene.IN_GAME);
         } catch (final NotOnPauseException | NotStartedException | InvalidModelMethodInvocationException e) {
             handleError("Error while resuming the game", Optional.of(e));
         }
@@ -217,6 +217,7 @@ public abstract class AbstractControllerImpl implements Controller {
             gameLoopSetting();
             gameLoop.pause();
             gameModel.pause();
+            view.changeView(ViewScene.PAUSE);
         } catch (final InvalidGameLoopStatusException | InvalidModelMethodInvocationException e) {
             handleError("Error while resuming the thread", Optional.of(e));
         }
@@ -228,9 +229,10 @@ public abstract class AbstractControllerImpl implements Controller {
     private void gameRestart() {
         try {
             gameLoopSetting();
-            this.gameLoop.start();
             this.gameModel.restart();
-        } catch (final InvalidGameLoopStatusException | InvalidGameLoopConfigurationException
+            this.gameLoop.resume();
+            this.view.changeView(ViewScene.IN_GAME);
+        } catch (final InvalidGameLoopStatusException
                 | InvalidModelMethodInvocationException | ModelExecutionException e) {
             handleError("Error while restarting the match", Optional.of(e));
         }
@@ -244,8 +246,23 @@ public abstract class AbstractControllerImpl implements Controller {
     public void update(final ModelEvent event) {
         switch (event.getType()) {
             case VICTORY:
-                view.changeView(ViewScene.START_MENU);
-                handleError("Errore durante l'update della partita", Optional.empty());
+                try {
+                    gameLoopSetting();
+                    gameLoop.stop();
+                } catch (NotStartedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        view.victory(getModel().getPlayer().getCoins(), this.getModel().getLevel().getTotalCoins());
+                        view.changeView(ViewScene.START_MENU);
+
+                    } catch (ModelExecutionException e) {
+                        LOGGER.error("Impossible to retrieve coins");
+                        view.victory(0, 0);
+                    }
+                });
                 break;
             case GAMEOVER:
                 break;
@@ -294,7 +311,7 @@ public abstract class AbstractControllerImpl implements Controller {
         try {
             this.view.show();
         } catch (NotStartedViewException e) {
-            LOGGER.error("impossible to start the view",e);
+            LOGGER.error("impossible to start the view", e);
         }
     }
 

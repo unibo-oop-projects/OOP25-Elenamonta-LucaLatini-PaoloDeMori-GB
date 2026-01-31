@@ -10,7 +10,7 @@ public final class SwingKeyboardListener extends KeyAdapter implements InputList
 
     private InputListenerStrategy onClickStrategy;
 
-    SwingKeyboardListener(final InputListenerStrategy strategy) {
+    public SwingKeyboardListener(final InputListenerStrategy strategy) {
         this.onClickStrategy = strategy;
     }
 

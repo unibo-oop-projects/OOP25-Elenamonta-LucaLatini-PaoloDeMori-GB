@@ -78,7 +78,7 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
         switch (scene) {
             case ViewScene.START_MENU:
                 if (this.gamePanel != null) {
-                    this.gamePanel.show();
+                    this.gamePanel.hide();
                 }
                 this.menuView.display();
                 break;

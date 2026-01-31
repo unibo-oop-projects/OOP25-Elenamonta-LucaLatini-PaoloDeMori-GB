@@ -1,7 +1,7 @@
 {
     "name": "Draft Level",
     "playerStarterX": 5.0,
-    "playerStarterY": 5.0,
+    "playerStarterY": 8.0,
     "winX": 990.0,
     "floorLevelY": 4,
     "width": 1000,

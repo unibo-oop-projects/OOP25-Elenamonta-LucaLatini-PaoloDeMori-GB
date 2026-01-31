@@ -3,8 +3,6 @@ package it.unibo.geometrybash.view.gamepanel;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import java.util.List;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,16 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import it.unibo.geometrybash.commons.assets.AssetStore;
-import it.unibo.geometrybash.commons.assets.ResourceLoaderImpl;
-import it.unibo.geometrybash.commons.dtos.DtoObstaclesType;
-import it.unibo.geometrybash.commons.dtos.DtoPowerUpType;
 import it.unibo.geometrybash.commons.dtos.GameStateDto;
-import it.unibo.geometrybash.commons.dtos.ObstacleDto;
-import it.unibo.geometrybash.commons.dtos.PlayerDto;
-import it.unibo.geometrybash.commons.dtos.PowerUpDto;
-import it.unibo.geometrybash.commons.dtos.SkinDto;
-import it.unibo.geometrybash.model.Status;
-import it.unibo.geometrybash.view.core.Camera2D;
 import it.unibo.geometrybash.view.core.RenderContext;
 import it.unibo.geometrybash.view.utilities.GameResolution;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
@@ -40,7 +29,7 @@ import it.unibo.geometrybash.view.utilities.TerminalColor;
 public class GameFrameBuilder {
 
     private String title = "Default-Game-Title";
-    private GameResolution gameResolution = GameResolution.BIG;
+    private GameResolution gameResolution = GameResolution.MEDIUM;
     private Runnable runnable;
     private PanelWithEntities mainPanel;
     private Color backGroundColor = TerminalColor.BACKGROUND;
@@ -50,7 +39,7 @@ public class GameFrameBuilder {
      * The void constructore of this class.
      */
     public GameFrameBuilder() {
-        //Default Constructor.
+        // Default Constructor.
     }
 
     /**
@@ -170,28 +159,4 @@ public class GameFrameBuilder {
         return mainFrame;
 
     }
-
-    public static void main(String[] args) {
-        GameResolution gameResolution = GameResolution.SMALL;
-        Camera2D camera = new Camera2D(gameResolution,10);
-        camera.setViewportHeight(gameResolution.getViewPortHeight());
-        RenderContext renderContext = new RenderContext(camera, gameResolution.getViewPortWidth(),
-                gameResolution.getViewPortHeight());
-
-        AssetStore assetStore = new AssetStore(new ResourceLoaderImpl());
-
-        GameFrame<GameStateDto> frame = new GameFrameBuilder().setGameTitle("Geometry-Bash").setResizable(false)
-                .setResolution(gameResolution).setMainPanel(new PanelsFactoryImpl(), renderContext, assetStore).build();
-
-        frame.update(
-                new GameStateDto(new PlayerDto(11, 3, 1, 1, true, false, new SkinDto(0XFFFF0000, 0XFF880000), 0),
-                        List.of(new ObstacleDto(10, 3, 1, 1, true, DtoObstaclesType.SPIKE)),
-                        List.of(new PowerUpDto(21, 3, 1, 1, true, DtoPowerUpType.COIN),
-                                new PowerUpDto(22, 3, 1, 1, true, DtoPowerUpType.SHIELD),
-                                new PowerUpDto(23, 3, 1, 1, true, DtoPowerUpType.SPEED_BOOST)),
-                        10f, 20, Status.PLAYING, 50));
-        frame.setVisible(true);
-
-    }
-
 }
