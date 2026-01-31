@@ -89,7 +89,7 @@ public interface View extends ViewObservable {
     void showResolutionOptions();
 
     /**
-     * Methos called by the controller to show error message when an error occurs during game execution.
+     * Method called by the controller to show error message when an error occurs during game execution.
      *
      * @param executionError the description of the error occurred
      */

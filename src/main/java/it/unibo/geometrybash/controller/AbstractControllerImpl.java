@@ -19,11 +19,11 @@ import it.unibo.geometrybash.controller.input.InputHandlerFactory;
 import it.unibo.geometrybash.model.GameModel;
 import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
 import it.unibo.geometrybash.model.physicsengine.exception.ModelExecutionException;
-import it.unibo.geometrybash.view.ErrorMessageView;
 import it.unibo.geometrybash.view.View;
 import it.unibo.geometrybash.view.ViewScene;
 import it.unibo.geometrybash.view.exceptions.ExecutionWithIllegalThreadException;
 import it.unibo.geometrybash.view.exceptions.NotStartedViewException;
+import it.unibo.geometrybash.view.utilities.GameResolution;
 import it.unibo.geometrybash.controller.gameloop.GameLoopFactory;
 
 /**
@@ -42,6 +42,7 @@ public abstract class AbstractControllerImpl implements Controller {
     private final InputHandler inputHandler;
     private GameLoop gameLoop;
     private final GameLoopFactory gameLoopFactory;
+    private final GameResolution gameResolution= GameResolution.BIG;
 
     /**
      * The constructor of the controller with game model, view and input handler
@@ -95,6 +96,7 @@ public abstract class AbstractControllerImpl implements Controller {
      * The action to execute on.
      */
     private void onJumpAction() {
+        LOGGER.info("SALTO");
         this.gameModel.jumpSignal();
     }
 
@@ -186,7 +188,7 @@ public abstract class AbstractControllerImpl implements Controller {
      * @param e       the exception that caused this one.
      */
     private void errorMessage(final String message, final Optional<Exception> e) {
-        ErrorMessageView.showError(message);
+        view.showCommandsError(message);
         if (e.isPresent()) {
             LOGGER.error(message, e);
         } else {
@@ -266,6 +268,8 @@ public abstract class AbstractControllerImpl implements Controller {
         try {
             gameLoopSetting();
             gameModel.start(LEVEL_NAME);
+            view.init(gameResolution);
+            view.changeView(ViewScene.IN_GAME);
             gameLoop.start();
         } catch (InvalidGameLoopStatusException | InvalidGameLoopConfigurationException | ModelExecutionException
                 | InvalidModelMethodInvocationException e) {
@@ -287,7 +291,11 @@ public abstract class AbstractControllerImpl implements Controller {
     @Override
     public void start() {
         this.initInputHandler();
-        this.view.changeView(ViewScene.START_MENU);
+        try {
+            this.view.show();
+        } catch (NotStartedViewException e) {
+            LOGGER.error("impossible to start the view",e);
+        }
     }
 
     private void safeClosing() {

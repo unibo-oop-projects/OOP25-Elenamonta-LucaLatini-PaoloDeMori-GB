@@ -1,6 +1,7 @@
 package it.unibo.geometrybash.view.renderer;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,11 @@ public class LevelView implements Drawable<GameStateDto> {
      */
     @Override
     public void draw(final Graphics2D g2d, final RenderContext renderContext, final GameStateDto data) {
+        g2d.clearRect(0, 0, renderContext.viewportWidth(), renderContext.viewportHeight());
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
         if (data != null) {
             this.obstacleView.draw(g2d, renderContext, data.obstacles());
             this.powerUpView.draw(g2d, renderContext, data.powerUps());

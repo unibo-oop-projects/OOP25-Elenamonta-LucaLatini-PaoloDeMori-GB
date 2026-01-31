@@ -136,7 +136,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         header.add(logo, BorderLayout.CENTER);
 
         this.insertLabel = new JLabel(
-                "Insert" + CMD_COMMANDS + "or" + CMD_HELP + "to show the list of available actions");
+                "Insert " + CMD_COMMANDS + " or " + CMD_HELP + " to show the list of available actions");
         this.insertLabel.setForeground(TerminalColor.FOREGROUND);
         this.insertLabel.setFont(TerminalColor.MAIN_FONT);
         this.insertLabel.setHorizontalAlignment(JLabel.CENTER);

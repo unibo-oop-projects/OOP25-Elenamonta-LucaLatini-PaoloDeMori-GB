@@ -189,6 +189,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     public void jumpSignal() {
+        LOGGER.info("SALTO NEL MODEL");
         this.isJumpSignalActive = true;
     }
 
@@ -231,6 +232,10 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         }
 
         this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
+        if(this.isJumpSignalActive) {
+            this.player.jump();
+            this.isJumpSignalActive=false;
+        }
         respawnPlayer();
     }
 
