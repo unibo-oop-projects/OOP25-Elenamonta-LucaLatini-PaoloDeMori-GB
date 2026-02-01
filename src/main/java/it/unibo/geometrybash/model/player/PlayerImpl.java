@@ -2,9 +2,11 @@ package it.unibo.geometrybash.model.player;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.geometrybash.model.core.AbstractGameObject;
+import it.unibo.geometrybash.model.core.GameObject;
 import it.unibo.geometrybash.model.core.Updatable;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
@@ -41,6 +43,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     private double rotationRad;
     private final int numVertices;
     private final double stepAngle;
+    private Consumer<GameObject<?>> onSpecialObjectCollision;
 
     /**
      * Creates a new {@code PlayerImpl} instance with a position, hitbox, and
@@ -142,16 +145,26 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      * {@inheritDoc}
      */
     @Override
-    public void onShieldCollected() {
-        powerUpManager.activateShield();
+    public void setOnSpecialObjectCollision(final Consumer<GameObject<?>> onSpecialObjectCollision) {
+        this.onSpecialObjectCollision = Objects.requireNonNull(onSpecialObjectCollision);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onSpeedBoostCollected(final float multiplier, final float duration) {
+    public void onShieldCollected(final GameObject<?> shield) {
+        powerUpManager.activateShield();
+        this.onSpecialObjectCollision.accept(shield);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onSpeedBoostCollected(final GameObject<?> speedBoost, final float multiplier, final float duration) {
         powerUpManager.applySpeedModifier(multiplier, duration);
+        this.onSpecialObjectCollision.accept(speedBoost);
     }
 
     /**
@@ -162,6 +175,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         if (powerUpManager.isShielded()) {
             powerUpManager.consumeShield();
             obstacle.setActive(false);
+            this.onSpecialObjectCollision.accept(obstacle);
         } else if (!this.dead) {
             die();
         }

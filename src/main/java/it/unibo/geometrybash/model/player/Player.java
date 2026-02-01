@@ -1,5 +1,7 @@
 package it.unibo.geometrybash.model.player;
 
+import java.util.function.Consumer;
+
 import it.unibo.geometrybash.model.core.GameObject;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
@@ -61,14 +63,23 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
     int getCoins();
 
     /**
+     * Sets the action to execute when the player collides with a game object with a peculiar behavior.
+     *
+     * @param onSpecialObjectCollision the consumer that accepts the object with a peculiar behavior
+     */
+    void setOnSpecialObjectCollision(final Consumer<GameObject<?>> onSpecialObjectCollision);
+
+    /**
      * Activates a shield effect for the player.
      *
      * <p>
      * The shield protects the player from the next fatal collision.
      * This method should delegate the effect to the internal power-up manager.
      * </p>
+     *
+     * @param shield the object that collides with the player
      */
-    void onShieldCollected();
+    void onShieldCollected(GameObject<?> shield);
 
     /**
      * Applies a speed boost effect to the player.
@@ -80,7 +91,7 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      * @param multiplier the speed multiplier
      * @param duration   the duration of the effect in seconds
      */
-    void onSpeedBoostCollected(float multiplier, float duration);
+    void onSpeedBoostCollected(GameObject<?> speedBoost, float multiplier, float duration);
 
     /**
      * Called when the player collides with a deadly obstacle.
@@ -165,7 +176,7 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
 
     /**
      * Return true if the player died.
-     * 
+     *
      * @return true if the player died.
      */
     boolean isDead();

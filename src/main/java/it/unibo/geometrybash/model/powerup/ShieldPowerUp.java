@@ -54,7 +54,7 @@ public final class ShieldPowerUp extends AbstractPowerUp<CircleHitBox> implement
      */
     @Override
     public void onCollision(final Player<?> player) {
-        player.onShieldCollected();
+        player.onShieldCollected(this);
         this.setActive(false);
     }
 
