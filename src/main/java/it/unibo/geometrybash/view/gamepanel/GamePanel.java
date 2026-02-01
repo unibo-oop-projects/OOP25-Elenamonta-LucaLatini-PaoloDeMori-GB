@@ -50,7 +50,9 @@ public class GamePanel extends AbstractObservableWithSet<ViewEvent> implements U
     }
 
     public void dispose() {
-        this.gameFrame.dispose();
+        if (this.gameFrame != null) {
+            this.gameFrame.dispose();
+        }
     }
 
 }

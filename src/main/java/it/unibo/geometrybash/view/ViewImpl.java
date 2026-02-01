@@ -99,8 +99,12 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
      */
     @Override
     public void disposeView() {
-        this.gamePanel.dispose();
-        this.menuView.hide();
+        if (this.gamePanel != null) {
+            this.gamePanel.dispose();
+        }
+        if (this.menuView != null) {
+            this.menuView.hide();
+        }
     }
 
     /**

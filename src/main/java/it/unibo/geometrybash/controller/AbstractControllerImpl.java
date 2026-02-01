@@ -80,6 +80,7 @@ public abstract class AbstractControllerImpl implements Controller {
         this.inputHandler.setActionForEvent(StandardViewEventType.START, this::startLevel);
         this.inputHandler.setActionForEvent(StandardViewEventType.RESTART, this::gameRestart);
         this.inputHandler.setActionForEvent(StandardViewEventType.RESUME, this::gameResume);
+        this.inputHandler.setActionForEvent(StandardViewEventType.CLOSE, this::onClose);
         this.inputHandler.setGenericCommandHandler(this::onGenericCommand);
     }
 
@@ -99,6 +100,10 @@ public abstract class AbstractControllerImpl implements Controller {
         this.gameModel.jumpSignal();
     }
 
+    private void onClose() {
+        safeClosing();
+    }
+
     /**
      * The actions to execute if a generic command represented as a string is
      * received.
@@ -107,19 +112,6 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private void onGenericCommand(final String command) {
         switch (command) {
-            case "close":
-            case "quit":
-                try {
-                    if (gameLoop != null) {
-                        gameLoop.stop();
-                    }
-                } catch (final NotStartedException e) {
-                    LOGGER.warn("Gameloop never started");
-                } finally {
-                    LOGGER.info("Chiusura del gioco");
-                    safeClosing();
-                }
-                break;
             case "resolution -big":
                 // TODO
                 break;
@@ -250,19 +242,20 @@ public abstract class AbstractControllerImpl implements Controller {
                     gameLoopSetting();
                     gameLoop.stop();
                 } catch (NotStartedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                SwingUtilities.invokeLater(() -> {
-                    try {
-                        view.victory(getModel().getPlayer().getCoins(), this.getModel().getLevel().getTotalCoins());
-                        view.changeView(ViewScene.START_MENU);
+                    LOGGER.info("Safe thread interrupted safely");
 
-                    } catch (ModelExecutionException e) {
-                        LOGGER.error("Impossible to retrieve coins");
-                        view.victory(0, 0);
-                    }
-                });
+                } finally {
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            view.victory(getModel().getPlayer().getCoins(), this.getModel().getLevel().getTotalCoins());
+                            view.changeView(ViewScene.START_MENU);
+
+                        } catch (ModelExecutionException e) {
+                            LOGGER.error("Impossible to retrieve coins");
+                            view.victory(0, 0);
+                        }
+                    });
+                }
                 break;
             case GAMEOVER:
                 break;
@@ -317,11 +310,14 @@ public abstract class AbstractControllerImpl implements Controller {
 
     private void safeClosing() {
         try {
-            gameLoop.stop();
+            if (this.gameLoop != null) {
+                this.gameLoop.stop();
+            }
         } catch (final NotStartedException e) {
-            LOGGER.info("The safe thread interruption wasn't necessary");
+            LOGGER.info("Safe thread interrupted safely");
         } finally {
             this.view.disposeView();
+            System.exit(0);
         }
     }
 

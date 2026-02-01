@@ -77,6 +77,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      * Notify the observer that the player fullfil the victory condition.
      */
     private void onPlayerWin() {
+        this.reset();
         notifyObservers(ModelEvent.createVictoryEvent());
     }
 
@@ -178,11 +179,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     public void restart() throws InvalidModelMethodInvocationException, ModelExecutionException {
-        this.state = Status.NEVERSTARTED;
-        clearUpdatableList();
-        this.changedStateObjects.clear();
+        this.reset();
         start(levelName);
-        
+
     }
 
     /**
@@ -232,9 +231,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         }
 
         this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
-        if(this.isJumpSignalActive) {
+        if (this.isJumpSignalActive) {
             this.player.jump();
-            this.isJumpSignalActive=false;
+            this.isJumpSignalActive = false;
         }
         respawnPlayer();
     }
@@ -255,6 +254,12 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     @Override
     public UpdateInfoDto toDto() throws ModelExecutionException {
         return new UpdateInfoDto(this.gameStateMapper.toDto(this));
+    }
+
+    private void reset() {
+        this.state = Status.NEVERSTARTED;
+        clearUpdatableList();
+        this.changedStateObjects.clear();
     }
 
     /**
