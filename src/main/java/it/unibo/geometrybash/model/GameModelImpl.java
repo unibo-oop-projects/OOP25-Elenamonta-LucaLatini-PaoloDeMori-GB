@@ -74,6 +74,16 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     }
 
     /**
+     * The behaviour to specify in the player to save the game object in the list
+     * of changed objects.
+     * 
+     * @param object the object to add. 
+     */
+    private void onPlayerCollisionWithBehaviour(GameObject<?> object) {
+        this.changedStateObjects.add(object);
+    }
+
+    /**
      * Notify the observer that the player fullfil the victory condition.
      */
     private void onPlayerWin() {

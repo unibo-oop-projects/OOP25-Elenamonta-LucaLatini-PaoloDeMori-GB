@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
@@ -308,6 +309,9 @@ public abstract class AbstractControllerImpl implements Controller {
         }
     }
 
+    @SuppressFBWarnings(value = "Dm", justification = ""
+            + "Since the view uses a personalized close action i'm using System.exit(0) here "
+            + "to allow the disposing of the awt thread.")
     private void safeClosing() {
         try {
             if (this.gameLoop != null) {
