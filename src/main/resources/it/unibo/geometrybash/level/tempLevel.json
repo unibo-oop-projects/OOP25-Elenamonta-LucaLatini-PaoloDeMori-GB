@@ -22,7 +22,7 @@
     {
       "type": "SPEED_BOOST",
       "coordinates": [
-        { "x": 50, "y": 5 },
+        { "x": 55, "y": 5 },
         { "x": 160, "y": 5 }
       ]
     },

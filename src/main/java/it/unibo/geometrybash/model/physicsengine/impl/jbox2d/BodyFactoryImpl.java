@@ -204,7 +204,9 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
             final Body body = createBody(centerPos, BodyType.DYNAMIC, p);
             final FixtureDef fDef = createPoligonalFixtureDefinition(hB, false);
             fDef.density = 1.0f;
+            fDef.friction= -0.1f;
             body.createFixture(fDef);
+            body.setBullet(true);
 
             return body;
         } else {

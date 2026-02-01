@@ -21,8 +21,8 @@ import org.jbox2d.dynamics.Body;
  */
 public class PlayerPhysicsImpl implements PlayerPhysics {
 
-    private static final float JUMP_IMPULSE = 15.0f;
-    private static final float BASE_SPEED = 6.0f;
+    private static final float JUMP_IMPULSE = 13.5f;
+    private static final float BASE_SPEED = 9.0f;
     private final Body body;
     private int groundContacts;
 
