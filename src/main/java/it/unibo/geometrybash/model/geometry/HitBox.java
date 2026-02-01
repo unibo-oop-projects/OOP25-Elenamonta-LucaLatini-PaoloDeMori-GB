@@ -144,9 +144,4 @@ public final class HitBox implements Shape {
         return v.x() * u.y() - v.y() * u.x();
     }
 
-    private static float distanceFromVertices(Vector2 a, Vector2 b) {
-        float dx = a.x() - b.x();
-        float dy = a.y() - b.y();
-        return (float) Math.sqrt(dx * dx + dy * dy);
-    }
 }
