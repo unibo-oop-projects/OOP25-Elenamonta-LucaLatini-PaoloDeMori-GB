@@ -12,7 +12,7 @@ import it.unibo.geometrybash.view.core.SpriteRegistry;
 
 /**
  * The class responsible to draw effectively the entities in the level.
- * 
+ *
  * @see SpriteRegistry
  * @see PlayerView
  * @see ObstacleView
@@ -35,7 +35,7 @@ public class LevelView implements Drawable<GameStateDto> {
 
     /**
      * The constructor of this level.
-     * 
+     *
      * @param spriteRegistry the cache containing the loaded sprites.
      */
     public LevelView(final SpriteRegistry spriteRegistry) {
@@ -47,7 +47,7 @@ public class LevelView implements Drawable<GameStateDto> {
 
     /**
      * The class responsible of drawing the entities of the level.
-     * 
+     *
      * {@inheritDoc}
      */
     @Override

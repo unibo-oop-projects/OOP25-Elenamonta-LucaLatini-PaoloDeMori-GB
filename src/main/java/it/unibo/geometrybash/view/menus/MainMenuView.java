@@ -383,6 +383,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     public void hide() {
         this.manage.stop("it/unibo/geometrybash/audio/menu.wav");
         this.frame.setVisible(false);
+        this.frame.dispose();
     }
 
     /**

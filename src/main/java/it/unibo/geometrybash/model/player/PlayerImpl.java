@@ -58,6 +58,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         this.dead = false;
         this.numVertices = this.hitBox.getVertices().size();
         this.stepAngle = TWO_PI / numVertices;
+        this.rotationRad = 0.0;
     }
 
     /**
@@ -68,17 +69,16 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         this.powerUpManager.update(deltaTime);
         getNotEmptyPhysics().setVelocity(this.powerUpManager.getSpeedMultiplier());
         this.position = getNotEmptyPhysics().getPosition(hitBox);
-
         if (!this.physics.isGrounded()) {
             // player rotate with a angular rotation of 4PI/s
-            rotationRad += ANGULAR_SPEED_RAD_S * deltaTime;
-            rotationRad = normalizeAngle(rotationRad);
+            this.rotationRad += ANGULAR_SPEED_RAD_S * deltaTime;
+            this.rotationRad = normalizeAngle(this.rotationRad);
         } else {
-            rotationRad = normalizeAngle(rotationRad);
+            this.rotationRad = normalizeAngle(this.rotationRad);
             // take the nearest approximation of possible orientation values (multiples of
             // stepAngle)
-            final double k = Math.round(rotationRad / stepAngle);
-            rotationRad = k * stepAngle;
+            final double k = Math.round(this.rotationRad / stepAngle);
+            this.rotationRad = k * stepAngle;
         }
     }
 
@@ -208,6 +208,7 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         copy.coins = this.coins;
         copy.skin = this.skin;
         copy.dead = false;
+        copy.rotationRad = this.rotationRad;
         return copy;
     }
 

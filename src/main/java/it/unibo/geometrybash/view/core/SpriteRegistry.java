@@ -65,7 +65,7 @@ public final class SpriteRegistry {
      */
     public BufferedImage playerOuterBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
-        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/outer1.png"), new Color(skin.primaryColor()));
+        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/outer2.png"), new Color(skin.primaryColor()));
     }
 
     /**

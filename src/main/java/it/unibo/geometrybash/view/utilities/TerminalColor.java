@@ -11,7 +11,7 @@ public final class TerminalColor {
     /**
      * Set the black color for the background.
      */
-    public static final Color BACKGROUND = Color.BLACK;
+    public static final Color BACKGROUND = new Color(20,20, 20);
 
     /**
      * Set the green color for the foreground.

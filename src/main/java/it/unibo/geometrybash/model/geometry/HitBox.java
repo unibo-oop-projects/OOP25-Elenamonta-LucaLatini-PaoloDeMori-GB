@@ -90,20 +90,20 @@ public final class HitBox implements Shape {
         return max - min;
     }
 
-    private void isValidHitBox(final List<Vector2> verteces) {
-        if (verteces.isEmpty()) {
+    private void isValidHitBox(final List<Vector2> vertices) {
+        if (vertices.isEmpty()) {
             throw new InvalidHitBoxConfiguration("Vertices list is empty.");
         }
 
-        if (verteces.size() < MIN_VERTEX) {
+        if (vertices.size() < MIN_VERTEX) {
             throw new InvalidHitBoxConfiguration("A HitBox must have at least 3 vertices.");
         }
 
-        if (verteces.stream().anyMatch(v -> v == null || !Float.isFinite(v.x()) || !Float.isFinite(v.y()))) {
+        if (vertices.stream().anyMatch(v -> v == null || !Float.isFinite(v.x()) || !Float.isFinite(v.y()))) {
             throw new InvalidHitBoxConfiguration("HitBox contains invalid vertices");
         }
 
-        if (verteces.stream().distinct().count() != verteces.size()) {
+        if (vertices.stream().distinct().count() != vertices.size()) {
             throw new InvalidHitBoxConfiguration("Duplicate vertices found.");
         }
 
@@ -111,24 +111,11 @@ public final class HitBox implements Shape {
          * If all determinants have the same sign, the HitBox represents a convex
          * polygon; otherwise, it is concave.
          */
-        List<Float> crosses = getCrossesList(this.vertices);
+        List<Float> crosses = getCrossesList(vertices);
         boolean sign = crosses.getFirst() > 0;
         if (crosses.stream().anyMatch(c -> (c > 0) != sign)) {
             throw new InvalidHitBoxConfiguration("Concave HitBox are not supported.");
         }
-
-        // test poligono regolare
-        float referenceSide = distanceFromVertices(vertices.get(0), vertices.get(1));
-        IntStream.range(0, verteces.size())
-                .mapToObj(i -> distanceFromVertices(
-                        vertices.get(i),
-                        vertices.get((i + 1) % verteces.size())))
-                .filter(side -> Math.abs(side - referenceSide) > 1e-5)
-                .findAny()
-                .ifPresent(side -> {
-                    throw new InvalidHitBoxConfiguration(
-                            "HitBox is not a regular polygon (unequal sides).");
-                });
     }
 
     private List<Float> getCrossesList(final List<Vector2> verticesList) {

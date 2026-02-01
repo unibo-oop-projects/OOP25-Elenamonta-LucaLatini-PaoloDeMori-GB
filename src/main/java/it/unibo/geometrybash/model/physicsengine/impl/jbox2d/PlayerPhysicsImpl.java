@@ -68,8 +68,10 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
                 Math.abs(this.body.getPosition().x - lastPosition.x) < 0.001f && isGrounded()) {
             counter++;
             if (counter > 2) {
-                this.body.setTransform(new Vec2(this.body.getPosition().x + 0.1f, this.body.getPosition().y + 0.08f),
-                        0f);
+                this.body.setActive(false);
+                this.body.setAwake(true);
+                this.body.synchronizeTransform();
+                this.body.setActive(true);
                 counter = 0;
             }
         } else {
