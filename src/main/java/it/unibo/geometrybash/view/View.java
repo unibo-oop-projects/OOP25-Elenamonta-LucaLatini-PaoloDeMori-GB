@@ -94,4 +94,11 @@ public interface View extends ViewObservable {
      * @param executionError the description of the error occurred
      */
     void showExecutionError(String executionError);
+
+    /**
+     * Method called by the controller to show generic message on menu view.
+     *
+     * @param text the message to show on menu
+     */
+    void appendText(String text);
 }

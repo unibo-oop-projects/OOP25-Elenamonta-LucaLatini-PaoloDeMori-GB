@@ -153,4 +153,9 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
         this.gamePanel.addObserver(obs);
         this.menuView.addObserver(obs);
     }
+
+    @Override
+    public void appendText(String text){
+        this.menuView.appendText(text);
+    }
 }
