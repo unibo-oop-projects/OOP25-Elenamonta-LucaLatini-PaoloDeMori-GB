@@ -2,6 +2,7 @@ package it.unibo.geometrybash.controller;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import javax.swing.SwingUtilities;
 
@@ -120,6 +121,8 @@ public abstract class AbstractControllerImpl implements Controller {
      * @param command the string received.
      */
     private void onGenericCommand(final String command) {
+        if(checkCommandParsing(command)){
+        }
         switch (command) {
             case "resolution -big":
                 this.gameResolution = GameResolution.BIG;
@@ -143,41 +146,49 @@ public abstract class AbstractControllerImpl implements Controller {
     private boolean checkCommandParsing(String command) {
 
         String[] parts = command.split(" ");
+        Consumer<Integer> setter;
 
-        if (parts.length != 3) {
+        if (parts.length != 3 || !parts[0].equals(MainMenuView.CMD_SET_COLOR)
+                || ((!parts[1].equals(MainMenuView.FLAG_INNER)) && (!parts[1].equals(MainMenuView.FLAG_OUTER)))) {
             return false;
         }
-
-        if (MainMenuView.CMD_SET_COLOR.equals(command.substring(0, MainMenuView.CMD_SET_COLOR.length()))) {
-            if (MainMenuView.FLAG_INNER.equals(
-                    command.substring(MainMenuView.CMD_SET_COLOR.length() + 1, MainMenuView.FLAG_INNER.length()))) {
-                String color = command.substring(
-                        MainMenuView.CMD_SET_COLOR.length() + 1 + MainMenuView.FLAG_INNER.length() + 1);
-                if (Arrays.stream(MainMenuView.AVAILABLE_COLORS).anyMatch(x -> x.equalsIgnoreCase(color))) {
-                    switch (color) {
-                        case "red":
-                            this.gameModel.setPlayerInnerColor(0XFFFF0000);
-                            break;
-                        case "blue":
-                            this.gameModel.setPlayerInnerColor(0XFFFF0000);
-                            break;
-                        case "green":
-                            this.gameModel.setPlayerInnerColor(0XFF00FF00);
-                            break;
-                        case "yellow":
-                            this.gameModel.setPlayerInnerColor(0XFFFFD700);
-                            break;
-                        case "white":
-                            this.gameModel.setPlayerInnerColor(0XFFFFFFFF);
-                            break;
-                        default:
-                            return false;
-                    }
-                    return true;
-                }
+        if (parts[1].equals(MainMenuView.FLAG_INNER)) {
+            setter = (Integer c) -> {
+                int num = c.intValue();
+                this.gameModel.setPlayerInnerColor(num);
+            };
+        } else {
+            setter = (Integer c) -> {
+                int num = c.intValue();
+                this.gameModel.setPlayerOuterColor(num);
+            };
+        }
+        String color = parts[2].replace("-", "").toLowerCase();
+        if (Arrays.stream(MainMenuView.AVAILABLE_COLORS).anyMatch(x -> x.equalsIgnoreCase(color))) {
+            int rgbaColor = this.stringColorToRgba(color);
+            if (rgbaColor != -1) {
+                setter.accept(rgbaColor);
+                return true;
             }
         }
         return false;
+    }
+
+    private int stringColorToRgba(String color) {
+        switch (color) {
+            case "red":
+                return 0XFFFF0000;
+            case "blue":
+                return 0XFF0000FF;
+            case "green":
+                return 0XFF00FF00;
+            case "yellow":
+                return 0XFFFFD700;
+            case "white":
+                return 0XFFFFFFFF;
+            default:
+                return -1;
+        }
     }
 
     /**
