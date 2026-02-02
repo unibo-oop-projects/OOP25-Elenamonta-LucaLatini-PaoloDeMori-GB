@@ -65,7 +65,7 @@ public final class SpriteRegistry {
      */
     public BufferedImage playerOuterBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
-        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/outer2.png"), new Color(skin.primaryColor()));
+        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/outer2.png"), new Color(skin.secondaryColor()));
     }
 
     /**
@@ -79,7 +79,7 @@ public final class SpriteRegistry {
      */
     public BufferedImage playerInnerBase(final SkinDto skin) {
         Objects.requireNonNull(skin, "skin must not be null");
-        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/inner1.png"), new Color(skin.secondaryColor()));
+        return tint(assets.getImage("it/unibo/geometrybash/graphics/player/inner1.png"), new Color(skin.primaryColor()));
     }
 
     private String obstaclePath(final DtoObstaclesType type) {
