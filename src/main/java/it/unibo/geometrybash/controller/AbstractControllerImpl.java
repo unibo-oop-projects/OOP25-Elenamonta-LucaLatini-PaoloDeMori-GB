@@ -1,8 +1,6 @@
 package it.unibo.geometrybash.controller;
 
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import javax.swing.SwingUtilities;
 
@@ -30,7 +28,6 @@ import it.unibo.geometrybash.view.View;
 import it.unibo.geometrybash.view.ViewScene;
 import it.unibo.geometrybash.view.exceptions.ExecutionWithIllegalThreadException;
 import it.unibo.geometrybash.view.exceptions.NotStartedViewException;
-import it.unibo.geometrybash.view.menus.MainMenuView;
 import it.unibo.geometrybash.view.utilities.GameResolution;
 
 /**
@@ -43,6 +40,8 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractControllerImpl.class);
     private static final String LEVEL_NAME = "tempLevel";
+    private static final String MENU_MUSIC = "it/unibo/geometrybash/audio/menu.wav";
+    private static final String LEVEL_MUSIC = "it/unibo/geometrybash/audio/level1.wav";
 
     private final GameModel gameModel;
     private final View view;
@@ -121,73 +120,15 @@ public abstract class AbstractControllerImpl implements Controller {
      * @param command the string received.
      */
     private void onGenericCommand(final String command) {
-        if(checkCommandParsing(command)){
+        if (GenericCommands.checkSetPlayerColorCommand(command, (c) -> {
+            this.gameModel.setPlayerInnerColor(c.intValue());
+        }, (c) -> {
+            this.gameModel.setPlayerInnerColor(c.intValue());
+        })) {
+            this.view.appendText("Correctly upadated color.");
         }
-        switch (command) {
-            case "resolution -big":
-                this.gameResolution = GameResolution.BIG;
-                break;
-            case "resolution -medium":
-                this.gameResolution = GameResolution.MEDIUM;
-                break;
-            case "resolution -small":
-                this.gameResolution = GameResolution.SMALL;
-                break;
-            case "setcolor -inner -purple":
-                System.out.println("OKOK");
-                this.getModel().setPlayerInnerColor(0XFFFF00FF);
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    private boolean checkCommandParsing(String command) {
-
-        String[] parts = command.split(" ");
-        Consumer<Integer> setter;
-
-        if (parts.length != 3 || !parts[0].equals(MainMenuView.CMD_SET_COLOR)
-                || ((!parts[1].equals(MainMenuView.FLAG_INNER)) && (!parts[1].equals(MainMenuView.FLAG_OUTER)))) {
-            return false;
-        }
-        if (parts[1].equals(MainMenuView.FLAG_INNER)) {
-            setter = (Integer c) -> {
-                int num = c.intValue();
-                this.gameModel.setPlayerInnerColor(num);
-            };
-        } else {
-            setter = (Integer c) -> {
-                int num = c.intValue();
-                this.gameModel.setPlayerOuterColor(num);
-            };
-        }
-        String color = parts[2].replace("-", "").toLowerCase();
-        if (Arrays.stream(MainMenuView.AVAILABLE_COLORS).anyMatch(x -> x.equalsIgnoreCase(color))) {
-            int rgbaColor = this.stringColorToRgba(color);
-            if (rgbaColor != -1) {
-                setter.accept(rgbaColor);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private int stringColorToRgba(String color) {
-        switch (color) {
-            case "red":
-                return 0XFFFF0000;
-            case "blue":
-                return 0XFF0000FF;
-            case "green":
-                return 0XFF00FF00;
-            case "yellow":
-                return 0XFFFFD700;
-            case "white":
-                return 0XFFFFFFFF;
-            default:
-                return -1;
+        if (GenericCommands.checkResolutionCommand(command).isPresent()) {
+            this.view.appendText("Correctly set size.");
         }
     }
 
@@ -263,8 +204,8 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private void gameResume() {
         try {
-            audioManager.stop("it/unibo/geometrybash/audio/menu.wav");
-            audioManager.loop("it/unibo/geometrybash/audio/level1.wav");
+            audioManager.stop(MENU_MUSIC);
+            audioManager.loop(LEVEL_MUSIC);
             gameModel.resume();
             gameLoopSetting();
             gameLoop.resume();
@@ -279,8 +220,8 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private void gamePause() {
         try {
-            audioManager.stop("it/unibo/geometrybash/audio/level1.wav");
-            audioManager.loop("it/unibo/geometrybash/audio/menu.wav");
+            audioManager.stop(LEVEL_MUSIC);
+            audioManager.loop(MENU_MUSIC);
             gameLoopSetting();
             gameLoop.pause();
             gameModel.pause();
@@ -296,8 +237,8 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private void gameRestart() {
         try {
-            audioManager.stop("it/unibo/geometrybash/audio/menu.wav");
-            audioManager.loop("it/unibo/geometrybash/audio/level1.wav");
+            audioManager.stop(MENU_MUSIC);
+            audioManager.loop(LEVEL_MUSIC);
             gameLoopSetting();
             this.gameModel.restart();
             this.gameLoop.resume();
@@ -336,8 +277,8 @@ public abstract class AbstractControllerImpl implements Controller {
                 }
                 break;
             case GAMEOVER:
-                audioManager.stop("it/unibo/geometrybash/audio/level1.wav");
-                audioManager.loop("it/unibo/geometrybash/audio/level1.wav");
+                audioManager.stop(LEVEL_MUSIC);
+                audioManager.loop(LEVEL_MUSIC);
                 break;
         }
     }
@@ -356,8 +297,8 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private void startLevel() {
         try {
-            audioManager.stop("it/unibo/geometrybash/audio/menu.wav");
-            audioManager.loop("it/unibo/geometrybash/audio/level1.wav");
+            audioManager.stop(MENU_MUSIC);
+            audioManager.loop(LEVEL_MUSIC);
             gameLoopSetting();
             gameModel.start(LEVEL_NAME);
             view.init(gameResolution);
@@ -382,7 +323,7 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     @Override
     public void start() {
-        audioManager.loop("it/unibo/geometrybash/audio/menu.wav");
+        audioManager.loop(MENU_MUSIC);
         this.initInputHandler();
         try {
             this.view.show();
