@@ -1,6 +1,5 @@
 package it.unibo.geometrybash.controller;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -35,11 +34,11 @@ public final class GenericCommands {
      *                       correctly formatted command to set the inner color.
      * @return true if the command was correctly formatted, false otherwise.
      */
-    public static boolean checkSetPlayerColorCommand(String command, Consumer<Integer> setterInner,
-            Consumer<Integer> setterOuter) {
+    public static boolean checkSetPlayerColorCommand(final String command, final Consumer<Integer> setterInner,
+            final Consumer<Integer> setterOuter) {
 
         String[] parts = command.split(" ");
-        Consumer<Integer> setter;
+        final Consumer<Integer> setter;
 
         if (isSetColorCommand(parts)) {
             if (parts[1].equals(MainMenuView.FLAG_INNER)) {
@@ -47,9 +46,9 @@ public final class GenericCommands {
             } else {
                 setter = setterOuter;
             }
-            String color = parts[2].replace("-", "").toLowerCase();
-            if (Arrays.stream(MainMenuView.AVAILABLE_COLORS).anyMatch(x -> x.equalsIgnoreCase(color))) {
-                Optional<Integer> rgbaColor = stringColorToRgba(color);
+            final String color = parts[2].replace("-", "").toLowerCase();
+            if (MainMenuView.AVAILABLE_COLORS.keySet().stream().anyMatch(x -> x.equalsIgnoreCase(color))) {
+                final Optional<Integer> rgbaColor = stringColorToRgba(color);
                 if (rgbaColor.isPresent()) {
                     setter.accept(rgbaColor.get());
                     return true;
@@ -67,20 +66,11 @@ public final class GenericCommands {
      * @return an Optional empty if the color is not convertible, otherwise it
      *         returns an Optional wrapping a color.
      */
-    private static Optional<Integer> stringColorToRgba(String color) {
-        switch (color) {
-            case "red":
-                return Optional.of(0XFFFF0000);
-            case "blue":
-                return Optional.of(0XFF0000FF);
-            case "green":
-                return Optional.of(0XFF00FF00);
-            case "yellow":
-                return Optional.of(0XFFFFD700);
-            case "white":
-                return Optional.of(0XFFFFFFFF);
-            default:
-                return Optional.empty();
+    private static Optional<Integer> stringColorToRgba(final String color) {
+        if (MainMenuView.AVAILABLE_COLORS.keySet().contains(color)) {
+            return Optional.of(MainMenuView.AVAILABLE_COLORS.get(color));
+        } else {
+            return Optional.empty();
         }
     }
 
