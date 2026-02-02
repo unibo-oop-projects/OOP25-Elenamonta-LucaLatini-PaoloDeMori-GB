@@ -34,41 +34,41 @@ import it.unibo.geometrybash.view.utilities.TerminalColor;
  */
 public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> implements ViewObservable {
     /** Prompt displayed before the user input. */
-    private static final String PROMPT = "geometrybash@oop24:~# ";
+    public static final String PROMPT = "geometrybash@oop24:~# ";
     /** Command to start the game session. */
-    private static final String CMD_START = "start";
+    public static final String CMD_START = "start";
     /** Command to close the application. */
-    private static final String CMD_CLOSE = "close";
+    public static final String CMD_CLOSE = "close";
     /** Command to restar the level. */
-    private static final String CMD_RESTART = "restart";
+    public static final String CMD_RESTART = "restart";
     /** Command to close the application. */
-    private static final String CMD_EXIT = "exit";
+    public static final String CMD_EXIT = "exit";
     /** Command to resume the game from pause state. */
-    private static final String CMD_RESUME = "resume";
+    public static final String CMD_RESUME = "resume";
     /** Command to display commands help. */
-    private static final String CMD_HELP = "help";
+    public static final String CMD_HELP = "help";
     /** Command to display commands help. */
-    private static final String CMD_COMMANDS = "commands";
+    public static final String CMD_COMMANDS = "commands";
     /** Argument for the man command specifying the resolution manual. */
-    private static final String ARG_RESOLUTION = "resolution";
+    public static final String ARG_RESOLUTION = "resolution";
     /** Full command to display the manual for screen resolutions. */
-    private static final String CMD_MAN_RESOLUTION = "man " + ARG_RESOLUTION;
+    public static final String CMD_MAN_RESOLUTION = "man " + ARG_RESOLUTION;
     /** Command for set the 1920x1080 resolution. */
-    private static final String BIG = "big";
+    public static final String BIG = "big";
     /** Command for set the 1600x9000 resolution. */
-    private static final String MEDIUM = "medium";
+    public static final String MEDIUM = "medium";
     /** Command for set the 1024x768 resolution. */
-    private static final String SMALL = "small";
+    public static final String SMALL = "small";
     /** Command to display avaible colors. */
-    private static final String CMD_COLORS = "colors";
+    public static final String CMD_COLORS = "colors";
     /** Command to set the player's color. */
-    private static final String CMD_SET_COLOR = "setcolor";
+    public static final String CMD_SET_COLOR = "setcolor";
     /** Flag for set the player's inner color. */
-    private static final String FLAG_INNER = "-inner";
+    public static final String FLAG_INNER = "-inner";
     /** Flag for set the player's outer color. */
-    private static final String FLAG_OUTER = "-outer";
+    public static final String FLAG_OUTER = "-outer";
     /** List of avaible colors for the terminal display. */
-    private static final String[] AVAIBLE_COLORS = {
+    public static final String[] AVAIBLE_COLORS = {
             "RED", "BLUE", "GREE", "YELLOW", "WHITE",
     };
     /** Prefix for command list items. */
