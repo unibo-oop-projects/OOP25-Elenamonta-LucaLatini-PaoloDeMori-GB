@@ -19,6 +19,9 @@ import it.unibo.geometrybash.model.level.map.GameMapImpl;
 import it.unibo.geometrybash.model.obstacle.Obstacle;
 import it.unibo.geometrybash.model.obstacle.ObstacleFactory;
 import it.unibo.geometrybash.model.obstacle.ObstacleType;
+import it.unibo.geometrybash.model.powerup.PowerUp;
+import it.unibo.geometrybash.model.powerup.PowerUpFactory;
+import it.unibo.geometrybash.model.powerup.PowerUpType;
 
 /**
  * Test for {@link Level}.
@@ -56,13 +59,13 @@ class LevelTest {
         final Obstacle spike1 = ObstacleFactory.create(ObstacleType.SPIKE, new Vector2(2, 0));
         final Obstacle block2 = ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(10, 0));
         final Map<Coordinate, Cell> cells = Map.of(
-            new Coordinate(1, 0), new CellImpl(block1),
-            new Coordinate(2, 0), new CellImpl(spike1),
-            new Coordinate(5, 0), new CellImpl(block2)
-        );
+                new Coordinate(1, 0), new CellImpl(block1),
+                new Coordinate(2, 0), new CellImpl(spike1),
+                new Coordinate(5, 0), new CellImpl(block2));
         final GameMap map = new GameMapImpl(cells);
         final Level level = new LevelImpl(LEVEL_NAME, new Vector2(0, 0), map, 10);
-        final List<GameObject<?>> obstacles = level.getGameObjectsInRange(new Vector2(0.0f, 0.0f), new Vector2(4.0f, 0.0f));
+        final List<GameObject<?>> obstacles = level.getGameObjectsInRange(new Vector2(0.0f, 0.0f),
+                new Vector2(4.0f, 0.0f));
         assertEquals(2, obstacles.size());
         assertTrue(obstacles.contains(block1));
         assertTrue(obstacles.contains(spike1));
@@ -75,10 +78,9 @@ class LevelTest {
         final Obstacle spike1 = ObstacleFactory.create(ObstacleType.SPIKE, new Vector2(2, 0));
         final Obstacle block2 = ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(10, 0));
         final Map<Coordinate, Cell> cells = Map.of(
-            new Coordinate(1, 0), new CellImpl(block1),
-            new Coordinate(2, 0), new CellImpl(spike1),
-            new Coordinate(5, 0), new CellImpl(block2)
-        );
+                new Coordinate(1, 0), new CellImpl(block1),
+                new Coordinate(2, 0), new CellImpl(spike1),
+                new Coordinate(5, 0), new CellImpl(block2));
         final GameMap map = new GameMapImpl(cells);
         final Level level = new LevelImpl(LEVEL_NAME, new Vector2(0, 0), map, 10);
         final List<GameObject<?>> obstacles = level.getAllGameObject();
@@ -94,14 +96,34 @@ class LevelTest {
         final Obstacle spike1 = ObstacleFactory.create(ObstacleType.SPIKE, new Vector2(2, 0));
         final Obstacle block2 = ObstacleFactory.create(ObstacleType.BLOCK, new Vector2(10, 0));
         final Map<Coordinate, Cell> cells = Map.of(
-            new Coordinate(1, 0), new CellImpl(block1),
-            new Coordinate(2, 0), new CellImpl(spike1),
-            new Coordinate(5, 0), new CellImpl(block2)
-        );
+                new Coordinate(1, 0), new CellImpl(block1),
+                new Coordinate(2, 0), new CellImpl(spike1),
+                new Coordinate(5, 0), new CellImpl(block2));
         final GameMap map = new GameMapImpl(cells);
         final Level level = new LevelImpl(LEVEL_NAME, new Vector2(0, 0), map, 10);
         final Optional<GameObject<?>> object = level.getGameObjectAtPosition(new Vector2(1, 0));
         assertEquals(block1, object.get());
 
+    }
+
+    @Test
+    void testGetTotalCoin() {
+        final PowerUp<?> coin1 = PowerUpFactory.create(PowerUpType.COIN, new Vector2(1, 0));
+        final PowerUp<?> coin2 = PowerUpFactory.create(PowerUpType.COIN, new Vector2(2, 0));
+        final Map<Coordinate, Cell> cells = Map.of(
+                new Coordinate(1, 0), new CellImpl(coin1),
+                new Coordinate(2, 0), new CellImpl(coin2));
+        final GameMap map = new GameMapImpl(cells);
+        final Level level = new LevelImpl(LEVEL_NAME, new Vector2(0, 0), map, 10);
+        final int totalCoins = level.getTotalCoins();
+        assertEquals(2, totalCoins);
+    }
+
+    @Test
+    void testWinX() {
+        final Map<Coordinate, Cell> cells = Map.of();
+        final GameMap map = new GameMapImpl(cells);
+        final Level level = new LevelImpl(LEVEL_NAME, new Vector2(0, 0), map, 8);
+        assertEquals(8, level.getWinX());
     }
 }
