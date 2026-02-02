@@ -248,7 +248,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
             this.player.jump();
             this.isJumpSignalActive = false;
         }
-        respawnPlayer();
+        if (player.isDead()) {
+            respawnPlayer();
+        }
     }
 
     /**
@@ -300,7 +302,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     }
 
     public void setPlayerInnerColor(int color) {
-        this.setInnerColor=color;
+        this.setInnerColor = color;
     }
 
 }
