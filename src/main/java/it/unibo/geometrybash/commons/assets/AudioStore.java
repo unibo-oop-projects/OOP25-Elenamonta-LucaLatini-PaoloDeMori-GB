@@ -5,6 +5,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -43,7 +45,8 @@ public final class AudioStore {
 
     private Clip loadClip(final String resourceName) {
         try (InputStream in = loader.openStream(resourceName);
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(in)) {
+                BufferedInputStream bIn = new BufferedInputStream(in);
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(bIn)) {
 
             final Clip clip = AudioSystem.getClip();
             clip.open(audioIn);

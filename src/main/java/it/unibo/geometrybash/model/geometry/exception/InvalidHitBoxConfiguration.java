@@ -1,5 +1,7 @@
 package it.unibo.geometrybash.model.geometry.exception;
 
+import it.unibo.geometrybash.model.geometry.HitBox;
+
 /**
  * An Exception thrown to indicate that a {@link HitBox} has been created with
  * an invalid geometric configuration.
