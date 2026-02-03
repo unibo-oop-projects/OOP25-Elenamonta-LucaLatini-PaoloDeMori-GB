@@ -34,10 +34,8 @@ public final class HitBox implements Shape {
     /**
      * Constructs a HitBox with a list of vertices.
      *
-     * @param vertices the list of vertices; must contain at least
-     *                 {@value #MIN_VERTEX} points
-     * @throws IllegalArgumentException if the list contains fewer than
-     *                                  {@value #MIN_VERTEX} vertices
+     * @param vertices the list of vertices
+     * @throws InvalidHitBoxConfiguration if the hitbox configuration is invalid
      */
     public HitBox(final List<Vector2> vertices) {
         isValidHitBox(vertices);
@@ -90,20 +88,20 @@ public final class HitBox implements Shape {
         return max - min;
     }
 
-    private void isValidHitBox(final List<Vector2> vertices) {
-        if (vertices.isEmpty()) {
+    private void isValidHitBox(final List<Vector2> polygonVertices) {
+        if (polygonVertices.isEmpty()) {
             throw new InvalidHitBoxConfiguration("Vertices list is empty.");
         }
 
-        if (vertices.size() < MIN_VERTEX) {
+        if (polygonVertices.size() < MIN_VERTEX) {
             throw new InvalidHitBoxConfiguration("A HitBox must have at least 3 vertices.");
         }
 
-        if (vertices.stream().anyMatch(v -> v == null || !Float.isFinite(v.x()) || !Float.isFinite(v.y()))) {
+        if (polygonVertices.stream().anyMatch(v -> v == null || !Float.isFinite(v.x()) || !Float.isFinite(v.y()))) {
             throw new InvalidHitBoxConfiguration("HitBox contains invalid vertices");
         }
 
-        if (vertices.stream().distinct().count() != vertices.size()) {
+        if (polygonVertices.stream().distinct().count() != polygonVertices.size()) {
             throw new InvalidHitBoxConfiguration("Duplicate vertices found.");
         }
 
@@ -111,23 +109,23 @@ public final class HitBox implements Shape {
          * If all determinants have the same sign, the HitBox represents a convex
          * polygon; otherwise, it is concave.
          */
-        List<Float> crosses = getCrossesList(vertices);
-        boolean sign = crosses.getFirst() > 0;
+        final List<Float> crosses = getCrossesList(polygonVertices);
+        final boolean sign = crosses.getFirst() > 0;
         if (crosses.stream().anyMatch(c -> (c > 0) != sign)) {
             throw new InvalidHitBoxConfiguration("Concave HitBox are not supported.");
         }
     }
 
     private List<Float> getCrossesList(final List<Vector2> verticesList) {
-        int n = verticesList.size();
+        final int n = verticesList.size();
         return IntStream.range(0, n)
                 .mapToObj(i -> {
-                    Vector2 p0 = verticesList.get(i);
-                    Vector2 p1 = verticesList.get((i + 1) % n);
-                    Vector2 p2 = verticesList.get((i + 2) % n);
+                    final Vector2 p0 = verticesList.get(i);
+                    final Vector2 p1 = verticesList.get((i + 1) % n);
+                    final Vector2 p2 = verticesList.get((i + 2) % n);
 
-                    Vector2 e1 = vectorBetweenConsecutiveVertex(p1, p0);
-                    Vector2 e2 = vectorBetweenConsecutiveVertex(p2, p1);
+                    final Vector2 e1 = vectorBetweenConsecutiveVertex(p1, p0);
+                    final Vector2 e2 = vectorBetweenConsecutiveVertex(p2, p1);
 
                     return crossProductFromVertex(e1, e2);
                 })

@@ -23,6 +23,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
 
     private static final float JUMP_IMPULSE = 13.5f;
     private static final float BASE_SPEED = 9.0f;
+    private static final float TOLLERANCE = 0.001f;
     private final Body body;
     private int groundContacts;
 
@@ -64,8 +65,7 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
     public void setVelocity(final float multiplier) {
         final float currentSpeed = BASE_SPEED * multiplier;
 
-        if (lastPosition != null &&
-                Math.abs(this.body.getPosition().x - lastPosition.x) < 0.001f && isGrounded()) {
+        if (lastPosition != null && Math.abs(this.body.getPosition().x - lastPosition.x) < TOLLERANCE && isGrounded()) {
             counter++;
             if (counter > 2) {
                 this.body.setActive(false);

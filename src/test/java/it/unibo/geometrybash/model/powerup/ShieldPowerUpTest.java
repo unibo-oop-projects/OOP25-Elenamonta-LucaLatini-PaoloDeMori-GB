@@ -42,6 +42,8 @@ class ShieldPowerUpTest {
     @Test
     void testOnCollision() {
         final Player<?> player = new PlayerImpl(new Vector2(0, 0));
+        player.setOnSpecialObjectCollision(obj -> {
+        });
         assertFalse(player.isShielded());
         shieldPowerUp.onCollision(player);
         assertTrue(player.isShielded());

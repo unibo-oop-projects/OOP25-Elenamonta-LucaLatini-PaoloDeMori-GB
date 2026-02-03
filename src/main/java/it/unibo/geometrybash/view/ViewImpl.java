@@ -147,6 +147,9 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
         this.menuView.showGameExecutionError(executionError);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addObserver(final Observer<? super ViewEvent> obs) {
         super.addObserver(obs);
@@ -154,6 +157,9 @@ public class ViewImpl extends AbstractObservableWithSet<ViewEvent> implements Vi
         this.menuView.addObserver(obs);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void appendText(final String text) {
         this.menuView.appendText(text);
