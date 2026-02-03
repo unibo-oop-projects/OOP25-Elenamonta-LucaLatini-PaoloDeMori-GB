@@ -17,6 +17,7 @@ public final class MenuModel {
             "yellow", 0xFFFFD700,
             "white", 0xFFFFFFFF);
 
+    /** List of available levels for the terminal display. */
     public static final List<String> LEVELS_NAME_LIST = List.of("Level1", "DemoLevel");
 
     /**

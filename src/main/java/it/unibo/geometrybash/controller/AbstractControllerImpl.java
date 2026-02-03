@@ -30,6 +30,7 @@ import it.unibo.geometrybash.view.View;
 import it.unibo.geometrybash.view.ViewScene;
 import it.unibo.geometrybash.view.exceptions.ExecutionWithIllegalThreadException;
 import it.unibo.geometrybash.view.exceptions.NotStartedViewException;
+import it.unibo.geometrybash.view.menus.MainMenuView;
 import it.unibo.geometrybash.view.utilities.GameResolution;
 
 /**
@@ -152,6 +153,9 @@ public abstract class AbstractControllerImpl implements Controller {
         if (onLevelsCommand(command)) {
             return;
         }
+        if (onColorsCommand(command)) {
+            return;
+        }
 
         view.showCommandsError(command);
     }
@@ -239,11 +243,39 @@ public abstract class AbstractControllerImpl implements Controller {
      * @param command the received command
      * @return true if the command is is the correct
      *         command to
-     *         change the game panel resolution false otherwise.
+     *         show the levels list false otherwise.
      */
     private boolean onLevelsCommand(final String command) {
-        if ("levels".equals(command)) {
+        if (MainMenuView.CMD_LEVELS.equals(command)) {
             view.showLevels(MenuModel.LEVELS_NAME_LIST);
+            menuModel.addCommand(command);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Private method to evaluate a generic command, if the command is the correct
+     * command to
+     * retrieve the map of colors, this method shows it in the view and return
+     * true,
+     * otherwise
+     * return false.
+     * 
+     * <p>
+     * THis method shows a map that links color names with their hexadecimal rgba
+     * representation.
+     * </p>
+     * 
+     * @param command the received command
+     * @return true if the command is is the correct
+     *         command to
+     *         show the colors map false otherwise.
+     */
+    private boolean onColorsCommand(final String command) {
+        if (MainMenuView.CMD_COLORS.equals(command)) {
+            view.showColors(MenuModel.AVAILABLE_COLORS);
+            menuModel.addCommand(command);
             return true;
         }
         return false;
@@ -267,6 +299,7 @@ public abstract class AbstractControllerImpl implements Controller {
                 && value.get() >= 0
                 && this.gameModel.getStatus().equals(Status.NEVERSTARTED)) {
             this.levelName = MenuModel.LEVELS_NAME_LIST.get(value.get());
+            menuModel.addCommand(command);
             view.appendText(ON_LEVEL_CHANGED + "level's name -> " + levelName);
             return true;
         }

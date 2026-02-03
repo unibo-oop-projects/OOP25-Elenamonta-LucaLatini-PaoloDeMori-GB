@@ -1,6 +1,7 @@
 package it.unibo.geometrybash.view;
 
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObservable;
@@ -108,6 +109,14 @@ public interface View extends ViewObservable {
      * @param levels the list of leves.
      */
     void showLevels(List<String> levels);
+
+    /**
+     * Method called by the controller to show the map of colors passed as
+     * parameter.
+     *
+     * @param colors the map of colors.
+     */
+    void showColors(Map<String, Integer> colors);
 
     /**
      * Method called by the controller to show generic message on menu view.

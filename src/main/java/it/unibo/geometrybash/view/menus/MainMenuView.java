@@ -64,7 +64,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     /** Command to display available colors. */
     public static final String CMD_COLORS = "colors";
     /** Command to display availabe levels. */
-    public static final String CMD_LEVEL = "levels";
+    public static final String CMD_LEVELS = "levels";
     /** Command to set the player's color. */
     public static final String CMD_SET_COLOR = "setcolor";
     /** Command to set the level. */
@@ -177,7 +177,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.appendText(CMD_PREFIX + CMD_HELP + "  : show this list");
         this.appendText(CMD_PREFIX + CMD_MAN_RESOLUTION + "  : display available game resolutions");
         this.appendText(CMD_PREFIX + CMD_COLORS + "  : show customization colors");
-        this.appendText(CMD_PREFIX + CMD_LEVEL + "  : show the available levels");
+        this.appendText(CMD_PREFIX + CMD_LEVELS + "  : show the available levels");
         this.appendText("---------------------------");
     }
 
@@ -393,7 +393,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
                     }
                     break;
                 default:
-                    notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.generic(rawCmd)));
+                    notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.generic(cmd)));
             }
             inputField.setText("");
         }
