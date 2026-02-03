@@ -262,7 +262,7 @@ public abstract class AbstractControllerImpl implements Controller {
      *         change the level false otherwise.
      */
     private boolean onSetLevelCommand(final String command) {
-        Optional<Integer> value = GenericCommands.checkSelectLevelCommand(command);
+        final Optional<Integer> value = GenericCommands.checkSelectLevelCommand(command);
         if (value.isPresent() && MenuModel.LEVELS_NAME_LIST.size() >= value.get()
                 && value.get() >= 0
                 && this.gameModel.getStatus().equals(Status.NEVERSTARTED)) {

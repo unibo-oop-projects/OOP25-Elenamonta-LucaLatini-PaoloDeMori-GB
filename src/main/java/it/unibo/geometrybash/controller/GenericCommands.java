@@ -130,7 +130,7 @@ public final class GenericCommands {
             } catch (final NumberFormatException e) {
                 number = invalidInt;
             }
-            return Optional.of(Integer.valueOf(number));
+            return Optional.of(number);
         } else {
             return Optional.empty();
         }
