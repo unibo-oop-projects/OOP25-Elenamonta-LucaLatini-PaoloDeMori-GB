@@ -17,7 +17,7 @@ import it.unibo.geometrybash.controller.gameloop.exceptions.NotStartedException;
 class TestGameLoopImpl {
     private static final String INTERRUPT_RECEIVED_MESSAGE = "interrupt received";
     private static final String ELAPSED_MAX_TIME = "Gameloop slept too much";
-    private static final long MAX_WAITING_TIME = 10000L;
+    private static final long MAX_WAITING_TIME = 10_000L;
     private static final long SMALL_AMOUNT_OF_TIME = 200L;
 
     /**
@@ -51,7 +51,7 @@ class TestGameLoopImpl {
         } catch (final InterruptedException e) {
             fail(ELAPSED_MAX_TIME);
         }
-        assertTrue(eC.getValue());
+        assertTrue(eC.isValue());
     }
 
     /**
@@ -68,7 +68,7 @@ class TestGameLoopImpl {
         } catch (final InterruptedException e) {
             fail(ELAPSED_MAX_TIME);
         }
-        assertTrue(eC.getValue());
+        assertTrue(eC.isValue());
     }
 
     /**
@@ -92,7 +92,7 @@ class TestGameLoopImpl {
         } catch (final InterruptedException e) {
             fail(ELAPSED_MAX_TIME);
         }
-        assertTrue(eC.getValue());
+        assertTrue(eC.isValue());
         assertDoesNotThrow(gL::stop);
         assertTrue(gL.isTerminatedSafely());
     }
@@ -121,7 +121,7 @@ class TestGameLoopImpl {
         }
         assertThrows(NotOnPauseException.class, gL::resume);
         // Check if the thread correctly executed the function
-        assertTrue(eC.getValue());
+        assertTrue(eC.isValue());
 
         // set the variable as false thinking that it will be set as true by the
         // gameloop
@@ -132,7 +132,7 @@ class TestGameLoopImpl {
             fail(ELAPSED_MAX_TIME);
         }
         // check if the thread set the variable as true
-        assertTrue(eC.getValue());
+        assertTrue(eC.isValue());
         assertDoesNotThrow(gL::pause);
         try {
             eC.optimizedWaiting(MAX_WAITING_TIME);
@@ -150,7 +150,7 @@ class TestGameLoopImpl {
             fail(ELAPSED_MAX_TIME);
         }
         // check if the variable is still false
-        assertFalse(eC.getValue());
+        assertFalse(eC.isValue());
 
         assertDoesNotThrow(gL::resume);
 
@@ -161,7 +161,7 @@ class TestGameLoopImpl {
         }
 
         // check if the variable was set as true since the thread resumed
-        assertTrue(eC.getValue());
+        assertTrue(eC.isValue());
 
         assertDoesNotThrow(gL::stop);
 
@@ -329,7 +329,7 @@ class TestGameLoopImpl {
             }
         }
 
-        boolean getValue() {
+        boolean isValue() {
             synchronized (lock) {
                 return this.value;
             }
