@@ -8,7 +8,7 @@ import java.util.List;
  */
 public final class MenuModel {
 
-    private static final List<String> LEVELS_NAME_LIST = List.of("Level1", "DemoLevel");
+    public static final List<String> LEVELS_NAME_LIST = List.of("Level1", "DemoLevel");
 
     /**
      * Stores the history of user commands.

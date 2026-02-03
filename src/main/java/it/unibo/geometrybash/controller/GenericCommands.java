@@ -113,6 +113,30 @@ public final class GenericCommands {
 
     }
 
+    /**
+     * checks if the command can be a level selector command, if so returns the
+     * correct {@link Integer} representation.
+     * 
+     * @param command the command received.
+     * @return the correct {@link Integer} representation.
+     */
+    public static Optional<Integer> checkSelectLevelCommand(final String command) {
+        final String[] splitCommand = command.split(" ");
+        final int invalidInt = Integer.MIN_VALUE;
+        if (splitCommand.length == 2 && MainMenuView.CMD_SET_LEVEL.equals(splitCommand[0])) {
+            int number;
+            try {
+                number = Integer.parseInt(splitCommand[1].replace("-", ""));
+            } catch (final NumberFormatException e) {
+                number = invalidInt;
+            }
+            return Optional.of(Integer.valueOf(number));
+        } else {
+            return Optional.empty();
+        }
+
+    }
+
     private static String getBigResolutionCommand() {
         return MainMenuView.ARG_RESOLUTION + " " + MainMenuView.STANDARD_SEPARATOR + MainMenuView.BIG;
     }

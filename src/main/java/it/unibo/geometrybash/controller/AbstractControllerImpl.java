@@ -41,10 +41,11 @@ public abstract class AbstractControllerImpl implements Controller {
      * Logger instance to handle errors and sending debug information.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractControllerImpl.class);
-    private static final String LEVEL_NAME = "tempLevel";
     private static final String MENU_MUSIC = "it/unibo/geometrybash/audio/menu.wav";
     private static final String LEVEL_MUSIC = "it/unibo/geometrybash/audio/level1.wav";
     private static final String ON_HISTORY_DESCRIPTION = "LIST OF FUNCTIONING COMMANDS USED:";
+    private static final String ON_LEVEL_CHANGED = "Level correctly set! :)";
+
     private static final String ON_CORRECT_RESOLUTION_CHANGE = "\"Correctly set size.\"";
     private static final String ON_CORRECT_COLOR_UPDATE = "\"Correctly updated color.\"";
     private static final String HISTORY_COMMAND = "history";
@@ -57,6 +58,7 @@ public abstract class AbstractControllerImpl implements Controller {
     private GameResolution gameResolution = GameResolution.MEDIUM;
     private final AudioManager audioManager;
     private final MenuModel menuModel;
+    private String levelName = MenuModel.LEVELS_NAME_LIST.get(0);
 
     /**
      * The constructor of the controller with game model, view and input handler
@@ -144,6 +146,12 @@ public abstract class AbstractControllerImpl implements Controller {
         if (onHistoryCommand(command)) {
             return;
         }
+        if (onSetLevelCommand(command)) {
+            return;
+        }
+        if (onLevelsCommand(command)) {
+            return;
+        }
 
         view.showCommandsError(command);
     }
@@ -217,6 +225,52 @@ public abstract class AbstractControllerImpl implements Controller {
             menuModel.addCommand(command);
             return true;
         }
+        return false;
+    }
+
+    /**
+     * Private method to evaluate a genericcommand, if the command is the correct
+     * command to
+     * retrieve the list of levels, this method shows it in the view and return
+     * true,
+     * otherwise
+     * return false.
+     * 
+     * @param command the received command
+     * @return true if the command is is the correct
+     *         command to
+     *         change the game panel resolution false otherwise.
+     */
+    private boolean onLevelsCommand(final String command) {
+        if ("levels".equals(command)) {
+            view.showLevels(MenuModel.LEVELS_NAME_LIST);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Private method to evaluate a genericcommand, if the command is the correct
+     * command to
+     * change the level, this method changes it and return true,
+     * otherwise
+     * return false.
+     * 
+     * @param command the received command
+     * @return true if the command is is the correct
+     *         command to
+     *         change the level false otherwise.
+     */
+    private boolean onSetLevelCommand(final String command) {
+        Optional<Integer> value = GenericCommands.checkSelectLevelCommand(command);
+        if (value.isPresent() && MenuModel.LEVELS_NAME_LIST.size() >= value.get()
+                && value.get() >= 0
+                && this.gameModel.getStatus().equals(Status.NEVERSTARTED)) {
+            this.levelName = MenuModel.LEVELS_NAME_LIST.get(value.get());
+            view.appendText(ON_LEVEL_CHANGED + "level's name -> " + levelName);
+            return true;
+        }
+
         return false;
     }
 
@@ -397,7 +451,7 @@ public abstract class AbstractControllerImpl implements Controller {
                 audioManager.stop(MENU_MUSIC);
                 audioManager.loop(LEVEL_MUSIC);
                 gameLoopSetting();
-                gameModel.start(LEVEL_NAME);
+                gameModel.start(levelName);
                 view.init(gameResolution);
                 view.changeView(ViewScene.IN_GAME);
                 gameLoop.start();
@@ -407,7 +461,7 @@ public abstract class AbstractControllerImpl implements Controller {
             }
         } catch (InvalidGameLoopStatusException | InvalidGameLoopConfigurationException | ModelExecutionException
                 | InvalidModelMethodInvocationException e) {
-            handleError(LEVEL_NAME, Optional.of(e));
+            handleError(levelName, Optional.of(e));
         }
     }
 

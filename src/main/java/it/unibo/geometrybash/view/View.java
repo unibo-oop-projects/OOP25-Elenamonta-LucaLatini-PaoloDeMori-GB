@@ -1,5 +1,7 @@
 package it.unibo.geometrybash.view;
 
+import java.util.List;
+
 import it.unibo.geometrybash.commons.UpdateInfoDto;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObservable;
 import it.unibo.geometrybash.view.exceptions.ExecutionWithIllegalThreadException;
@@ -64,9 +66,10 @@ public interface View extends ViewObservable {
     void disposeView();
 
     /**
-     * Methos called by the controller to show the victory message with the total number of coins collected.
+     * Methos called by the controller to show the victory message with the total
+     * number of coins collected.
      *
-     * @param coins number of coins taken by the player
+     * @param coins      number of coins taken by the player
      * @param totalCoins total number of coins in the level
      */
     void victory(int coins, int totalCoins);
@@ -77,23 +80,34 @@ public interface View extends ViewObservable {
     void pause();
 
     /**
-     * Method called by the controller to show an error message when a command is not found.
+     * Method called by the controller to show an error message when a command is
+     * not found.
      *
      * @param command represent the command typed from the user
      */
     void showCommandsError(String command);
 
     /**
-     * Methos called by the controller to show all options to reset resolution of the screen.
+     * Methos called by the controller to show all options to reset resolution of
+     * the screen.
      */
     void showResolutionOptions();
 
     /**
-     * Method called by the controller to show error message when an error occurs during game execution.
+     * Method called by the controller to show error message when an error occurs
+     * during game execution.
      *
      * @param executionError the description of the error occurred
      */
     void showExecutionError(String executionError);
+
+    /**
+     * Method called by the controller to show the list of levels passed as
+     * parameter.
+     *
+     * @param levels the list of leves.
+     */
+    void showLevels(List<String> levels);
 
     /**
      * Method called by the controller to show generic message on menu view.
