@@ -8,6 +8,13 @@ import java.awt.Color;
 public class PauseStyle implements MenuStyle {
 
     /**
+     * Creates a {@link PauseStyle} for the paused game state.
+     */
+    public PauseStyle() {
+        // Default constructor
+    }
+
+    /**
      * {@inheritDoc}.
      */
     @Override

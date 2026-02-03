@@ -11,7 +11,7 @@ public final class TerminalColor {
     /**
      * Set the black color for the background.
      */
-    public static final Color BACKGROUND = new Color(20,20, 20);
+    public static final Color BACKGROUND = new Color(20, 20, 20);
 
     /**
      * Set the green color for the foreground.
@@ -47,6 +47,7 @@ public final class TerminalColor {
     /** Monospaced font used for ASCII or fixed-width text. */
     public static final Font ASCII_FONT = new Font("Monospaced", Font.BOLD, 12);
 
-    private TerminalColor() { }
+    private TerminalColor() {
+    }
 
 }

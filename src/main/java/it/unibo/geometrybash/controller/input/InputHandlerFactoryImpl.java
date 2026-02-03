@@ -11,6 +11,13 @@ import it.unibo.geometrybash.controller.InputHandler;
 public class InputHandlerFactoryImpl implements InputHandlerFactory {
 
     /**
+     * Create new {@link CompositeInputHandler}.
+     */
+    public InputHandlerFactoryImpl() {
+        // Default constructor.
+    }
+
+    /**
      * {@inheritDoc}.
      */
     @Override

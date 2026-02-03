@@ -9,6 +9,13 @@ import java.awt.Color;
 public class DefaultStyle implements MenuStyle {
 
     /**
+     * Creates a {@code DefaultStyle} with the standard terminal colors and prompt.
+     */
+    public DefaultStyle() {
+        // Default constructor
+    }
+
+    /**
      * {@inheritDoc}.
      */
     @Override

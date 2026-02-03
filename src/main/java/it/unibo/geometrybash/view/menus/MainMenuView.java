@@ -200,6 +200,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * @param totalCoins  the total number of coins in the level
      */
     public void showVictoryMessage(final int playerCoins, final int totalCoins) {
+        this.applyStyle(defaultStyle);
         this.appendText(NEW_LINE + " LEVEL COMPLETED! YOU WON!");
         this.appendText(" -----------------------------");
         this.appendText(" you have collected " + playerCoins + " out of " + totalCoins + " avaible coins!");

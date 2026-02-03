@@ -54,6 +54,13 @@ public final class GameStateMapper {
         private static final float CULLING_X_RIGHT = 18.0f;
 
         /**
+         * Creates a new {@code GameStateMapper}.
+         */
+        public GameStateMapper() {
+                // Default constructor
+        }
+
+        /**
          * Converts the current {@link GameModel} into a {@link GameStateDto}.
          *
          * <p>
