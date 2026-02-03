@@ -2,6 +2,7 @@ package it.unibo.geometrybash.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Model that stores the history of user commands.
@@ -9,6 +10,14 @@ import java.util.List;
 public final class MenuModel {
 
     private static final List<String> LEVELS_NAME_LIST = List.of("Level1", "DemoLevel");
+
+    /** List of available colors for the terminal display. */
+    public static final Map<String, Integer> AVAILABLE_COLORS = Map.of(
+            "red", 0xFFFF0000,
+            "blue", 0xFF0000FF,
+            "green", 0xFF00FF00,
+            "yellow", 0xFFFFD700,
+            "white", 0xFFFFFFFF);
 
     /**
      * Stores the history of user commands.
@@ -47,5 +56,14 @@ public final class MenuModel {
      */
     public List<String> getLevelsNames() {
         return new LinkedList<>(LEVELS_NAME_LIST);
+    }
+
+    /**
+     * Returns a copy of the player's available colors.
+     *
+     * @return the list of player's available colors.
+     */
+    public Map<String, Integer> getPlayerColors() {
+        return Map.copyOf(AVAILABLE_COLORS);
     }
 }

@@ -63,6 +63,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     public static final String SMALL = "small";
     /** Command to display available colors. */
     public static final String CMD_COLORS = "colors";
+    /** Command to display availabe levels. */
+    public static final String CMD_LEVEL = "levels";
     /** Command to set the player's color. */
     public static final String CMD_SET_COLOR = "setcolor";
     /** Command to set the level. */
@@ -73,13 +75,6 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     public static final String FLAG_INNER = STANDARD_SEPARATOR + "inner";
     /** Flag for set the player's outer color. */
     public static final String FLAG_OUTER = STANDARD_SEPARATOR + "outer";
-    /** List of available colors for the terminal display. */
-    public static final Map<String, Integer> AVAILABLE_COLORS = Map.of(
-            "red", 0xFFFF0000,
-            "blue", 0xFF0000FF,
-            "green", 0xFF00FF00,
-            "yellow", 0xFFFFD700,
-            "white", 0xFFFFFFFF);
     /** Prefix for command list items. */
     private static final String CMD_PREFIX = " > ";
     /** Command for create new line. */
@@ -182,6 +177,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.appendText(CMD_PREFIX + CMD_HELP + "  : show this list");
         this.appendText(CMD_PREFIX + CMD_MAN_RESOLUTION + "  : display available game resolutions");
         this.appendText(CMD_PREFIX + CMD_COLORS + "  : show customization colors");
+        this.appendText(CMD_PREFIX + CMD_LEVEL + "  : show the available levels");
         this.appendText("---------------------------");
     }
 
@@ -215,9 +211,9 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     /**
      * Shows all the colors available that can be used to customize the player.
      */
-    public void showAvailableColors() {
+    public void showAvailableColors(final Map<String, Integer> availableColors) {
         this.appendText(NEW_LINE + " AVAILABLE CUSTOMIZAION COLOR");
-        for (final String color : AVAILABLE_COLORS.keySet()) {
+        for (final String color : availableColors.keySet()) {
             this.appendText(CMD_PREFIX + color.toUpperCase(Locale.ROOT));
         }
         this.appendText(LINE_SEPARATOR);
@@ -385,9 +381,6 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
                     break;
                 case CMD_RESUME:
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.RESUME)));
-                    break;
-                case CMD_COLORS:
-                    this.showAvailableColors();
                     break;
                 case "man":
                     if (CMD_MAN_RESOLUTION.equals(cmd)) {

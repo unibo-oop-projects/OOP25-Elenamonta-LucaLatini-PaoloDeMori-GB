@@ -25,13 +25,13 @@ public final class GenericCommands {
     /**
      * Check if the string is a command to set the color of the player, if so this
      * methods calls the right method.
-     * 
+     *
      * <p>
      * If the string is intended to set the inner color accepts the setterInner
      * consumer, if the string is intended to set the outer color,
      * accepts the setter outer consumer.
      * </p>
-     * 
+     *
      * @param command     the command.
      * @param setterInner the method to call to apply changes if the command is a
      *                    correctly formatted command to set the inner color.
@@ -66,7 +66,7 @@ public final class GenericCommands {
     /**
      * Method that converts a color string in the set color command into an
      * hexxadecimal representation of a RGBA color.
-     * 
+     *
      * @param color the string color.
      * @return an Optional empty if the color is not convertible, otherwise it
      *         returns an Optional wrapping a color.
@@ -81,11 +81,11 @@ public final class GenericCommands {
 
     /**
      * Checks if the commands past a string's arrays can be a setColorCommand.
-     * 
+     *
      * <p>
      * This function doesn't check if the color if presents is correctly formatted.
      * </p>
-     * 
+     *
      * @param parts The command received without blank spaces and in an array
      *              representation.
      * @return true if the command can be a setColor command.
@@ -100,7 +100,7 @@ public final class GenericCommands {
     /**
      * checks if the command can be a game panel size command, if so returns the
      * correct {@link GameResolution} representation.
-     * 
+     *
      * @param command the command received.
      * @return the correct {@link GameResolution} representation.
      */
