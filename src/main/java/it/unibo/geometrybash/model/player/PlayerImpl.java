@@ -46,14 +46,46 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     private Consumer<GameObject<?>> onSpecialObjectCollision;
 
     /**
-     * Creates a new {@code PlayerImpl} instance with a position, hitbox, and
-     * physics component.
+     * Creates a new {@code PlayerImpl} instance with the given initial position
+     * and a default square {@link HitBox}.
+     *
+     * <p>
+     * The hitbox construction is performed internally and uses the standard
+     * player shape defined by the game.
+     * </p>
      *
      * @param position the initial position of the player in the game world
      */
     public PlayerImpl(final Vector2 position) {
+        this(position, createHitBox());
+    }
+
+    /**
+     * Creates a new {@code PlayerImpl} instance with the given initial position
+     * and a custom {@link HitBox}.
+     *
+     * <p>
+     * The hitbox is normally created internally; however, its implementation is
+     * designed to support different polygonal shapes, as allowed by the
+     * {@link HitBox} class.
+     * </p>
+     *
+     * <p>
+     * This constructor allows providing a custom hitbox in order to test
+     * scenarios different from the standard implementation, such as polygons
+     * with a number of vertices other than four. The hitbox of the player entity
+     * must represent a regular polygon otherwise the angular snapping logic would
+     * not behave correctly.
+     * </p>
+     *
+     * @param position the initial position of the player in the game world
+     * @param hitBox   the hitbox defining the player's polygonal shape
+     *
+     * @throws NullPointerException if {@code hitBox} is {@code null}
+     */
+    public PlayerImpl(final Vector2 position, final HitBox hitBox) {
         super(position);
-        this.hitBox = createHitBox();
+        this.hitBox = Objects.requireNonNull(hitBox);
         this.powerUpManager = new PowerUpManager();
         this.skin = new Skin();
         this.coins = 0;
@@ -122,6 +154,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
             getNotEmptyPhysics().resetBodyTo(position);
             this.position = position;
             this.dead = false;
+            this.coins = 0;
+            this.powerUpManager.reset();
         }
     }
 
