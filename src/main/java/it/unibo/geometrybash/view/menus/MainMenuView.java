@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,10 +20,11 @@ import it.unibo.geometrybash.commons.input.ViewEventTypeFactory;
 import it.unibo.geometrybash.commons.pattern.observerpattern.AbstractObservableWithSet;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
 import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewObservable;
-import it.unibo.geometrybash.commons.assets.AudioManager;
-import it.unibo.geometrybash.commons.assets.AudioStore;
 import it.unibo.geometrybash.commons.assets.ResourceLoader;
 import it.unibo.geometrybash.commons.assets.TextAssetReader;
+import it.unibo.geometrybash.view.utilities.DefaultStyle;
+import it.unibo.geometrybash.view.utilities.PauseStyle;
+import it.unibo.geometrybash.view.utilities.MenuStyle;
 import it.unibo.geometrybash.view.utilities.TerminalColor;
 
 /**
@@ -33,41 +35,48 @@ import it.unibo.geometrybash.view.utilities.TerminalColor;
  */
 public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> implements ViewObservable {
     /** Prompt displayed before the user input. */
-    private static final String PROMPT = "geometrybash@oop24:~# ";
+    public static final String PROMPT = "geometrybash@oop24:~# ";
     /** Command to start the game session. */
-    private static final String CMD_START = "start";
+    public static final String CMD_START = "start";
     /** Command to close the application. */
-    private static final String CMD_CLOSE = "close";
+    public static final String CMD_CLOSE = "close";
+    /** Command to restar the level. */
+    public static final String CMD_RESTART = "restart";
     /** Command to close the application. */
-    private static final String CMD_EXIT = "exit";
+    public static final String CMD_EXIT = "exit";
     /** Command to resume the game from pause state. */
-    private static final String CMD_RESUME = "resume";
+    public static final String CMD_RESUME = "resume";
     /** Command to display commands help. */
-    private static final String CMD_HELP = "help";
+    public static final String CMD_HELP = "help";
     /** Command to display commands help. */
-    private static final String CMD_COMMANDS = "commands";
+    public static final String CMD_COMMANDS = "commands";
     /** Argument for the man command specifying the resolution manual. */
-    private static final String ARG_RESOLUTION = "resolution";
+    public static final String ARG_RESOLUTION = "resolution";
     /** Full command to display the manual for screen resolutions. */
-    private static final String CMD_MAN_RESOLUTION = "man " + ARG_RESOLUTION;
+    public static final String CMD_MAN_RESOLUTION = "man " + ARG_RESOLUTION;
     /** Command for set the 1920x1080 resolution. */
-    private static final String BIG = "big";
+    public static final String BIG = "big";
     /** Command for set the 1600x9000 resolution. */
-    private static final String MEDIUM = "medium";
+    public static final String MEDIUM = "medium";
     /** Command for set the 1024x768 resolution. */
-    private static final String SMALL = "small";
+    public static final String SMALL = "small";
     /** Command to display avaible colors. */
-    private static final String CMD_COLORS = "colors";
+    public static final String CMD_COLORS = "colors";
     /** Command to set the player's color. */
-    private static final String CMD_SET_COLOR = "setcolor";
+    public static final String CMD_SET_COLOR = "setcolor";
+    /** characters for parameters representation. */
+    public static final String STANDARD_SEPARATOR = "-";
     /** Flag for set the player's inner color. */
-    private static final String FLAG_INNER = "-inner";
+    public static final String FLAG_INNER = STANDARD_SEPARATOR + "inner";
     /** Flag for set the player's outer color. */
-    private static final String FLAG_OUTER = "-outer";
+    public static final String FLAG_OUTER = STANDARD_SEPARATOR + "outer";
     /** List of avaible colors for the terminal display. */
-    private static final String[] AVAIBLE_COLORS = {
-            "RED", "BLUE", "GREE", "YELLOW", "WHITE",
-    };
+    public static final Map<String, Integer> AVAILABLE_COLORS = Map.of(
+            "red", 0xFFFF0000,
+            "blue", 0xFF0000FF,
+            "green", 0xFF00FF00,
+            "yellow", 0xFFFFD700,
+            "white", 0xFFFFFFFF);
     /** Prefix for command list items. */
     private static final String CMD_PREFIX = " > ";
     /** Command for create new line. */
@@ -82,8 +91,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     private final TextAssetReader textReader;
     private final ResourceLoader resourceLoader;
 
-    private final AudioStore audioStore;
-    private final AudioManager manage;
+    private final MenuStyle defaultStyle = new DefaultStyle();
+    private final MenuStyle pauseStyle = new PauseStyle();
 
     /**
      * Initializes the main menu view and its graphical components.
@@ -98,9 +107,6 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.frame.setLayout(new BorderLayout());
         this.resourceLoader = resourceLoader;
         this.textReader = new TextAssetReader(this.resourceLoader);
-        this.audioStore = new AudioStore(resourceLoader);
-        this.manage = new AudioManager(audioStore);
-
         this.outputArea = createOutputArea();
         this.inputField = createInputField();
 
@@ -109,6 +115,27 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         this.frame.add(createFooterInputPanel(), BorderLayout.SOUTH);
 
         setupInputListener();
+        this.applyStyle(this.defaultStyle);
+    }
+
+    /**
+     * Applies the styling to all graphical component.
+     *
+     * @param style the styling strategy to apply.
+     */
+    private void applyStyle(final MenuStyle style) {
+        this.outputArea.setForeground(style.getTextColor());
+        this.outputArea.setBackground(style.getBackgroundColor());
+        this.inputField.setForeground(style.getTextColor());
+        this.inputField.setBackground(style.getBackgroundColor());
+        this.inputField.setCaretColor(style.getAccentColor());
+        this.logo.setForeground(style.getTextColor());
+        this.logo.setBackground(style.getBackgroundColor());
+        this.insertLabel.setForeground(style.getTextColor());
+        this.promptLabel.setForeground(style.getTextColor());
+        this.promptLabel.setText(style.getPrompt());
+        this.promptLabel.getParent().setBackground(style.getBackgroundColor());
+        this.frame.getContentPane().setBackground(style.getBackgroundColor());
     }
 
     /**
@@ -128,8 +155,6 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
 
         final String title = textReader.readAll("it/unibo/geometrybash/startMenu/logo.txt");
         this.logo = new JTextArea(title);
-        this.logo.setBackground(TerminalColor.BACKGROUND);
-        this.logo.setForeground(TerminalColor.FOREGROUND);
         this.logo.setFont(TerminalColor.ASCII_FONT);
         this.logo.setEditable(false);
         this.logo.setFocusable(false);
@@ -161,14 +186,9 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * this method is called when the player enter in pause state.
      */
     public void showPauseMessage() {
-        this.outputArea.setForeground(TerminalColor.PAUSE);
-        this.inputField.setForeground(TerminalColor.PAUSE);
-        this.insertLabel.setForeground(TerminalColor.PAUSE);
-        this.logo.setForeground(TerminalColor.PAUSE);
-        this.promptLabel.setForeground(TerminalColor.PAUSE);
-
+        this.applyStyle(this.pauseStyle);
         this.appendText("\n GAME PAUSED");
-        this.appendText(" Type" + CMD_RESUME + "to continue your run in Geometry Bash");
+        this.appendText(" Type " + CMD_RESUME + " to continue your run in Geometry Bash");
         this.appendText(" ----------------------------------------------------");
 
     }
@@ -177,14 +197,15 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * Show the victory message with the total number of coins collected.
      *
      * @param playerCoins the number of coins collected during the level
-     * @param totalCoins the total number of coins in the level
+     * @param totalCoins  the total number of coins in the level
      */
     public void showVictoryMessage(final int playerCoins, final int totalCoins) {
+        this.applyStyle(defaultStyle);
         this.appendText(NEW_LINE + " LEVEL COMPLETED! YOU WON!");
         this.appendText(" -----------------------------");
         this.appendText(" you have collected " + playerCoins + " out of " + totalCoins + " avaible coins!");
         this.appendText(" -----------------------------");
-        this.appendText(" type" + CMD_START + "for start new challenge");
+        this.appendText(" type " + CMD_START + " for start new challenge");
     }
 
     /**
@@ -192,8 +213,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      */
     public void showAvailableColors() {
         this.appendText(NEW_LINE + " AVAIBLE CUSTOMIZAION COLOR");
-        for (final String color : AVAIBLE_COLORS) {
-            this.appendText(CMD_PREFIX + color);
+        for (final String color : AVAILABLE_COLORS.keySet()) {
+            this.appendText(CMD_PREFIX + color.toUpperCase(Locale.ROOT));
         }
         this.appendText(" -----------------------------");
         this.appendText(" Usage: " + CMD_SET_COLOR + " [" + FLAG_INNER + "|" + FLAG_OUTER + "] -<color>");
@@ -269,8 +290,6 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      */
     private JTextArea createOutputArea() {
         final JTextArea area = new JTextArea();
-        area.setBackground(TerminalColor.BACKGROUND);
-        area.setForeground(TerminalColor.FOREGROUND);
         area.setFont(TerminalColor.MAIN_FONT);
         area.setEditable(false);
         area.setLineWrap(true);
@@ -285,10 +304,8 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      */
     private JPanel createFooterInputPanel() {
         final JPanel footer = new JPanel(new BorderLayout());
-        footer.setBackground(TerminalColor.BACKGROUND);
 
         this.promptLabel = new JLabel(PROMPT);
-        this.promptLabel.setForeground(TerminalColor.FOREGROUND);
         this.promptLabel.setFont(TerminalColor.MAIN_FONT);
 
         footer.add(promptLabel, BorderLayout.WEST);
@@ -304,10 +321,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      */
     private JTextField createInputField() {
         final JTextField field = new JTextField();
-        field.setBackground(TerminalColor.BACKGROUND);
-        field.setForeground(TerminalColor.FOREGROUND);
         field.setFont(TerminalColor.MAIN_FONT);
-        field.setCaretColor(TerminalColor.CARET);
         field.setBorder(null);
         return field;
     }
@@ -337,6 +351,10 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
             switch (firstCommand) {
                 case CMD_START:
                     notifyObservers(ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.START)));
+                    break;
+                case CMD_RESTART:
+                    notifyObservers(
+                            ViewEvent.createEvent(ViewEventTypeFactory.standard(StandardViewEventType.RESTART)));
                     break;
                 case CMD_HELP:
                 case CMD_COMMANDS:
@@ -370,7 +388,6 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * Displays the main menu in full screen mode.
      */
     public void display() {
-        this.manage.loop("it/unibo/geometrybash/audio/menu.wav");
         GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice().setFullScreenWindow(frame);
         this.frame.setVisible(true);
@@ -381,8 +398,14 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
      * Hides the main menu window.
      */
     public void hide() {
-        this.manage.stop("it/unibo/geometrybash/audio/menu.wav");
         this.frame.setVisible(false);
+        this.frame.dispose();
+    }
+
+    /**
+     * Release all the screen resources used by main menu.
+     */
+    public void dispose() {
         this.frame.dispose();
     }
 
@@ -394,6 +417,13 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
     public void appendText(final String text) {
         this.outputArea.append(text + "\n");
         this.outputArea.setCaretPosition(outputArea.getDocument().getLength());
+    }
+
+    /**
+     * Restores the normal terminal style.
+     */
+    public void resumeFromPause() {
+        this.applyStyle(this.defaultStyle);
     }
 
 }

@@ -38,6 +38,7 @@ public final class AudioManager {
      */
     public void loop(final String music) {
         final Clip clip = audio.getClip(music);
+        clip.setFramePosition(0);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 

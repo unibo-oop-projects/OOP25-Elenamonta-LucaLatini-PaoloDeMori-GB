@@ -12,11 +12,15 @@ import it.unibo.geometrybash.model.geometry.Vector2;
 public interface Level {
 
     /**
+     * Retrives the level's name.
+     *
      * @return the level's name.
      */
     String getName();
 
     /**
+     * Gets the initial position of the player in the level.
+     *
      * @return the starting position of the player.
      */
     Vector2 getPlayerStartPosition();

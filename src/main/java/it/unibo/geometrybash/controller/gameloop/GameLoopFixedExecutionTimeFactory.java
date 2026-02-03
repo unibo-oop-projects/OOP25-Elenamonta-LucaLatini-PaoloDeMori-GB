@@ -1,7 +1,8 @@
 package it.unibo.geometrybash.controller.gameloop;
 
 /**
- * {@inheritDoc}
+ * A factory to create an instance of a gameloop that executes personalizable
+ * actions.
  * 
  * <p>
  * This implementation creates an instance of a gamellop that uses native java
@@ -9,6 +10,13 @@ package it.unibo.geometrybash.controller.gameloop;
  * </p>
  */
 public class GameLoopFixedExecutionTimeFactory implements GameLoopFactory {
+
+    /**
+     * Default constructor.
+     */
+    public GameLoopFixedExecutionTimeFactory() {
+        // default constructor.
+    }
 
     /**
      * {@inheritDoc}

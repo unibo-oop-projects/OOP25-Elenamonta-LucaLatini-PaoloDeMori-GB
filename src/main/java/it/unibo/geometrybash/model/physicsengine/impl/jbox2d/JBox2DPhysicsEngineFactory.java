@@ -6,13 +6,22 @@ import it.unibo.geometrybash.model.physicsengine.PhysicsEngine;
 import it.unibo.geometrybash.model.physicsengine.PhysicsEngineFactory;
 
 /**
- * {@inheritDoc}
+ * A factory interface to create a JBox2D physics engine.
+ * 
  * 
  * <p>
- * An implementation that uses JBox2d physics engine.
+ * An implementation of {@link PhysicsEngineFactory} that uses JBox2d physics
+ * engine.
  * </p>
  */
-public class JBox2dPhysicsEngineFactory implements PhysicsEngineFactory<Body> {
+public class JBox2DPhysicsEngineFactory implements PhysicsEngineFactory<Body> {
+
+    /**
+     * Default constructor.
+     */
+    public JBox2DPhysicsEngineFactory() {
+        // default constructor.
+    }
 
     /**
      * {@inheritDoc}

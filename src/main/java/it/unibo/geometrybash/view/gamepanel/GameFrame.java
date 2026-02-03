@@ -5,7 +5,8 @@ import javax.swing.JFrame;
 import it.unibo.geometrybash.view.UpdatableWithDto;
 
 /**
- * A JFrame updatable with {@GameStateDto}.
+ * A JFrame updatable with
+ * {@link it.unibo.geometrybash.commons.dtos.GameStateDto}.
  * 
  * @param <T> the type of dto that makes possible to update this
  *            frame.
@@ -13,6 +14,9 @@ import it.unibo.geometrybash.view.UpdatableWithDto;
 
 public class GameFrame<T> extends JFrame implements UpdatableWithDto<T> {
 
+    /**
+     * Value for serialization.
+     */
     private static final long serialVersionUID = 1L;
 
     private UpdatableWithDto<T> panel;

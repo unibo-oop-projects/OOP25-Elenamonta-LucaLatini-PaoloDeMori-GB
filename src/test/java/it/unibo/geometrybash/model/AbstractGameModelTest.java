@@ -229,5 +229,15 @@ class AbstractGameModelTest {
         public void respawnPlayer() {
             throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
+
+        @Override
+        public void setPlayerInnerColor(int color) {
+        }
+
+        @Override
+        public void setPlayerOuterColor(int color) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'setPlayerOuterColor'");
+        }
     }
 }

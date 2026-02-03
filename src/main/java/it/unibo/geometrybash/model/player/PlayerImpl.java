@@ -163,8 +163,10 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      * {@inheritDoc}
      */
     @Override
-    public void addCoin(final int value) {
+    public void addCoin(GameObject<?> coin, final int value) {
         this.coins += value;
+        this.onSpecialObjectCollision.accept(coin);
+
     }
 
     /**

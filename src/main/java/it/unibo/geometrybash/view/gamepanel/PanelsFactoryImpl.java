@@ -4,9 +4,16 @@ import it.unibo.geometrybash.commons.assets.AssetStore;
 import it.unibo.geometrybash.view.core.RenderContext;
 
 /**
- * {@inheritDoc}.
+ * A factory for a game panel for geometry bash with java swing.
  */
 public class PanelsFactoryImpl implements PanelsFactory {
+
+    /**
+     * Default constructor.
+     */
+    public PanelsFactoryImpl() {
+        // default constructor.
+    }
 
     /**
      * {@inheritDoc}

@@ -2,57 +2,47 @@ package it.unibo.geometrybash.view.gamepanel;
 
 import it.unibo.geometrybash.commons.assets.AssetStore;
 import it.unibo.geometrybash.commons.dtos.GameStateDto;
-import it.unibo.geometrybash.commons.pattern.observerpattern.AbstractObservableWithSet;
-import it.unibo.geometrybash.commons.pattern.observerpattern.viewobserverpattern.ViewEvent;
-import it.unibo.geometrybash.view.UpdatableWithDto;
 import it.unibo.geometrybash.view.core.RenderContext;
-import it.unibo.geometrybash.view.userinteraction.SwingKeyboardListener;
-import it.unibo.geometrybash.view.userinteraction.SwingStrategyWithObservable;
-import it.unibo.geometrybash.view.utilities.TerminalColor;
+import it.unibo.geometrybash.view.utilities.GameResolution;
 
-public class GamePanel extends AbstractObservableWithSet<ViewEvent> implements UpdatableWithDto<GameStateDto> {
+/**
+ * The class that represents the graphic representation of the game while
+ * playing.
+ */
+public interface GamePanel {
 
-    private GameFrame<GameStateDto> gameFrame;
-    private PanelsFactory panelsFactory;
-    private SwingKeyboardListener swingKeyboardListener = new SwingKeyboardListener(new SwingStrategyWithObservable(
-            e -> notifyObservers(e)));
+    /**
+     * Method to correctly initialized the Game Panel.
+     * 
+     * @param renderContext  the object that exposes methods to give encessary
+     *                       informations to render view entities.
+     * @param assetStore     the object responsible of retrieving resources.
+     * @param gameTitle      the title of the gui window.
+     * @param gameResolution the size resolution of the game window.
+     */
+    void init(RenderContext renderContext, AssetStore assetStore, String gameTitle,
+            GameResolution gameResolution);
 
-    public GamePanel(PanelsFactory panelsFactory) {
-        this.panelsFactory = panelsFactory;
+    /**
+     * Method to show the game window.
+     */
+    void show();
 
-    }
+    /**
+     * Method to hide the game window.
+     */
+    void hide();
 
-    public void init(RenderContext renderContext, AssetStore assetStore, String gameTitle) {
-        this.gameFrame = new GameFrameBuilder()
-                .setMainPanel(this.panelsFactory, renderContext, assetStore)
-                .setBackGroundColor(TerminalColor.BACKGROUND)
-                .setGameTitle(gameTitle)
-                .build();
-        this.gameFrame.addKeyListener(
-                this.swingKeyboardListener);
-    }
+    /**
+     * Method to update the game window.
+     * 
+     * @param gameStateDto the representation of the model state.
+     */
+    void update(GameStateDto gameStateDto);
 
-    public void show() {
-        if (this.gameFrame != null) {
-            this.gameFrame.setVisible(true);
-        }
-    }
-
-    public void hide() {
-        if (this.gameFrame != null) {
-            this.gameFrame.setVisible(false);
-        }
-    }
-
-    @Override
-    public void update(GameStateDto gameStateDto) {
-        this.gameFrame.update(gameStateDto);
-    }
-
-    public void dispose() {
-        if (this.gameFrame != null) {
-            this.gameFrame.dispose();
-        }
-    }
+    /**
+     * Method to dispose the game window.
+     */
+    void dispose();
 
 }

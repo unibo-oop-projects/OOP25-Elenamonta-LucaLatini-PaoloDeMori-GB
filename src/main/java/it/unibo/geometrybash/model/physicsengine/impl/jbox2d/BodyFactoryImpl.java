@@ -28,11 +28,15 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
     /**
      * The default friction value.
      */
-    public static final float STANDARD_FRICTION = 0.0f;
+    private static final float STANDARD_FRICTION = JBox2DValues.STANDARD_FRICTION;
     /**
      * The default restitution value.
      */
-    public static final float STANDARD_RESTITUTION = 0.0f;
+    private static final float STANDARD_RESTITUTION = JBox2DValues.STANDARD_RESTITUTION;
+
+    private static final float PLAYER_STANDARD_DENSITY = JBox2DValues.PLAYER_STANDARD_DENSITY;
+
+    private static final float PLAYER_STANDARD_FRICTION = JBox2DValues.PLAYER_STANDARD_FRICTION;
 
     private final World world;
 
@@ -203,8 +207,8 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
             final Vector2 centerPos = modelCenterToJBox2dCenterConverter(playerPosition, hB);
             final Body body = createBody(centerPos, BodyType.DYNAMIC, p);
             final FixtureDef fDef = createPoligonalFixtureDefinition(hB, false);
-            fDef.density = 1.0f;
-            fDef.friction= -0.1f;
+            fDef.density = PLAYER_STANDARD_DENSITY;
+            fDef.friction = PLAYER_STANDARD_FRICTION;
             body.createFixture(fDef);
             body.setBullet(true);
 

@@ -73,7 +73,7 @@ public final class Coin extends AbstractPowerUp<CircleHitBox> implements Collida
      */
     @Override
     public void onCollision(final Player<?> player) {
-        player.addCoin(DEFAULT_VALUE);
+        player.addCoin(this, DEFAULT_VALUE);
         this.setActive(false);
 
     }

@@ -53,7 +53,7 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
      *
      * @param value the number of coins to add
      */
-    void addCoin(int value);
+    void addCoin(GameObject<?> coin, int value);
 
     /**
      * Returns the current number of coins collected by the player.
@@ -63,9 +63,11 @@ public interface Player<S extends Shape> extends GameObject<HitBox> {
     int getCoins();
 
     /**
-     * Sets the action to execute when the player collides with a game object with a peculiar behavior.
+     * Sets the action to execute when the player collides with a game object with a
+     * peculiar behavior.
      *
-     * @param onSpecialObjectCollision the consumer that accepts the object with a peculiar behavior
+     * @param onSpecialObjectCollision the consumer that accepts the object with a
+     *                                 peculiar behavior
      */
     void setOnSpecialObjectCollision(Consumer<GameObject<?>> onSpecialObjectCollision);
 

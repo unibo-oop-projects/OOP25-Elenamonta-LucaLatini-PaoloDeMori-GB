@@ -1,5 +1,6 @@
 package it.unibo.geometrybash.controller;
 
+import it.unibo.geometrybash.commons.assets.ResourceLoader;
 import it.unibo.geometrybash.controller.gameloop.GameLoopFixedExecutionTimeFactory;
 import it.unibo.geometrybash.controller.input.InputHandlerFactoryImpl;
 import it.unibo.geometrybash.model.GameModel;
@@ -17,13 +18,18 @@ public class StaticDeltaTimeControllerImpl extends AbstractControllerImpl {
     /**
      * The constructor of this class.
      *
-     * @param gameModel del to use as the "brain" of this
+     * @param gameModel      component responsible of executing and evaluating the
+     *                       logic of this game.
      *
-     * @param view      omponent to show the gui of this
+     * @param view           component responsible of showing the gui of this game.
+     * 
+     * @param resourceLoader the object responsible to retrieve resources.
+     * 
      *
      */
-    public StaticDeltaTimeControllerImpl(final GameModel gameModel, final View view) {
-        super(gameModel, view, new GameLoopFixedExecutionTimeFactory(), new InputHandlerFactoryImpl());
+    public StaticDeltaTimeControllerImpl(final GameModel gameModel, final View view,
+            final ResourceLoader resourceLoader) {
+        super(gameModel, view, new GameLoopFixedExecutionTimeFactory(), new InputHandlerFactoryImpl(), resourceLoader);
     }
 
     /**
