@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.unibo.geometrybash.controller.gameloop.exceptions.FpsNotCalculatedException;
 import it.unibo.geometrybash.controller.gameloop.exceptions.InvalidGameLoopConfigurationException;
@@ -19,6 +21,7 @@ class TestGameLoopImpl {
     private static final String ELAPSED_MAX_TIME = "Gameloop slept too much";
     private static final long MAX_WAITING_TIME = 10_000L;
     private static final long SMALL_AMOUNT_OF_TIME = 200L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestGameLoopImpl.class);
 
     /**
      * Tests that an InvalidGameLoopConfigurationException is thrown if the gameLoop
@@ -108,6 +111,9 @@ class TestGameLoopImpl {
      */
     @Test
     void testCorrectPauseAndResume() {
+        // Since this test has to wait a significant amount of time to correctly test the class i log this
+        // info
+        LOGGER.info("\n\n---THIS TEST COULD TAKE A WHILE---\n");
         final GameLoop gL = new GameLoopImpl();
         final ExampleClass eC = new ExampleClass();
         gL.setUpdateAction(eC::executable);
@@ -248,6 +254,9 @@ class TestGameLoopImpl {
      */
     @Test
     void testGetFps() {
+        // Since this test has to wait a significant amount of time to correctly test the class i log this
+        // info
+        LOGGER.info("\n\n---THIS TEST COULD TAKE A WHILE---\n");
         final GameLoop gL = new GameLoopImpl();
         final ExampleClass eC = new ExampleClass();
         // number of times to check the number of fps.

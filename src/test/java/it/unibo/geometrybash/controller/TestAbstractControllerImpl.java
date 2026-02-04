@@ -2,6 +2,7 @@ package it.unibo.geometrybash.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,10 @@ import it.unibo.geometrybash.controller.gameloop.GameLoopFixedExecutionTimeFacto
 import it.unibo.geometrybash.controller.input.InputHandlerFactory;
 import it.unibo.geometrybash.model.GameModel;
 import it.unibo.geometrybash.model.GameModelImpl;
+import it.unibo.geometrybash.model.MenuModel;
 import it.unibo.geometrybash.model.Status;
+import it.unibo.geometrybash.model.exceptions.InvalidModelMethodInvocationException;
+import it.unibo.geometrybash.model.physicsengine.exception.ModelExecutionException;
 import it.unibo.geometrybash.model.physicsengine.impl.jbox2d.JBox2DPhysicsEngineFactory;
 import it.unibo.geometrybash.view.View;
 import it.unibo.geometrybash.view.ViewImpl;
@@ -31,22 +35,39 @@ import it.unibo.geometrybash.view.exceptions.ExecutionWithIllegalThreadException
 import it.unibo.geometrybash.view.exceptions.NotStartedViewException;
 import it.unibo.geometrybash.view.utilities.GameResolution;
 
+/**
+ * Class to test the AbstractControllerImpl.
+ */
 class TestAbstractControllerImpl {
+
+    /**
+     * A mock delta time.
+     */
+    private static final float DELTA = 1 / 60f;
 
     private final ResourceLoader rL = new ResourceLoaderImpl();
 
     private final View view = new ViewImpl(rL, new AssetStore(rL));
 
+    private final Object obj = new Object();
+
+    private volatile boolean isNotified;
+
+    /**
+     * Tests the StaticDeltaTimeController EvaluateDeltaTime Implementation.
+     */
     @Test
     void evaluateDeltaTimeTest() {
-        final float delta = 1 / 60f;
 
         final GameModelImpl gM = new GameModelImpl(rL, new JBox2DPhysicsEngineFactory());
         final AbstractControllerImpl abs = new StaticDeltaTimeControllerImpl(gM,
                 view, rL);
-        assertEquals(delta, abs.evaluateDeltaTime());
+        assertEquals(DELTA, abs.evaluateDeltaTime());
     }
 
+    /**
+     * Tests the isTheViewSet and isTheModelTest methods.
+     */
     @Test
     void controllerInterfacesTest() {
         final GameModelImpl gM = new GameModelImpl(rL, new JBox2DPhysicsEngineFactory());
@@ -57,6 +78,9 @@ class TestAbstractControllerImpl {
         assertTrue(abs.isTheModelSet());
     }
 
+    /**
+     * Tests the public start methods.
+     */
     @Test
     void startTest() {
         final ViewMock viewMock = new ViewMock();
@@ -68,25 +92,95 @@ class TestAbstractControllerImpl {
                 new GameLoopFixedExecutionTimeFactory(), inputHandlerFactory, cAS);
 
         controller.start();
+        // checks if the audioscheduler started
         assertTrue(cAS.isStart);
+        // checks if the show method of the view is called.
         assertTrue(viewMock.isShow);
+        // checks if the inputhandler was correctly init.
         assertTrue(inputHandlerFactory.isAllTrue());
     }
 
+    /**
+     * Private method to notify the threads waiting on the obj lock.
+     */
+    private void notifyObj() {
+        synchronized (obj) {
+            this.isNotified = true;
+            obj.notifyAll();
+        }
+    }
+
+    /**
+     * Method to test the update method.
+     * 
+     */
     @Test
     void updateTest() {
-        final ViewMock viewMock = new ViewMock();
+        final ViewMock viewMock = new ViewMock(this::notifyObj);
         final MockAudioScheduler cAS = new MockAudioScheduler();
         final GameModel gM = new GameModelImpl(rL, new JBox2DPhysicsEngineFactory());
         final MockInputHandlerFactory inputHandlerFactory = new MockInputHandlerFactory();
+        final long maxWaitingTime = 3000L;
 
         final AbstractControllerImpl controller = new MockAbstractController(gM, viewMock,
                 new GameLoopFixedExecutionTimeFactory(), inputHandlerFactory, cAS);
+        try {
+            gM.start(MenuModel.LEVELS_NAME_LIST.get(0));
+        } catch (final InvalidModelMethodInvocationException | ModelExecutionException e) {
+            fail("An error occured while starting the gamemodel");
+        }
+        gM.update(DELTA);
         controller.start();
-        controller.update(ModelEvent.createVictoryEvent());
-        assertTrue(cAS.isFromGameToMenu);
+        synchronized (obj) {
+            controller.update(ModelEvent.createVictoryEvent());
+            try {
+                while (!isNotified) {
+                    obj.wait(maxWaitingTime);
+                }
+            } catch (final InterruptedException e) {
+                fail("An error occured while waiting for the lock to be notified");
+            }
+            assertTrue(cAS.isFromGameToMenu);
+            assertTrue(viewMock.isVictory());
+            assertTrue(viewMock.isViewChanged);
+        }
+
     }
 
+    @Test
+    void updateGameOverTest() {
+        final ViewMock viewMock = new ViewMock();
+        final MockAudioScheduler cAS = new MockAudioScheduler(this::notifyObj);
+        final GameModel gM = new GameModelImpl(rL, new JBox2DPhysicsEngineFactory());
+        final MockInputHandlerFactory inputHandlerFactory = new MockInputHandlerFactory();
+        final long maxWaitingTime = 3000L;
+
+        final AbstractControllerImpl controller = new MockAbstractController(gM, viewMock,
+                new GameLoopFixedExecutionTimeFactory(), inputHandlerFactory, cAS);
+        try {
+            gM.start(MenuModel.LEVELS_NAME_LIST.get(0));
+        } catch (final InvalidModelMethodInvocationException | ModelExecutionException e) {
+            fail("An error occured while starting the gamemodel");
+        }
+        gM.update(DELTA);
+        controller.start();
+        synchronized (obj) {
+            controller.update(ModelEvent.createGameOverEvent());
+            try {
+                while (!isNotified) {
+                    obj.wait(maxWaitingTime);
+                }
+            } catch (final InterruptedException e) {
+                fail("An error occured while waiting for the lock to be notified");
+            }
+            assertTrue(cAS.isRestart);
+        }
+
+    }
+
+    /**
+     * MockClass for the inputhandler.
+     */
     class MockInputHandlerFactory implements InputHandlerFactory {
         private boolean isSetOnMainKeyPressed;
         private boolean isSetOnMenuKeyPressed;
@@ -145,6 +239,9 @@ class TestAbstractControllerImpl {
 
     }
 
+    /**
+     * Mock Class representing an AbstractControllerImpl implementation.
+     */
     class MockAbstractController extends AbstractControllerImpl {
 
         private static final float DELTA = 1 / 60f;
@@ -162,6 +259,9 @@ class TestAbstractControllerImpl {
 
     }
 
+    /**
+     * Mock Class representing an AudioScheduler implementation.
+     */
     class MockAudioScheduler implements ControllerAudioScheduler {
 
         private boolean isStart;
@@ -169,6 +269,22 @@ class TestAbstractControllerImpl {
         private boolean isFromMenuToGame;
 
         private boolean isFromGameToMenu;
+
+        private boolean isRestart;
+
+        private Runnable toWait;
+
+        MockAudioScheduler() {
+            // default constructor.
+        }
+
+        MockAudioScheduler(final Runnable r) {
+            this.toWait = r;
+        }
+
+        public boolean isRestart() {
+            return isRestart;
+        }
 
         public boolean isFromMenuToGame() {
             return isFromMenuToGame;
@@ -196,21 +312,59 @@ class TestAbstractControllerImpl {
 
         @Override
         public void restartLevelMusic() throws ImpossibleToReproduceMusicException {
-            throw new UnsupportedOperationException("Unimplemented method 'restartLevelMusic'");
+            if (this.toWait != null) {
+                this.toWait.run();
+            }
+            this.isRestart = true;
         }
     }
 
+    /**
+     * Mock class representing a View implementation.
+     */
     class ViewMock extends AbstractObservableWithSet<ViewEvent> implements View {
         private boolean isShow;
 
         private boolean isVictory;
 
+        private boolean isViewChanged;
+
+        private Runnable toWait;
+
+        ViewMock() {
+            // default constructor.
+        }
+
+        ViewMock(final Runnable r) {
+            this.toWait = r;
+        }
+
+        /**
+         * Method that returns true if the victory method was called.
+         * 
+         * @return true if the victory method was called.
+         */
         boolean isVictory() {
             return isVictory;
         }
 
+        /**
+         * Method that returns true if the show method is called.
+         * 
+         * @return true if the show method was called
+         */
         boolean isShow() {
             return isShow;
+        }
+
+        /**
+         * Method that returns true if the change view method was called with the
+         * correct configuration for the test.
+         * 
+         * @return true if the changeView method was called
+         */
+        boolean isViewChanged() {
+            return this.isViewChanged;
         }
 
         @Override
@@ -224,13 +378,23 @@ class TestAbstractControllerImpl {
         }
 
         @Override
-        public void update(final UpdateInfoDto dto) throws NotStartedViewException, ExecutionWithIllegalThreadException {
+        public void update(final UpdateInfoDto dto)
+                throws NotStartedViewException, ExecutionWithIllegalThreadException {
             throw new UnsupportedOperationException("Unimplemented method 'update'");
         }
 
         @Override
         public void changeView(final ViewScene scene) {
-            throw new UnsupportedOperationException("Unimplemented method 'changeView'");
+            if (scene.equals(ViewScene.START_MENU)) {
+                this.isViewChanged = true;
+            }
+            /*
+             * tries to call the toWait runnable. This stategy is set by the test to notify
+             * a lock, to avoid concurrency problems
+             */
+            if (this.toWait != null) {
+                this.toWait.run();
+            }
         }
 
         @Override
