@@ -210,12 +210,12 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
 
     /**
      * Shows all the colors available that can be used to customize the player.
-     * 
+     *
      * @param availableColors a map that links the availble colors for the player
      *                        with their hexadecimal value.
      */
     public void showAvailableColors(final Map<String, Integer> availableColors) {
-        this.appendText(NEW_LINE + " AVAILABLE CUSTOMIZAION COLOR");
+        this.appendText(NEW_LINE + " AVAILABLE CUSTOMIZATION COLOR");
         for (final String color : availableColors.keySet()) {
             this.appendText(CMD_PREFIX + color.toUpperCase(Locale.ROOT));
         }
@@ -272,7 +272,7 @@ public final class MainMenuView extends AbstractObservableWithSet<ViewEvent> imp
         }
         this.appendText(LINE_SEPARATOR);
         this.appendText(" Usage: " + CMD_SET_LEVEL + " " + STANDARD_SEPARATOR + "<index>");
-        this.appendText(" Example: " + CMD_SET_LEVEL + STANDARD_SEPARATOR + "1");
+        this.appendText(" Example: " + CMD_SET_LEVEL + " " + STANDARD_SEPARATOR + "1");
     }
 
     /**

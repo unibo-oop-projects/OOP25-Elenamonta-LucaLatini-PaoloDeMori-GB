@@ -21,7 +21,7 @@ public final class CompositeInputHandler implements InputHandler {
     /**
      * Creates a new CompositeInputHandler with default handlers.
      */
-    public CompositeInputHandler() {
+    CompositeInputHandler() {
         this.userInputHandler = new UserInputHandlerImpl();
         this.guiEventHandler = new GuiEventHandlerImpl();
     }
