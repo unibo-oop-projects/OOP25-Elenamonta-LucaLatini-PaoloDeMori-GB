@@ -21,8 +21,8 @@ import org.jbox2d.dynamics.Body;
  */
 public class PlayerPhysicsImpl implements PlayerPhysics {
 
-    private static final float JUMP_IMPULSE = 13.5f;
-    private static final float BASE_SPEED = 9.0f;
+    private static final float JUMP_IMPULSE = JBox2DValues.JUMP_IMPULSE;
+    private static final float BASE_SPEED = JBox2DValues.BASE_SPEED;
     private static final float TOLLERANCE = 0.001f;
     private final Body body;
     private int groundContacts;
@@ -49,10 +49,8 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
         if (!isGrounded()) {
             return;
         }
-
         final Vec2 velocity = this.body.getLinearVelocity();
         this.body.setLinearVelocity(new Vec2(velocity.x, 0f));
-
         this.body.applyLinearImpulse(
                 new Vec2(0f, JUMP_IMPULSE),
                 this.body.getWorldCenter());
@@ -64,7 +62,6 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
     @Override
     public void setVelocity(final float multiplier) {
         final float currentSpeed = BASE_SPEED * multiplier;
-
         if (lastPosition != null && Math.abs(this.body.getPosition().x - lastPosition.x) < TOLLERANCE && isGrounded()) {
             counter++;
             if (counter > 2) {

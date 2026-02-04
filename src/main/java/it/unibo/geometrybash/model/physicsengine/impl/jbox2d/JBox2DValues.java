@@ -25,7 +25,7 @@ public final class JBox2DValues {
 
     /**
      * the standard friction of the player.
-     * 
+     *
      * <p>
      * Now set to -0.1f for smooth sliding.
      * </p>
@@ -40,7 +40,7 @@ public final class JBox2DValues {
     /**
      * The Velocity Iterations to use during the
      * {@link World#step(float, int, int)}.
-     * 
+     *
      * <p>
      * The velocity phase in jbox2d engine evaluates the forces to apply to
      * the bodies to meve correctly. THis values represents the number of iterations
@@ -52,8 +52,8 @@ public final class JBox2DValues {
     /**
      * The Position Iterations to use during the
      * {@link World#step(float, int, int)}.
-     * 
-     * 
+     *
+     *
      * <p>
      * The position phase in jbox2d engine evaluates the exact position of the
      * player. This values represents the number of iterations
@@ -61,6 +61,16 @@ public final class JBox2DValues {
      * </p>
      */
     public static final int POSITION_ITERATIONS = 3;
+
+    /**
+     * Represents the magnitude of the vertical linear impulse applied to the body to produce a jump.
+     */
+    public static final float JUMP_IMPULSE = 13.5f;
+
+    /**
+     * Represents the magnitude of the horizontal component of the force applied to the body.
+     */
+    public static final float BASE_SPEED = 9.0f;
 
     private JBox2DValues() {
         // This class can't be instanciated.

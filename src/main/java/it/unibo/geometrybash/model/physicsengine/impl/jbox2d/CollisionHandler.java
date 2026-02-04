@@ -52,13 +52,10 @@ public class CollisionHandler implements ContactListener {
     private void processContact(final Contact contact, final Phase phase) {
         final GameObject<?> a = getGameObject(contact.getFixtureA());
         final GameObject<?> b = getGameObject(contact.getFixtureB());
-
         if (a == null || b == null) {
             return;
         }
-
         final Player<?> player = a instanceof Player p ? p : b instanceof Player p ? p : null;
-
         final Collidable collidable = a instanceof Collidable c ? c : b instanceof Collidable c ? c : null;
 
         if (phase == Phase.BEGIN) {
@@ -81,11 +78,9 @@ public class CollisionHandler implements ContactListener {
         if (player.isDead()) {
             return;
         }
-
         if (collidable instanceof Block) {
             player.notifyGroundContactBegin();
         }
-
         collidable.onCollision(player);
         player.activateContact();
     }
@@ -94,7 +89,6 @@ public class CollisionHandler implements ContactListener {
         if (player.isDead()) {
             return;
         }
-
         if (collidable instanceof Block) {
             player.notifyGroundContactEnd();
         }
