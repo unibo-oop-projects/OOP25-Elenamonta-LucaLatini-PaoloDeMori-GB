@@ -21,10 +21,14 @@ import org.jbox2d.dynamics.Body;
  */
 public class PlayerPhysicsImpl implements PlayerPhysics {
 
-    private static final float JUMP_IMPULSE = 6.5f;
-    private static final float BASE_SPEED = 5.0f;
+    private static final float JUMP_IMPULSE = JBox2DValues.JUMP_IMPULSE;
+    private static final float BASE_SPEED = JBox2DValues.BASE_SPEED;
+    private static final float TOLLERANCE = 0.001f;
     private final Body body;
     private int groundContacts;
+
+    private Vec2 lastPosition;
+    private short counter;
 
     /**
      * Creates a new physics component for a player entity.
@@ -45,10 +49,8 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
         if (!isGrounded()) {
             return;
         }
-
         final Vec2 velocity = this.body.getLinearVelocity();
         this.body.setLinearVelocity(new Vec2(velocity.x, 0f));
-
         this.body.applyLinearImpulse(
                 new Vec2(0f, JUMP_IMPULSE),
                 this.body.getWorldCenter());
@@ -60,6 +62,19 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
     @Override
     public void setVelocity(final float multiplier) {
         final float currentSpeed = BASE_SPEED * multiplier;
+        if (lastPosition != null && Math.abs(this.body.getPosition().x - lastPosition.x) < TOLLERANCE && isGrounded()) {
+            counter++;
+            if (counter > 2) {
+                this.body.setActive(false);
+                this.body.setAwake(true);
+                this.body.synchronizeTransform();
+                this.body.setActive(true);
+                counter = 0;
+            }
+        } else {
+            counter = 0;
+        }
+        lastPosition = this.body.getPosition().clone();
         this.body.setLinearVelocity(new Vec2(currentSpeed, this.body.getLinearVelocity().y));
     }
 
@@ -76,9 +91,11 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      */
     @Override
     public void resetBodyTo(final Vector2 position) {
-        this.body.setTransform(new Vec2(position.x(), position.y()), 0f);
-        this.body.setLinearVelocity(new Vec2(0f, 0f));
+        this.body.setLinearVelocity(new Vec2(BASE_SPEED, 0f));
         this.body.setAngularVelocity(0f);
+        this.body.setTransform(new Vec2(position.x(), position.y()), 0f);
+        this.body.setAwake(true);
+        this.groundContacts = 0;
     }
 
     /**
@@ -86,7 +103,8 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
      */
     @Override
     public Vector2 getPosition(final HitBox hB) {
-        // Converts the physics body position to the model position, which represents the bottom-left corner of the entity.
+        // Converts the physics body position to the model position, which represents
+        // the bottom-left corner of the entity.
         return new Vector2(
                 body.getPosition().x - (hB.getWidth() / 2f),
                 body.getPosition().y - (hB.getHeight() / 2f));
@@ -122,5 +140,13 @@ public class PlayerPhysicsImpl implements PlayerPhysics {
     @Override
     public void onGroundContactEnd() {
         this.groundContacts = Math.max(0, this.groundContacts - 1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setActive(final boolean activeState) {
+        this.body.setActive(activeState);
     }
 }

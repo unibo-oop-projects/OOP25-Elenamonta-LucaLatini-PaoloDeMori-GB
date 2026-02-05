@@ -8,6 +8,7 @@ import it.unibo.geometrybash.model.core.GameObject;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.level.map.Cell;
 import it.unibo.geometrybash.model.level.map.GameMap;
+import it.unibo.geometrybash.model.powerup.Coin;
 
 /**
  * Concrete implementation of {@link Level}.
@@ -107,6 +108,24 @@ public final class LevelImpl implements Level {
             }
         }
         return allObjects;
+    }
+
+    /**
+     * {@inheritDoc}.
+     */
+    @Override
+    public float getWinX() {
+        return this.winX;
+    }
+
+    /**
+     * {@inheritDoc}.
+     */
+    @Override
+    public int getTotalCoins() {
+        return (int) this.getAllGameObject().stream()
+                .filter(obj -> obj instanceof Coin)
+                .count();
     }
 
 }

@@ -13,6 +13,13 @@ public abstract class AbstractGameModelWithPhysicsEngine<T> extends AbstractGame
     private PhysicsEngine<T> physicsEngine;
 
     /**
+     * Default Constructor.
+     */
+    public AbstractGameModelWithPhysicsEngine() {
+        super();
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

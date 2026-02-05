@@ -16,6 +16,13 @@ import java.util.Objects;
 public final class ResourceLoaderImpl implements ResourceLoader {
 
     /**
+     * Creates new {@code ResourceLoaderImpl}.
+     */
+    public ResourceLoaderImpl() {
+        // Default constructor.
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

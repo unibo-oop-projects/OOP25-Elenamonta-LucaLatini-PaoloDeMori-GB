@@ -21,11 +21,6 @@ public enum StandardViewEventType {
     RESUME("resume"),
 
     /**
-     * Event to return to the home menu.
-     */
-    HOME("home"),
-
-    /**
      * Event to restart the current level.
      */
     RESTART("restart"),
@@ -34,11 +29,6 @@ public enum StandardViewEventType {
      * Event to close the application.
      */
     CLOSE("close"),
-
-    /**
-     * Event to open the inventory.
-     */
-    INVENTORY("inventory"),
 
     /**
      * Event when player push the button jump action (SPACE or UP arrow).
@@ -86,7 +76,7 @@ public enum StandardViewEventType {
      * @return true if this is a GUI event, false otherwise
      */
     public boolean isGuiEvent() {
-        return this == START || this == RESUME || this == HOME
-                || this == RESTART || this == CLOSE || this == INVENTORY;
+        return this == START || this == RESUME
+                || this == RESTART || this == CLOSE;
     }
 }

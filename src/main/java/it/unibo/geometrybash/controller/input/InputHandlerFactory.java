@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.commons.input;
+package it.unibo.geometrybash.controller.input;
 
 import it.unibo.geometrybash.controller.InputHandler;
 

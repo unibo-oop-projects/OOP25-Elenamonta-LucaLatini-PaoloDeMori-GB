@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.model.collision;
+package it.unibo.geometrybash.model.core;
 
 import it.unibo.geometrybash.model.player.Player;
 

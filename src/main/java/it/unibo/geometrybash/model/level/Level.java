@@ -12,11 +12,15 @@ import it.unibo.geometrybash.model.geometry.Vector2;
 public interface Level {
 
     /**
+     * Retrives the level's name.
+     *
      * @return the level's name.
      */
     String getName();
 
     /**
+     * Gets the initial position of the player in the level.
+     *
      * @return the starting position of the player.
      */
     Vector2 getPlayerStartPosition();
@@ -59,4 +63,19 @@ public interface Level {
      * @return a list of games object.
      */
     List<GameObject<?>> getAllGameObject();
+
+    /**
+     * Retrives the level's x win.
+     *
+     * @return the win x
+     */
+
+    float getWinX();
+
+    /**
+     * the total number of coins in the level.
+     *
+     * @return the number of coins in the level.
+     */
+    int getTotalCoins();
 }

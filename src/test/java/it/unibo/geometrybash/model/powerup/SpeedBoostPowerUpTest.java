@@ -43,6 +43,8 @@ class SpeedBoostPowerUpTest {
     @Test
     void testOnCollision() {
         final Player<?> player = new PlayerImpl(POS);
+        player.setOnSpecialObjectCollision(obj -> {
+        });
         assertEquals(1.0f, player.getSpeedMultiplier());
         speedBoostPowerUp.onCollision(player);
         assertEquals(SpeedBoostPowerUp.MULTIPLIER, player.getSpeedMultiplier());

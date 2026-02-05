@@ -15,6 +15,7 @@ import it.unibo.geometrybash.model.Status;
  * @param cameraOffsetX the camera X offset
  * @param score         the current cumulated coins
  * @param gameStatus    the current game's status
+ * @param progress      the level progres
  */
 public record GameStateDto(
         PlayerDto player,
@@ -22,7 +23,8 @@ public record GameStateDto(
         List<PowerUpDto> powerUps,
         float cameraOffsetX,
         int score,
-        Status gameStatus) implements Serializable {
+        Status gameStatus,
+        float progress) implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,12 +37,14 @@ public record GameStateDto(
      * @param cameraOffsetX the camera X offset
      * @param score         the current score
      * @param gameStatus    the game status
+     * @param progress      the level progres
      */
     public GameStateDto {
         Objects.requireNonNull(player, "player");
         Objects.requireNonNull(obstacles, "obstacles");
         Objects.requireNonNull(powerUps, "powerUps");
         Objects.requireNonNull(gameStatus, "gameStatus");
+        Objects.requireNonNull(progress, "progress");
 
         obstacles = List.copyOf(obstacles);
         powerUps = List.copyOf(powerUps);

@@ -2,9 +2,11 @@ package it.unibo.geometrybash.model.player;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.geometrybash.model.core.AbstractGameObject;
+import it.unibo.geometrybash.model.core.GameObject;
 import it.unibo.geometrybash.model.core.Updatable;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
@@ -31,31 +33,67 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
 
     private static final float SIZE = 1.0f;
     private static final double TWO_PI = Math.PI * 2.0;
-    private static final double RIGHT_ANGLE_RAD = Math.PI / 2.0;
     private static final double ANGULAR_SPEED_RAD_S = Math.toRadians(720.0);
     private final PowerUpManager powerUpManager;
-    private final Vector2 startPos;
-    private PlayerState state;
+    private Skin skin;
+    private boolean dead;
     private PlayerPhysics physics;
     private int coins;
-    private Skin skin;
     private OnDeathExecute onDeath;
     private double rotationRad;
+    private final int numVertices;
+    private final double stepAngle;
+    private Consumer<GameObject<?>> onSpecialObjectCollision;
 
     /**
-     * Creates a new {@code PlayerImpl} instance with a position, hitbox, and
-     * physics component.
+     * Creates a new {@code PlayerImpl} instance with the given initial position
+     * and a default square {@link HitBox}.
+     *
+     * <p>
+     * The hitbox construction is performed internally and uses the standard
+     * player shape defined by the game.
+     * </p>
      *
      * @param position the initial position of the player in the game world
      */
     public PlayerImpl(final Vector2 position) {
+        this(position, createHitBox());
+    }
+
+    /**
+     * Creates a new {@code PlayerImpl} instance with the given initial position
+     * and a custom {@link HitBox}.
+     *
+     * <p>
+     * The hitbox is normally created internally; however, its implementation is
+     * designed to support different polygonal shapes, as allowed by the
+     * {@link HitBox} class.
+     * </p>
+     *
+     * <p>
+     * This constructor allows providing a custom hitbox in order to test
+     * scenarios different from the standard implementation, such as polygons
+     * with a number of vertices other than four. The hitbox of the player entity
+     * must represent a regular polygon otherwise the angular snapping logic would
+     * not behave correctly.
+     * </p>
+     *
+     * @param position the initial position of the player in the game world
+     * @param hitBox   the hitbox defining the player's polygonal shape
+     *
+     * @throws NullPointerException if {@code hitBox} is {@code null}
+     */
+    public PlayerImpl(final Vector2 position, final HitBox hitBox) {
         super(position);
-        this.startPos = position;
-        this.hitBox = createHitBox();
+        this.hitBox = Objects.requireNonNull(hitBox);
         this.powerUpManager = new PowerUpManager();
+        this.skin = new Skin();
         this.coins = 0;
         this.physics = null;
-        this.state = PlayerState.ON_GROUND;
+        this.dead = false;
+        this.numVertices = this.hitBox.getVertices().size();
+        this.stepAngle = TWO_PI / numVertices;
+        this.rotationRad = 0.0;
     }
 
     /**
@@ -66,24 +104,26 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         this.powerUpManager.update(deltaTime);
         getNotEmptyPhysics().setVelocity(this.powerUpManager.getSpeedMultiplier());
         this.position = getNotEmptyPhysics().getPosition(hitBox);
-        if (this.physics.isGrounded()) {
-            this.state = PlayerState.ON_GROUND;
+        if (!this.physics.isGrounded()) {
             // player rotate with a angular rotation of 4PI/s
-            rotationRad += ANGULAR_SPEED_RAD_S * deltaTime;
-            // normalize angle to the [0, 2PI) range
-            rotationRad %= TWO_PI;
+            this.rotationRad += ANGULAR_SPEED_RAD_S * deltaTime;
+            this.rotationRad = normalizeAngle(this.rotationRad);
         } else {
-            // take the nearest approximation of possible orientation value
-            final double step = Math.round(rotationRad / RIGHT_ANGLE_RAD);
-            double snapped = step * RIGHT_ANGLE_RAD;
-            snapped %= TWO_PI;
-            // if snapped is negative shift it to the equivalent positive angle
-            if (snapped < 0) {
-                snapped += TWO_PI;
-            }
-            rotationRad = snapped;
-            this.state = PlayerState.JUMPING;
+            this.rotationRad = normalizeAngle(this.rotationRad);
+            // take the nearest approximation of possible orientation values (multiples of
+            // stepAngle)
+            final double k = Math.round(this.rotationRad / stepAngle);
+            this.rotationRad = k * stepAngle;
         }
+    }
+
+    // normalize angle to the [0, 2PI) range
+    private double normalizeAngle(final double angle) {
+        double normalized = angle % TWO_PI;
+        if (normalized < 0) {
+            normalized += TWO_PI;
+        }
+        return normalized;
     }
 
     /**
@@ -99,9 +139,9 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      */
     @Override
     public void die() {
+        this.dead = true;
         this.coins = 0;
         this.powerUpManager.reset();
-        respawn(this.startPos);
         this.onDeath.onDeath();
     }
 
@@ -110,16 +150,22 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      */
     @Override
     public void respawn(final Vector2 position) {
-        getNotEmptyPhysics().resetBodyTo(position);
-        this.position = position;
+        if (this.dead) {
+            getNotEmptyPhysics().resetBodyTo(position);
+            this.position = position;
+            this.dead = false;
+            this.coins = 0;
+            this.powerUpManager.reset();
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addCoin(final int value) {
+    public void addCoin(final GameObject<?> coin, final int value) {
         this.coins += value;
+        this.onSpecialObjectCollision.accept(coin);
     }
 
     /**
@@ -134,16 +180,26 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      * {@inheritDoc}
      */
     @Override
-    public void onShieldCollected() {
-        powerUpManager.activateShield();
+    public void setOnSpecialObjectCollision(final Consumer<GameObject<?>> onSpecialObjectCollision) {
+        this.onSpecialObjectCollision = Objects.requireNonNull(onSpecialObjectCollision);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onSpeedBoostCollected(final float multiplier, final float duration) {
+    public void onShieldCollected(final GameObject<?> shield) {
+        powerUpManager.activateShield();
+        this.onSpecialObjectCollision.accept(shield);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onSpeedBoostCollected(final GameObject<?> speedBoost, final float multiplier, final float duration) {
         powerUpManager.applySpeedModifier(multiplier, duration);
+        this.onSpecialObjectCollision.accept(speedBoost);
     }
 
     /**
@@ -154,7 +210,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         if (powerUpManager.isShielded()) {
             powerUpManager.consumeShield();
             obstacle.setActive(false);
-        } else {
+            this.onSpecialObjectCollision.accept(obstacle);
+        } else if (!this.dead) {
             die();
         }
     }
@@ -199,7 +256,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         final PlayerImpl copy = new PlayerImpl(new Vector2(position.x(), position.y()));
         copy.coins = this.coins;
         copy.skin = this.skin;
-        copy.state = this.state;
+        copy.dead = false;
+        copy.rotationRad = this.rotationRad;
         return copy;
     }
 
@@ -222,8 +280,8 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     /**
      * {@inheritDoc}
      */
-    @SuppressFBWarnings(value = "EI2",
-            justification = "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
+    @SuppressFBWarnings(value = "EI2", justification = ""
+            + "The reference to PlayerPhysics is intentionally stored as part of a one-time binding. "
             + "The method enforces immutability of the association by preventing reassignment "
             + "through an explicit state check inside the method. ")
     @Override
@@ -243,14 +301,6 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
      * {@inheritDoc}
      */
     @Override
-    public String getState() {
-        return this.state.getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setOnDeath(final OnDeathExecute onDeath) {
         this.onDeath = Objects.requireNonNull(onDeath);
     }
@@ -263,6 +313,22 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         return this.rotationRad;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setInnerColor(final int innerColor) {
+        this.skin = this.skin.withColors(innerColor, this.skin.getOuterColor());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOuterColor(final int outerColor) {
+        this.skin = this.skin.withColors(this.skin.getInnerColor(), outerColor);
+    }
+
     private static HitBox createHitBox() {
         return new HitBox(
                 List.of(new Vector2(0, 0), new Vector2(SIZE, 0), new Vector2(SIZE, SIZE), new Vector2(0, SIZE)));
@@ -272,5 +338,13 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
         return Objects.requireNonNull(
                 physics,
                 "Player physics not bound yet");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDead() {
+        return this.dead;
     }
 }

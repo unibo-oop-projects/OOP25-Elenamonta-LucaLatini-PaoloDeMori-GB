@@ -1,6 +1,6 @@
 package it.unibo.geometrybash.model.powerup;
 
-import it.unibo.geometrybash.model.collision.Collidable;
+import it.unibo.geometrybash.model.core.Collidable;
 import it.unibo.geometrybash.model.geometry.CircleHitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.player.Player;
@@ -23,7 +23,7 @@ public final class ShieldPowerUp extends AbstractPowerUp<CircleHitBox> implement
      *
      * @param position the initial position of the power-up in the game world
      */
-    public ShieldPowerUp(final Vector2 position) {
+    ShieldPowerUp(final Vector2 position) {
         super(position, PowerUpType.SHIELD, 0);
         this.hitBox = new CircleHitBox(RADIUS);
     }
@@ -54,7 +54,7 @@ public final class ShieldPowerUp extends AbstractPowerUp<CircleHitBox> implement
      */
     @Override
     public void onCollision(final Player<?> player) {
-        player.onShieldCollected();
+        player.onShieldCollected(this);
         this.setActive(false);
     }
 

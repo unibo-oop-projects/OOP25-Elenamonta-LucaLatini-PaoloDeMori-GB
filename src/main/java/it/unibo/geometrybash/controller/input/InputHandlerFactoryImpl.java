@@ -1,7 +1,6 @@
-package it.unibo.geometrybash.commons.input;
+package it.unibo.geometrybash.controller.input;
 
 import it.unibo.geometrybash.controller.InputHandler;
-import it.unibo.geometrybash.controller.input.CompositeInputHandler;
 
 /**
  * Concrete implementation of {@link InputHandlerFactory}.
@@ -10,6 +9,13 @@ import it.unibo.geometrybash.controller.input.CompositeInputHandler;
  * Provides a standardize way to obtain a {@link CompositeInputHandler}.
  */
 public class InputHandlerFactoryImpl implements InputHandlerFactory {
+
+    /**
+     * Create new {@link CompositeInputHandler}.
+     */
+    public InputHandlerFactoryImpl() {
+        // Default constructor.
+    }
 
     /**
      * {@inheritDoc}.

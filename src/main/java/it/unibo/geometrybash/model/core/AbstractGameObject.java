@@ -2,7 +2,6 @@ package it.unibo.geometrybash.model.core;
 
 import java.util.Objects;
 
-import it.unibo.geometrybash.model.core.exception.OnStateModifierNotSetException;
 import it.unibo.geometrybash.model.geometry.CircleHitBox;
 import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
@@ -112,9 +111,8 @@ public abstract class AbstractGameObject<S extends Shape> implements GameObject<
      */
     @Override
     public void activateContact() {
-        if (this.onState == null) {
-            throw new OnStateModifierNotSetException();
+        if (this.onState != null) {
+            this.onState.activateObject(this);
         }
-        Objects.requireNonNull(this.onState).activateObject(this);
     }
 }

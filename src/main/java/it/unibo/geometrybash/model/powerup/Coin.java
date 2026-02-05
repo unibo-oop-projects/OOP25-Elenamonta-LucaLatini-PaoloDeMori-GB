@@ -1,6 +1,6 @@
 package it.unibo.geometrybash.model.powerup;
 
-import it.unibo.geometrybash.model.collision.Collidable;
+import it.unibo.geometrybash.model.core.Collidable;
 import it.unibo.geometrybash.model.geometry.CircleHitBox;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.player.Player;
@@ -33,7 +33,7 @@ public final class Coin extends AbstractPowerUp<CircleHitBox> implements Collida
      *
      * @param position the initial coin's position
      */
-    public Coin(final Vector2 position) {
+    Coin(final Vector2 position) {
         super(position, PowerUpType.COIN, 0);
         this.hitBox = new CircleHitBox(RADIUS);
         this.value = DEFAULT_VALUE;
@@ -73,7 +73,7 @@ public final class Coin extends AbstractPowerUp<CircleHitBox> implements Collida
      */
     @Override
     public void onCollision(final Player<?> player) {
-        player.addCoin(DEFAULT_VALUE);
+        player.addCoin(this, DEFAULT_VALUE);
         this.setActive(false);
 
     }

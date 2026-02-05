@@ -224,5 +224,20 @@ class AbstractGameModelTest {
         protected void beforeGameObjectsUpdate(final float deltaTime) {
             throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
         }
+
+        @Override
+        public void respawnPlayer() {
+            throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
+        }
+
+        @Override
+        public void setPlayerInnerColor(final int color) {
+            throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
+        }
+
+        @Override
+        public void setPlayerOuterColor(final int color) {
+            throw new UnsupportedOperationException(NOT_NECESSARY_METHOD);
+        }
     }
 }

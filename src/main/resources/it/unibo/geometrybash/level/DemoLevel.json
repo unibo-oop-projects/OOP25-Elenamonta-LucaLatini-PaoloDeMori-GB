@@ -1,0 +1,43 @@
+{
+  "name": "Demo Level",
+  "playerStarterX": 5.0,
+  "playerStarterY": 8.0,
+  "winX": 90.0,
+  "floorLevelY": 4,
+  "width": 100,
+  "powerUps": [
+    {
+      "type": "COIN",
+      "coordinates": [
+        { "x": 15, "y": 5 }
+      ]
+    },
+    {
+      "type": "SPEED_BOOST",
+      "coordinates": [
+        { "x": 35, "y": 5 }
+      ]
+    },
+    {
+      "type": "SHIELD",
+      "coordinates": [
+        { "x": 50, "y": 5 }
+      ]
+    }
+  ],
+  "obs": [
+    {
+      "type": "BLOCK",
+      "coordinates": [
+        { "x": 25, "y": 5 }
+      ]
+    },
+    {
+      "type": "SPIKE",
+      "coordinates": [
+        { "x": 55, "y": 5 },
+        { "x": 75, "y": 5 }
+      ]
+    }
+  ]
+}

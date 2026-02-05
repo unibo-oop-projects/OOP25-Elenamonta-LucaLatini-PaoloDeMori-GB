@@ -1,4 +1,4 @@
-package it.unibo.geometrybash.model.collision;
+package it.unibo.geometrybash.model.physicsengine.impl.jbox2d;
 
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.dynamics.Fixture;
@@ -6,6 +6,7 @@ import org.jbox2d.dynamics.contacts.Contact;
 import org.jbox2d.collision.Manifold;
 import org.jbox2d.callbacks.ContactImpulse;
 
+import it.unibo.geometrybash.model.core.Collidable;
 import it.unibo.geometrybash.model.core.GameObject;
 import it.unibo.geometrybash.model.obstacle.Block;
 import it.unibo.geometrybash.model.player.Player;
@@ -20,15 +21,15 @@ import it.unibo.geometrybash.model.player.Player;
  */
 public class CollisionHandler implements ContactListener {
 
-    // enum Phase {
-    // END,
-    // BEGIN
-    // }
+    enum Phase {
+        END,
+        BEGIN
+    }
 
     /**
      * Creates a new CollisionHandler.
      */
-    CollisionHandler() {
+    public CollisionHandler() {
         // Default constructor.
     }
 
@@ -37,7 +38,7 @@ public class CollisionHandler implements ContactListener {
      */
     @Override
     public void beginContact(final Contact contact) {
-        processContact(contact);
+        processContact(contact, Phase.BEGIN);
     }
 
     /**
@@ -45,18 +46,27 @@ public class CollisionHandler implements ContactListener {
      */
     @Override
     public void endContact(final Contact contact) {
-        processContact(contact);
+        processContact(contact, Phase.END);
     }
 
-    private void processContact(final Contact contact) {
+    private void processContact(final Contact contact, final Phase phase) {
         final GameObject<?> a = getGameObject(contact.getFixtureA());
         final GameObject<?> b = getGameObject(contact.getFixtureB());
-
         if (a == null || b == null) {
             return;
         }
-        handleBeginContact(a, b);
-        handleBeginContact(b, a);
+        final Player<?> player = a instanceof Player p ? p : b instanceof Player p ? p : null;
+        final Collidable collidable = a instanceof Collidable c ? c : b instanceof Collidable c ? c : null;
+
+        if (phase == Phase.BEGIN) {
+            if (player != null && collidable != null) {
+                handleBeginContact(player, collidable);
+            }
+        } else {
+            if (player != null && collidable != null) {
+                handleEndContact(player, collidable);
+            }
+        }
     }
 
     private GameObject<?> getGameObject(final Fixture fixture) {
@@ -64,13 +74,23 @@ public class CollisionHandler implements ContactListener {
         return userData instanceof GameObject gameObject ? gameObject : null;
     }
 
-    private void handleBeginContact(final GameObject<?> source, final GameObject<?> other) {
-        if (source instanceof Collidable collidable && other instanceof Player player) {
-            if (source instanceof Block) {
-                player.notifyGroundContactBegin();
-            }
-            collidable.onCollision(player);
-            source.activateContact();
+    private void handleBeginContact(final Player<?> player, final Collidable collidable) {
+        if (player.isDead()) {
+            return;
+        }
+        if (collidable instanceof Block) {
+            player.notifyGroundContactBegin();
+        }
+        collidable.onCollision(player);
+        player.activateContact();
+    }
+
+    private void handleEndContact(final Player<?> player, final Collidable collidable) {
+        if (player.isDead()) {
+            return;
+        }
+        if (collidable instanceof Block) {
+            player.notifyGroundContactEnd();
         }
     }
 

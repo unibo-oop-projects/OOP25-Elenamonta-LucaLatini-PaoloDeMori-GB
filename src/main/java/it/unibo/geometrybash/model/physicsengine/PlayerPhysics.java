@@ -103,4 +103,11 @@ public interface PlayerPhysics {
      * </p>
      */
     void onGroundContactEnd();
+
+    /**
+     * Sets active param of the physics body.
+     *
+     * @param activeState the current state of player body
+     */
+    void setActive(boolean activeState);
 }

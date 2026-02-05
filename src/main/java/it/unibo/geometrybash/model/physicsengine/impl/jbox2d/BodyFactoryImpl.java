@@ -15,6 +15,7 @@ import it.unibo.geometrybash.model.geometry.HitBox;
 import it.unibo.geometrybash.model.geometry.Shape;
 import it.unibo.geometrybash.model.geometry.Vector2;
 import it.unibo.geometrybash.model.obstacle.Obstacle;
+import it.unibo.geometrybash.model.obstacle.Spike;
 import it.unibo.geometrybash.model.physicsengine.BodyFactory;
 import it.unibo.geometrybash.model.physicsengine.exception.InvalidPhysicsEngineConfiguration;
 import it.unibo.geometrybash.model.player.Player;
@@ -27,11 +28,15 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
     /**
      * The default friction value.
      */
-    public static final float STANDARD_FRICTION = 0.0f;
+    private static final float STANDARD_FRICTION = JBox2DValues.STANDARD_FRICTION;
     /**
      * The default restitution value.
      */
-    public static final float STANDARD_RESTITUTION = 0.0f;
+    private static final float STANDARD_RESTITUTION = JBox2DValues.STANDARD_RESTITUTION;
+
+    private static final float PLAYER_STANDARD_DENSITY = JBox2DValues.PLAYER_STANDARD_DENSITY;
+
+    private static final float PLAYER_STANDARD_FRICTION = JBox2DValues.PLAYER_STANDARD_FRICTION;
 
     private final World world;
 
@@ -45,17 +50,18 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
     }
 
     /**
-     * A private method to convert the position of a polygonal object from the bottom left vertex to the geometric center.
+     * A private method to convert the position of a polygonal object from the
+     * bottom left vertex to the geometric center.
      * 
-     * @param leftCenter the model version of the position representing the bottom left vertex.
-     * @param hB the hitbox of the geometric figure.
+     * @param leftCenter the model version of the position representing the bottom
+     *                   left vertex.
+     * @param hB         the hitbox of the geometric figure.
      * @return the geometric center.
      */
     private Vector2 modelCenterToJBox2dCenterConverter(final Vector2 leftCenter, final HitBox hB) {
         return new Vector2(
                 leftCenter.x() + (hB.getWidth() / 2f),
-                leftCenter.y() + (hB.getHeight() / 2f)
-            );
+                leftCenter.y() + (hB.getHeight() / 2f));
     }
 
     /**
@@ -142,11 +148,15 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
         if (sH instanceof CircleHitBox) {
             throw new InvalidPhysicsEngineConfiguration("Circular obstacle dont exist");
         } else if (sH instanceof HitBox) {
+            boolean isAsensor = false;
+            if (obj instanceof Spike) {
+                isAsensor = true;
+            }
             final HitBox hB = (HitBox) sH;
             final Vector2 obstaclePosition = obj.getPosition();
             final Vector2 centerPos = modelCenterToJBox2dCenterConverter(obstaclePosition, hB);
             final Body body = createBody(centerPos, BodyType.STATIC, obj);
-            final FixtureDef fDef = createPoligonalFixtureDefinition(hB, false);
+            final FixtureDef fDef = createPoligonalFixtureDefinition(hB, isAsensor);
             body.createFixture(fDef);
 
             return body;
@@ -197,8 +207,10 @@ public class BodyFactoryImpl implements BodyFactory<Body> {
             final Vector2 centerPos = modelCenterToJBox2dCenterConverter(playerPosition, hB);
             final Body body = createBody(centerPos, BodyType.DYNAMIC, p);
             final FixtureDef fDef = createPoligonalFixtureDefinition(hB, false);
-            fDef.density = 1.0f;
+            fDef.density = PLAYER_STANDARD_DENSITY;
+            fDef.friction = PLAYER_STANDARD_FRICTION;
             body.createFixture(fDef);
+            body.setBullet(true);
 
             return body;
         } else {

@@ -35,6 +35,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private static final Logger LOGGER = LoggerFactory.getLogger(GameModelImpl.class);
     private static final String INVALID_STATE_EXCEPTION_MESSAGE = "A method is called while not in the correct state";
 
+    private static final int DEFAULT_PLAYER_INNER_COLOR = 0xFFFF0000;
+    private static final int DEFAULT_PLAYER_OUTER_COLOR = 0xFF0000FF;
+
     private Status state = Status.NEVERSTARTED;
     private PlayerWithPhysics player;
     private Level level;
@@ -45,10 +48,13 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private final List<GameObject<?>> changedStateObjects;
     private final GameStateMapper gameStateMapper;
     private volatile boolean isJumpSignalActive;
+    private volatile int setInnerColor = DEFAULT_PLAYER_INNER_COLOR;
+
+    private volatile int setOuterColor = DEFAULT_PLAYER_OUTER_COLOR;
 
     /**
      * The constructor of this gamemodel implementation.
-     * 
+     *
      * @param rLoader the resource laoder.
      * @param pEF     the factory to create jbox2d entities.
      */
@@ -62,7 +68,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
 
     /**
      * Method called when the player dies.
-     * 
+     *
      * <p>
      * Linked to the game execution through a functional interface in the player.
      * </p>
@@ -74,16 +80,27 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     }
 
     /**
+     * The behaviour to specify in the player to save the game object in the list
+     * of changed objects.
+     * 
+     * @param object the object to add.
+     */
+    private void onPlayerCollisionWithBehaviour(final GameObject<?> object) {
+        this.changedStateObjects.add(object);
+    }
+
+    /**
      * Notify the observer that the player fullfil the victory condition.
      */
     private void onPlayerWin() {
+        this.reset();
         notifyObservers(ModelEvent.createVictoryEvent());
     }
 
     /**
      * Method to pass to the selected objects in the level loader for handle state
      * changes.
-     * 
+     *
      * @param gO the object calling this method that lived a state change.
      */
     private void resetStateObjects(final GameObject<?> gO) {
@@ -93,7 +110,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     /**
      * Private method to throw and log a default error if a method is called while
      * the finite state machine is in an invalid state.
-     * 
+     *
      * @throws InvalidModelMethodInvocationException if a method is called while
      *                                               the finite state machine is in
      *                                               an invalid state.
@@ -101,7 +118,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private void invalidStateThrower() throws InvalidModelMethodInvocationException {
         final InvalidModelMethodInvocationException ex = new InvalidModelMethodInvocationException(
                 INVALID_STATE_EXCEPTION_MESSAGE);
-        LOGGER.error(INVALID_STATE_EXCEPTION_MESSAGE, ex);
+        LOGGER.error(INVALID_STATE_EXCEPTION_MESSAGE);
         throw ex;
     }
 
@@ -114,7 +131,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         switch (state) {
             case NEVERSTARTED:
                 this.levelName = levName;
-                try (InputStream levelIS = rLoader.openStream(levName + ".json")) {
+                try (InputStream levelIS = rLoader.openStream("it/unibo/geometrybash/level/" + levName + ".json")) {
                     this.setPhysicsEngine(physicsFactory);
                     final String exceptionInReadingFileMessage = "Error while creating the "
                             + "level from file in the model's start method";
@@ -128,6 +145,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
                     final Vector2 playerStartPosition = level.getPlayerStartPosition();
                     player = new PlayerImpl(playerStartPosition);
                     player.setOnDeath(this::onPlayerDeath);
+                    player.setOnSpecialObjectCollision(this::onPlayerCollisionWithBehaviour);
+                    player.setInnerColor(setInnerColor);
+                    player.setOuterColor(setOuterColor);
                     this.getPhysicsEngine().addPlayer(player);
                     this.addUpdatableGameObjects((PlayerImpl) player);
 
@@ -167,6 +187,12 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         switch (state) {
             case ONPAUSE:
                 this.state = Status.PLAYING;
+                if (this.player != null) {
+                    player.setInnerColor(setInnerColor);
+                    player.setOuterColor(setOuterColor);
+                } else {
+                    this.invalidStateThrower();
+                }
                 break;
             default:
                 this.invalidStateThrower();
@@ -178,10 +204,9 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
      */
     @Override
     public void restart() throws InvalidModelMethodInvocationException, ModelExecutionException {
-        this.state = Status.NEVERSTARTED;
-        clearUpdatableList();
-        this.changedStateObjects.clear();
+        this.reset();
         start(levelName);
+
     }
 
     /**
@@ -231,7 +256,13 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         }
 
         this.getPhysicsEngine().updatePhysicsEngine(deltaTime);
-
+        if (this.isJumpSignalActive) {
+            this.player.jump();
+            this.isJumpSignalActive = false;
+        }
+        if (player.isDead()) {
+            respawnPlayer();
+        }
     }
 
     /**
@@ -252,9 +283,15 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
         return new UpdateInfoDto(this.gameStateMapper.toDto(this));
     }
 
+    private void reset() {
+        this.state = Status.NEVERSTARTED;
+        clearUpdatableList();
+        this.changedStateObjects.clear();
+    }
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>
      * In this implementation of {@link GameModel} i use this method to call the
      * jump signal in a thread
@@ -267,6 +304,53 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
             this.player.jump();
             this.isJumpSignalActive = false;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public void respawnPlayer() {
+        if (player != null && level != null) {
+            player.respawn(this.level.getPlayerStartPosition());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public void setPlayerInnerColor(final int color) {
+        this.setInnerColor = color;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public void setPlayerOuterColor(final int color) {
+        this.setOuterColor = color;
+    }
+
+    /**
+     * Gets the value of the setOuterColor variable.
+     * 
+     * @return the value of the setOuterColor variable.
+     */
+    int getSetOuterColor() {
+        return setOuterColor;
+    }
+
+    /**
+     * Gets the value of the setOutherColor variable.
+     * 
+     * @return the value of the setOutherColor variable.
+     */
+    int getSetInnerColor() {
+        return setInnerColor;
     }
 
 }
