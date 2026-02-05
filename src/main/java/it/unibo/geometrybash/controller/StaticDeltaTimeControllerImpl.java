@@ -29,7 +29,8 @@ public class StaticDeltaTimeControllerImpl extends AbstractControllerImpl {
      */
     public StaticDeltaTimeControllerImpl(final GameModel gameModel, final View view,
             final ResourceLoader resourceLoader) {
-        super(gameModel, view, new GameLoopFixedExecutionTimeFactory(), new InputHandlerFactoryImpl(), resourceLoader);
+        super(gameModel, view, new GameLoopFixedExecutionTimeFactory(), new InputHandlerFactoryImpl(),
+                new ControllerAudioSchedulerImpl(resourceLoader));
     }
 
     /**

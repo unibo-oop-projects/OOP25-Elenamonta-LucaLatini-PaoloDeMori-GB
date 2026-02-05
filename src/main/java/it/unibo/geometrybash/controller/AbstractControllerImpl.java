@@ -9,9 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.geometrybash.commons.UpdateInfoDto;
-import it.unibo.geometrybash.commons.assets.AudioManager;
-import it.unibo.geometrybash.commons.assets.AudioStore;
-import it.unibo.geometrybash.commons.assets.ResourceLoader;
 import it.unibo.geometrybash.commons.input.StandardViewEventType;
 import it.unibo.geometrybash.commons.pattern.observerpattern.modelobserver.ModelEvent;
 import it.unibo.geometrybash.controller.gameloop.GameLoop;
@@ -42,8 +39,6 @@ public abstract class AbstractControllerImpl implements Controller {
      * Logger instance to handle errors and sending debug information.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractControllerImpl.class);
-    private static final String MENU_MUSIC = "it/unibo/geometrybash/audio/menu.wav";
-    private static final String LEVEL_MUSIC = "it/unibo/geometrybash/audio/level1.wav";
     private static final String ON_HISTORY_DESCRIPTION = "LIST OF FUNCTIONING COMMANDS USED:";
     private static final String ON_LEVEL_CHANGED = "Level correctly set! :)";
 
@@ -51,13 +46,18 @@ public abstract class AbstractControllerImpl implements Controller {
     private static final String ON_CORRECT_COLOR_UPDATE = "\"Correctly updated color.\"";
     private static final String HISTORY_COMMAND = "history";
 
+    private static final String ON_MUSIC_ERROR = "The game is running without music, "
+            + "because an error occured while loading the audiofiles";
+
+    private static final String DEBUG_MESSAGE = "For debug porpuses->";
+
     private final GameModel gameModel;
     private final View view;
     private final InputHandler inputHandler;
     private GameLoop gameLoop;
     private final GameLoopFactory gameLoopFactory;
     private GameResolution gameResolution = GameResolution.MEDIUM;
-    private final AudioManager audioManager;
+    private final ControllerAudioScheduler audioScheduler;
     private final MenuModel menuModel;
     private String levelName = MenuModel.LEVELS_NAME_LIST.get(0);
 
@@ -65,11 +65,11 @@ public abstract class AbstractControllerImpl implements Controller {
      * The constructor of the controller with game model, view and input handler
      * creation delegated.
      *
-     * @param gameModel           the model of the game
-     * @param view                the main view class of the game
-     * @param gameLoopFactory     the factory to init the gameloop.
-     * @param inputHandlerFactory the factory to init the inputHandler.
-     * @param resourceLoader      the object used to retrieve resources.
+     * @param gameModel                the model of the game
+     * @param view                     the main view class of the game
+     * @param gameLoopFactory          the factory to init the gameloop.
+     * @param inputHandlerFactory      the factory to init the inputHandler.
+     * @param controllerAudioScheduler the object used to handle the music.
      * 
      */
 
@@ -77,15 +77,14 @@ public abstract class AbstractControllerImpl implements Controller {
             + "I'm delegating the creation of many classes to improve the reusability of this class."
             + "Im using interfaces to give the parameter's classes default behaviour ")
     public AbstractControllerImpl(final GameModel gameModel, final View view, final GameLoopFactory gameLoopFactory,
-            final InputHandlerFactory inputHandlerFactory, final ResourceLoader resourceLoader) {
+            final InputHandlerFactory inputHandlerFactory, final ControllerAudioScheduler controllerAudioScheduler) {
         this.gameModel = gameModel;
         this.gameModel.addObserver(this);
         this.view = view;
         this.inputHandler = inputHandlerFactory.createInputHandler();
         this.view.addObserver(inputHandler);
         this.gameLoopFactory = gameLoopFactory;
-        final AudioStore audioStore = new AudioStore(resourceLoader);
-        this.audioManager = new AudioManager(audioStore);
+        this.audioScheduler = controllerAudioScheduler;
         this.menuModel = new MenuModel();
     }
 
@@ -104,7 +103,7 @@ public abstract class AbstractControllerImpl implements Controller {
         this.inputHandler.setOnMenuKeyPressed(this::gamePause);
         this.inputHandler.setActionForEvent(StandardViewEventType.START, this::startLevel);
         this.inputHandler.setActionForEvent(StandardViewEventType.RESTART, this::gameRestart);
-        this.inputHandler.setActionForEvent(StandardViewEventType.RESUME, this::gameResume);
+        this.inputHandler.setOnResumeKeyPressed(this::gameResume);
         this.inputHandler.setActionForEvent(StandardViewEventType.CLOSE, this::onClose);
         this.inputHandler.setGenericCommandHandler(this::onGenericCommand);
     }
@@ -375,13 +374,63 @@ public abstract class AbstractControllerImpl implements Controller {
     }
 
     /**
+     * Handle the possible exception thrown by the {@link audioScheduler}.
+     */
+    private void fromMenuToGameMusic() {
+        try {
+            this.audioScheduler.fromMenuToGame();
+        } catch (final ImpossibleToReproduceMusicException e) {
+            try {
+                this.audioScheduler.firstStart();
+                this.audioScheduler.fromMenuToGame();
+            } catch (final ImpossibleToReproduceMusicException ex) {
+                LOGGER.info(ON_MUSIC_ERROR);
+                LOGGER.debug(DEBUG_MESSAGE, e);
+            }
+        }
+    }
+
+    /**
+     * Handle the possible exception thrown by the {@link audioScheduler}.
+     */
+    private void fromGameToMenuMusic() {
+        try {
+            this.audioScheduler.fromGameToMenu();
+        } catch (final ImpossibleToReproduceMusicException e) {
+            try {
+                this.audioScheduler.firstStart();
+                this.audioScheduler.fromGameToMenu();
+            } catch (final ImpossibleToReproduceMusicException ex) {
+                LOGGER.info(ON_MUSIC_ERROR);
+                LOGGER.debug(DEBUG_MESSAGE, e);
+            }
+        }
+    }
+
+    /**
+     * Handle the possible exception thrown by the {@link audioScheduler}.
+     */
+    private void restartMusic() {
+        try {
+            this.audioScheduler.restartLevelMusic();
+        } catch (final ImpossibleToReproduceMusicException e) {
+            try {
+                this.audioScheduler.firstStart();
+                this.audioScheduler.restartLevelMusic();
+            } catch (final ImpossibleToReproduceMusicException ex) {
+                LOGGER.info(ON_MUSIC_ERROR);
+                LOGGER.debug(DEBUG_MESSAGE, e);
+            }
+        }
+    }
+
+    /**
      * A utility method to resume the game.
      */
     private void gameResume() {
         try {
             if (this.gameModel.getStatus().equals(Status.ONPAUSE)) {
-                audioManager.stop(MENU_MUSIC);
-                audioManager.loop(LEVEL_MUSIC);
+                fromMenuToGameMusic();
                 gameModel.resume();
                 gameLoopSetting();
                 gameLoop.resume();
@@ -401,8 +450,7 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     private void gamePause() {
         try {
-            audioManager.stop(LEVEL_MUSIC);
-            audioManager.loop(MENU_MUSIC);
+            this.fromGameToMenuMusic();
             gameLoopSetting();
             gameLoop.pause();
             gameModel.pause();
@@ -420,8 +468,7 @@ public abstract class AbstractControllerImpl implements Controller {
     private void gameRestart() {
         try {
             if (this.gameModel.getStatus().equals(Status.ONPAUSE)) {
-                audioManager.stop(MENU_MUSIC);
-                audioManager.loop(LEVEL_MUSIC);
+                this.fromMenuToGameMusic();
                 gameLoopSetting();
                 this.gameModel.restart();
                 this.gameLoop.resume();
@@ -452,8 +499,7 @@ public abstract class AbstractControllerImpl implements Controller {
                     LOGGER.info("Safe thread interrupted safely");
 
                 } finally {
-                    audioManager.stop(LEVEL_MUSIC);
-                    audioManager.loop(MENU_MUSIC);
+                    this.fromGameToMenuMusic();
                     SwingUtilities.invokeLater(() -> {
                         try {
                             view.victory(this.gameModel.getPlayer().getCoins(),
@@ -468,8 +514,7 @@ public abstract class AbstractControllerImpl implements Controller {
                 }
                 break;
             case GAMEOVER:
-                audioManager.stop(LEVEL_MUSIC);
-                audioManager.loop(LEVEL_MUSIC);
+                this.restartMusic();
                 break;
         }
     }
@@ -481,8 +526,7 @@ public abstract class AbstractControllerImpl implements Controller {
     private void startLevel() {
         try {
             if (this.gameModel.getStatus().equals(Status.NEVERSTARTED)) {
-                audioManager.stop(MENU_MUSIC);
-                audioManager.loop(LEVEL_MUSIC);
+                this.fromMenuToGameMusic();
                 gameLoopSetting();
                 gameModel.start(levelName);
                 view.init(gameResolution);
@@ -503,7 +547,12 @@ public abstract class AbstractControllerImpl implements Controller {
      */
     @Override
     public void start() {
-        audioManager.loop(MENU_MUSIC);
+        try {
+            this.audioScheduler.firstStart();
+        } catch (final ImpossibleToReproduceMusicException e) {
+            LOGGER.info("Impossible to init the music loader. the game starts without the music");
+            LOGGER.debug(DEBUG_MESSAGE, e);
+        }
         this.initInputHandler();
         try {
             this.view.show();

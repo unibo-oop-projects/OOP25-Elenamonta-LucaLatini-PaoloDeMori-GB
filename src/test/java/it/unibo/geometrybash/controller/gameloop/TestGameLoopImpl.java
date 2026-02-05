@@ -253,7 +253,7 @@ class TestGameLoopImpl {
         // number of times to check the number of fps.
         final short timesToCycle = 3;
         // time to wait for the thread to calculate a new number of fps
-        final long oneSecondAndOneMillisecond = 6_001L;
+        final long oneSecondAndOneMillisecond = 2500L;
         short fpsSum = 0;
         final short maxAverageFrameRate = 75;
         final short minAverageFramerate = 40;
