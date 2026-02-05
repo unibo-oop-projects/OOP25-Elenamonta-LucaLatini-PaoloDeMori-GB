@@ -166,7 +166,6 @@ public class PlayerImpl extends AbstractGameObject<HitBox> implements PlayerWith
     public void addCoin(final GameObject<?> coin, final int value) {
         this.coins += value;
         this.onSpecialObjectCollision.accept(coin);
-
     }
 
     /**
