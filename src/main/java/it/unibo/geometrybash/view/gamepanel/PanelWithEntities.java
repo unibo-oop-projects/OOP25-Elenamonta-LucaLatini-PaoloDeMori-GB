@@ -5,9 +5,6 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.geometrybash.commons.assets.AssetStore;
 import it.unibo.geometrybash.commons.dtos.GameStateDto;
@@ -21,18 +18,10 @@ import it.unibo.geometrybash.view.utilities.TerminalColor;
 /**
  * A panel that draws the entities in the level.
  */
-@SuppressFBWarnings(
-    value = "Se",
-    justification = "This class is not serializable"
-)
+@SuppressFBWarnings(value = "Se", justification = "This class is not serializable")
 public class PanelWithEntities extends JPanel implements UpdatableWithDto<GameStateDto> {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Logger for warnings,infos and errors.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(PanelWithEntities.class);
 
     /**
      * The instructions to draw correctly the entities.
@@ -80,8 +69,6 @@ public class PanelWithEntities extends JPanel implements UpdatableWithDto<GameSt
         graphic.setBackground(TerminalColor.BACKGROUND);
         if (this.gameStateDto != null) {
             this.levelView.draw(graphic, renderContext, gameStateDto);
-        } else {
-            LOGGER.warn("Panel with entities drawn without any information about world entities");
         }
     }
 

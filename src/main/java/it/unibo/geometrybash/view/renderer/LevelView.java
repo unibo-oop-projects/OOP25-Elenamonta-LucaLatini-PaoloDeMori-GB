@@ -3,9 +3,6 @@ package it.unibo.geometrybash.view.renderer;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import it.unibo.geometrybash.commons.dtos.GameStateDto;
 import it.unibo.geometrybash.view.core.RenderContext;
 import it.unibo.geometrybash.view.core.SpriteRegistry;
@@ -21,11 +18,6 @@ import it.unibo.geometrybash.view.core.SpriteRegistry;
  * @see GameStateDto
  */
 public class LevelView implements Drawable<GameStateDto> {
-
-    /**
-     * Logger for warnings,infos and errors.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(LevelView.class);
 
     private final ObstacleView obstacleView;
     private final PowerUpView powerUpView;
@@ -61,8 +53,6 @@ public class LevelView implements Drawable<GameStateDto> {
             this.obstacleView.draw(g2d, renderContext, data.obstacles());
             this.powerUpView.draw(g2d, renderContext, data.powerUps());
             this.playerView.draw(g2d, renderContext, data.player());
-        } else {
-            LOGGER.warn("Level drawn without any information about the world");
         }
     }
 

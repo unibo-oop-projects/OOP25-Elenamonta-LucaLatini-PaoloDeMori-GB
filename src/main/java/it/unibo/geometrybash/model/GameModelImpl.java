@@ -49,6 +49,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private final GameStateMapper gameStateMapper;
     private volatile boolean isJumpSignalActive;
     private volatile int setInnerColor = DEFAULT_PLAYER_INNER_COLOR;
+
     private volatile int setOuterColor = DEFAULT_PLAYER_OUTER_COLOR;
 
     /**
@@ -117,7 +118,7 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     private void invalidStateThrower() throws InvalidModelMethodInvocationException {
         final InvalidModelMethodInvocationException ex = new InvalidModelMethodInvocationException(
                 INVALID_STATE_EXCEPTION_MESSAGE);
-        LOGGER.error(INVALID_STATE_EXCEPTION_MESSAGE, ex);
+        LOGGER.error(INVALID_STATE_EXCEPTION_MESSAGE);
         throw ex;
     }
 
@@ -332,6 +333,24 @@ public final class GameModelImpl extends AbstractGameModelWithPhysicsEngine<Body
     @Override
     public void setPlayerOuterColor(final int color) {
         this.setOuterColor = color;
+    }
+
+    /**
+     * Gets the value of the setOuterColor variable.
+     * 
+     * @return the value of the setOuterColor variable.
+     */
+    int getSetOuterColor() {
+        return setOuterColor;
+    }
+
+    /**
+     * Gets the value of the setOutherColor variable.
+     * 
+     * @return the value of the setOutherColor variable.
+     */
+    int getSetInnerColor() {
+        return setInnerColor;
     }
 
 }
